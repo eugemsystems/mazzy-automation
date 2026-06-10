@@ -1,0 +1,8 @@
+Full workflow (recommended)
+
+# 1. Scrape mazzyautomations.co.za and export JSON
+php artisan woocommerce:export
+
+# 2. Import into Bagisto (deletes all products + non-root categories first)
+php artisan db:seed --class=WooCommerceProductSeeder
+

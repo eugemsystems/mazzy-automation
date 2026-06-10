@@ -1,0 +1,13 @@
+<?php
+
+namespace Webkul\Marketing\Repositories;
+
+use Webkul\Core\Eloquent\Repository;
+
+class FormSubmissionRepository extends Repository
+{
+    public function model(): string
+    {
+        return 'Webkul\Marketing\Contracts\FormSubmission';
+    }
+}

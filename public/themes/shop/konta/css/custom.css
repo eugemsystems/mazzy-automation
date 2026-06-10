@@ -1,0 +1,322 @@
+.header-logo img { height:50px;}
+
+.header-layout1 .main-menu-area {
+    background: rgb(51, 42, 94);
+    padding: 0 0 0 30px;
+    margin-top: -30px;
+    -webkit-transform: translateY(30px);
+    -ms-transform: translateY(30px);
+    transform: translateY(30px);
+}
+
+
+.header-layout1 .menu-area {
+    background-color:none;
+    background:url("/themes/shop/konta/img/moment.png");
+    background:none;
+    /*	background-repeat:no-repeat;
+        background-size:cover;*/
+    background-position:top right;
+    position: relative;
+    z-index: 0;
+}
+
+.hero-style5 {
+    padding: 180px 0 180px ! important;
+}
+
+.hero-style5 .hero-title {
+    font-size: 50px ! important;
+    text-transform: uppercase;
+}
+
+
+
+.header-layout1 .header-middle .header-link .header-single-link {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(51, 42, 94);
+    font-family: var(--title-font);
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+
+
+
+.header-layout1 .header-middle .header-link p {
+    font-size: 14px;
+    color: rgb(51, 42, 94);
+    margin-bottom: 5px;
+}
+
+.header-layout1 .header-middle .header-link i {
+    width: var(--icon-size, 46px);
+    height: var(--icon-size, 46px);
+    line-height: var(--icon-size, 46px);
+    background: rgba(51, 42, 94, 0.1);
+    border-radius: 50%;
+    text-align: center;
+    color: rgb(51, 42, 94);
+    font-size: 18px;
+}
+
+.header-top {display:none ! important; }
+
+.hero-style5 .hero-subtitle {
+    color: #ccc;
+    margin-bottom: 2px;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: var(--title-font);
+    text-transform: uppercase;
+    margin-top: -0.2em;
+    display: block;
+}
+
+.hero-5 .scroll-down {
+
+    background-color: rgb(53, 42, 94);
+
+}
+
+
+
+.hero-5 .hero-5-scroll-wrap {
+
+    border: 2px solid #fff;
+
+}
+
+.hero-5 .hero-5-scroll-wrap:before {
+    content: "";
+    height: 6px;
+    width: 2px;
+    border-radius: 50px;
+    background-color: #fff;
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    -webkit-animation: scrollMove 1.5s infinite;
+    animation: scrollMove 1.5s infinite;
+}
+
+.hero-slider-2 .th-hero-slide {
+    padding: 170px 0;
+}
+
+
+.hero-2 .icon-box {
+    position: absolute;
+    top: 50%;
+    right: 100px;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 60px;
+}
+
+
+.hero-2 .big-text {
+    display: none;
+    position: absolute;
+    top: 30%;
+    left: 11%;
+    z-index: 2;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.07);
+}
+
+.th-menu-wrapper .mobile-logo {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: block;
+    text-align: center;
+    background-color: var(--smoke-color);
+}
+
+
+.footer-widget .widget_title:after {
+    width: 16px;
+    border-left: 4px dashed #fff;
+    border-right: 4px dashed #ccc;
+    height: 2px;
+    background-color: transparent;
+    bottom: 0px;
+    left: 40px;
+    -webkit-animation: footerLine 7s linear infinite;
+    animation: footerLine 7s linear infinite;
+}
+
+.footer-wrapper .th-social a {
+    background-color: rgb(70, 42, 99);
+    color: var(--white-color);
+    border-radius: 0;
+}
+
+
+@media (min-width: 1200px) {
+    .col-xl-7 {
+        width: 50%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-xl-5 {
+        width: 50%;
+    }
+}
+
+
+.header-layout-default .menu-area .logo-bg {
+    position: absolute;
+    height: 100%;
+    width: 543px;
+    border-radius: 0 0px 0 0;
+    background: none;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    -webkit-clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
+    clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
+}
+
+.hero-meta {
+    margin-bottom: 0px;
+    margin-top: -0.4em;
+}
+
+.main-menu > ul > li {
+    margin: 0 10px;
+}
+
+
+
+.row {
+    --bs-gutter-x: 0.7rem ! important;
+
+
+}
+
+/**----Service Top and Bottom Space ---**/
+.space, .space-top {
+    padding-top: 60px;
+}
+
+.space, .space-bottom {
+    padding-bottom: 60px;
+}
+
+
+.service-card-icon img { width:30% ! important; }
+
+
+.main-menu ul.sub-menu li a:before {
+    display:none ! important;
+}
+
+
+
+.main-menu ul.sub-menu {
+    padding: 15px 15px  ! important;
+    left: 0px;
+}
+
+.img-box5 .play-btn {
+    position: absolute;
+    display: none;
+    right: 50%;
+    bottom: 50%;
+    -webkit-transform: translate(80%, 90%);
+    -ms-transform: translate(80%, 90%);
+    transform: translate(80%, 90%);
+}
+
+
+.col-auto {
+    width: auto;
+    margin-left: -10px;
+}
+
+
+/** ALIBABA DESCRIPTIONS CSS*/
+.attribute-layout {
+    margin-top:32px;
+    padding-top:32px;
+    border-top:1px solid #ddd
+}
+.attribute-layout a {
+    -webkit-text-decoration:underline;
+    text-decoration:underline
+}
+.attribute-layout.show-more .attribute-info {
+    max-height:440px;
+    overflow:hidden;
+    position:relative
+}
+.attribute-layout h2 {
+    font-weight:700;
+    font-size:20px;
+    color:#222;
+    line-height:26px
+}
+.attribute-layout .attribute-info h3 {
+    font-weight:600;
+    margin-bottom:20px;
+    margin-top:20px
+}
+.attribute-layout .attribute-list {
+    display:table;
+    border-collapse:collapse
+}
+.attribute-layout .attribute-list .attribute-item {
+    display:table-row;
+    border:1px solid #ddd
+}
+.attribute-layout .attribute-list .attribute-item>div {
+    padding:12px;
+    font-weight:400;
+    font-size:16px;
+    color:#222;
+    line-height:22px;
+    display:table-cell;
+    border:1px solid #ddd
+}
+.attribute-layout .attribute-list .attribute-item>div.left {
+    width:320px;
+    background:#f4f4f4
+}
+.attribute-layout .attribute-list .attribute-item>div.right {
+    width:420px
+}
+.attribute-layout .attribute-list .attribute-item>div.right p {
+    margin-bottom:0;
+    padding-bottom:0;
+    display:flex
+}
+.attribute-layout .attribute-list .attribute-item>div.right span {
+    font-weight:500;
+    font-size:16px;
+    color:#222;
+    line-height:22px
+}
+.attribute-layout .attribute-list .attribute-item>div.right img {
+    border-radius:4px;
+    width:32px;
+    height:32px;
+    margin-left:10px
+}
+.less-bg {
+    display:flex;
+    margin-top:20px
+}
+.less-bg a {
+    margin-right:10px;
+    color:#222;
+    font-size:16px;
+    line-height:22px
+}
+.less-bg svg {
+    width: 20px !important;
+    height: 20px !important
+}
