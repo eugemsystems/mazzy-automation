@@ -10,7 +10,24 @@ RUN apk add --no-cache \
     sqlite-dev \
     nodejs \
     npm \
-    && docker-php-ext-install pdo pdo_sqlite opcache
+    icu-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libzip-dev \
+    oniguruma-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+        pdo \
+        pdo_sqlite \
+        pdo_mysql \
+        opcache \
+        intl \
+        bcmath \
+        calendar \
+        gd \
+        zip \
+        mbstring
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
