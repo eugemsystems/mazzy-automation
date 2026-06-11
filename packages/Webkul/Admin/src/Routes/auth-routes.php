@@ -6,11 +6,12 @@ use Webkul\Admin\Http\Controllers\User\ForgetPasswordController;
 use Webkul\Admin\Http\Controllers\User\ResetPasswordController;
 use Webkul\Admin\Http\Controllers\User\SessionController;
 use Webkul\Admin\Http\Controllers\User\TwoFactorController;
+use Webkul\Core\Http\Middleware\NoCacheMiddleware;
 
 /**
  * Auth routes.
  */
-Route::group(['prefix' => config('app.admin_url')], function () {
+Route::group(['prefix' => config('app.admin_url'), 'middleware' => [NoCacheMiddleware::class]], function () {
     /**
      * Redirect route.
      */

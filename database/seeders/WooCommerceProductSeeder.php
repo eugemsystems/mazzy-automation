@@ -45,7 +45,7 @@ class WooCommerceProductSeeder extends Seeder
             return;
         }
 
-        $this->command->info('Importing WooCommerce products into Bagisto…');
+        $this->command->info('Importing WooCommerce products into Mazzy…');
 
         $importer = new WooCommerceImporter;
 

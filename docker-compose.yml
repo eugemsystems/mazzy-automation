@@ -1,116 +1,114 @@
+
+name: mazzy
+
 services:
-    laravel.test:
+    mariadb:
+        image: mariadb:11.4
+        container_name: mazzy-mariadb
+        restart: unless-stopped
+        environment:
+            MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MARIADB_AUTO_UPGRADE: "1"
+        volumes:
+            - ./mariadb/data:/var/lib/mysql
+            - ./mariadb/init:/docker-entrypoint-initdb.d:ro
+        networks:
+            - mazzy-net
+        healthcheck:
+            test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+            interval: 10s
+            timeout: 5s
+            retries: 12
+        command:
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_unicode_ci
+            - --max-allowed-packet=256M
+            - --innodb-buffer-pool-size=1G
+
+    wp-main:
+        image: wordpress:php8.2-fpm-alpine
+        container_name: mazzy-wp-main
+        restart: unless-stopped
+        depends_on:
+            mariadb:
+                condition: service_healthy
+        volumes:
+            - ./wordpress/main:/var/www/html
+            - ./wordpress/main:/var/www/main
+            - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+        networks:
+            - mazzy-net
+
+    wp-store:
+        image: wordpress:php8.2-fpm-alpine
+        container_name: mazzy-wp-store
+        restart: unless-stopped
+        depends_on:
+            mariadb:
+                condition: service_healthy
+        volumes:
+            - ./wordpress/store:/var/www/html
+            - ./wordpress/store:/var/www/store
+            - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+        networks:
+            - mazzy-net
+
+    laravel-app:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.3
+            context: ./laravel/app
             dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: sail-8.3/app
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-            IGNITION_LOCAL_SITES_PATH: '${PWD}'
+        image: mazzy-laravel-app
+        container_name: mazzy-laravel
+        restart: unless-stopped
         volumes:
-            - '.:/var/www/html'
-        networks:
-            - sail
+            - ./laravel/app:/var/www/laravel
+            - ./laravel/database:/var/www/laravel/database
+        environment:
+            APP_ENV: production
+            APP_DEBUG: "false"
+            APP_KEY: ${LARAVEL_APP_KEY}
+            APP_URL: https://new.mazzyautomations.co.za
+            APP_TIMEZONE: Africa/Johannesburg
+            SESSION_DRIVER: database
+            SESSION_DOMAIN: ""
+            SESSION_SECURE_COOKIE: "false"
+            SESSION_LIFETIME: 120
+            DB_CONNECTION: mysql
+            DB_HOST: mariadb
+            DB_PORT: 3306
+            DB_DATABASE: mazzy_laravel
+            DB_USERNAME: mazzy_laravel
+            DB_PASSWORD: ${LARAVEL_DB_PASSWORD}
+            CACHE_STORE: database
         depends_on:
-            - mysql
-            - redis
-            - elasticsearch
-            - kibana
-            - mailpit
-    mysql:
-        image: 'mysql/mysql-server:8.0'
-        ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
-        environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ROOT_HOST: '%'
-            MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
-            MYSQL_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ALLOW_EMPTY_PASSWORD: 1
-        volumes:
-            - 'sail-mysql:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            mariadb:
+                condition: service_healthy
         networks:
-            - sail
-        healthcheck:
-            test:
-                - CMD
-                - mysqladmin
-                - ping
-                - '-p${DB_PASSWORD}'
-            retries: 3
-            timeout: 5s
-    redis:
-        image: 'redis:alpine'
-        ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
-        volumes:
-            - 'sail-redis:/data'
-        networks:
-            - sail
-        healthcheck:
-            test:
-                - CMD
-                - redis-cli
-                - ping
-            retries: 3
-            timeout: 5s
-    elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
-        ports:
-            - '9200:9200'
-            - '9300:9300'
-        environment:
-            - xpack.security.enabled=false
-            - discovery.type=single-node
-            - bootstrap.memory_lock=true
-            - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-            nofile:
-                soft: 65536
-                hard: 65536
-        volumes:
-            - 'sail-elasticsearch:/var/lib/elasticsearch/data'
-        networks:
-            - sail
-    kibana:
-        image: docker.elastic.co/kibana/kibana:7.17.0
-        ports:
-            - 5601:5601
-        environment:
-            ELASTICSEARCH_HOSTS: 'http://elasticsearch:9200'
-        networks:
-            - sail
+            - mazzy-net
+
+    nginx:
+        image: nginx:1.27-alpine
+        container_name: mazzy-nginx
+        restart: unless-stopped
         depends_on:
-            - elasticsearch
-    mailpit:
-        image: 'axllent/mailpit:latest'
+            - wp-main
+            - wp-store
+            - laravel-app
         ports:
-            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
-            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./nginx/conf.d:/etc/nginx/conf.d:ro
+            - ./wordpress/main:/var/www/main:ro
+            - ./wordpress/store:/var/www/store:ro
+            - ./laravel/app:/var/www/laravel:ro
+            - ./certbot/conf:/etc/letsencrypt:ro
+            - ./certbot/www:/var/www/certbot
+            - ./logs/nginx:/var/log/nginx
         networks:
-            - sail
+            - mazzy-net
+
 networks:
-    sail:
+    mazzy-net:
         driver: bridge
-volumes:
-    sail-mysql:
-        driver: local
-    sail-redis:
-        driver: local
-    sail-elasticsearch:
-        driver: local
