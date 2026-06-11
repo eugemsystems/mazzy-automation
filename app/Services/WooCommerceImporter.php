@@ -75,6 +75,7 @@ class WooCommerceImporter
 
     protected function deleteExistingProducts(): void
     {
+        DB::table('product_flat')->delete();
         DB::table('products')->delete();
     }
 
@@ -383,8 +384,7 @@ class WooCommerceImporter
             $filename = Str::uuid().'.'.strtolower($ext);
             $path     = "product/{$productId}/{$filename}";
 
-            // Use the public disk so Storage::url() generates a web-accessible URL.
-            Storage::disk('public')->put($path, $response->body());
+            Storage::put($path, $response->body());
 
             return $path;
         } catch (\Throwable) {

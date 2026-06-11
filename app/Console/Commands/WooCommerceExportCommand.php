@@ -167,23 +167,42 @@ class WooCommerceExportCommand extends Command
 
     protected function extractImages(string $html, array $sitemapImages): array
     {
+        $socialHosts = ['pinterest.com', 'facebook.com', 'twitter.com', 'x.com', 'instagram.com'];
+
+        $isSocialShare = function (string $url) use ($socialHosts): bool {
+            $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+            foreach ($socialHosts as $sh) {
+                if ($host === $sh || str_ends_with($host, '.'.$sh)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
         // Strategy 1: <a href> links to wp-content/uploads images (full-size WooCommerce gallery links).
+        // Restrict to <a> tags only to avoid matching <link rel="apple-touch-icon"> and social share hrefs.
         preg_match_all(
-            '~href="(https?://[^"]+/wp-content/uploads/[^"]+\.(?:jpe?g|png|webp|gif))"~i',
+            '~<a\s[^>]*\bhref="(https?://[^"]+/wp-content/uploads/[^"]+\.(?:jpe?g|png|webp|gif))"[^>]*>~i',
             $html,
             $aHrefM
         );
-        $images = array_values(array_unique($aHrefM[1] ?? []));
+        $images = array_values(array_unique(array_filter(
+            $aHrefM[1] ?? [],
+            fn ($u) => ! $isSocialShare($u)
+        )));
 
         // Strategy 2: <img src> pointing to wp-content/uploads, excluding thumbnails and layout images.
         if (empty($images)) {
             preg_match_all(
-                '~src="(https?://[^"]+/wp-content/uploads/[^"]+\.(?:jpe?g|png|webp|gif))"~i',
+                '~<img\s[^>]*\bsrc="(https?://[^"]+/wp-content/uploads/[^"]+\.(?:jpe?g|png|webp|gif))"[^>]*>~i',
                 $html,
                 $imgSrcM
             );
-            $layoutKeywords = ['logo', 'banner', 'icon', 'payment', 'wallet', 'package', 'delivery', 'phone', 'mail', 'mazzy'];
-            $images = array_values(array_filter($imgSrcM[1] ?? [], function ($u) use ($layoutKeywords) {
+            $layoutKeywords = ['logo', 'banner', 'icon', 'payment', 'wallet', 'package', 'delivery', 'phone', 'mail', 'mazzy', 'fav', 'cropped-'];
+            $images = array_values(array_filter($imgSrcM[1] ?? [], function ($u) use ($layoutKeywords, $isSocialShare) {
+                if ($isSocialShare($u)) {
+                    return false;
+                }
                 if (preg_match('~-\d+x\d+\.(?:jpe?g|png|webp|gif)$~i', $u)) {
                     return false;
                 }
