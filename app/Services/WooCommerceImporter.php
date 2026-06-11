@@ -17,6 +17,10 @@ class WooCommerceImporter
 
     protected int $rootRgt = 2;
 
+    protected array $imageCache = [];
+
+    protected const IMAGE_CACHE_FILE = 'woocommerce-image-cache.json';
+
     protected const ATTRIBUTE_TYPE_FIELDS = [
         'text'        => 'text_value',
         'textarea'    => 'text_value',
@@ -40,6 +44,7 @@ class WooCommerceImporter
     public function import(array $data, ?callable $progress = null): array
     {
         $this->attributes = DB::table('attributes')->get()->all();
+        $this->loadImageCache();
 
         $this->deleteExistingProducts();
         $this->deleteExistingCategories();
@@ -402,14 +407,39 @@ class WooCommerceImporter
     // Image download
     // -------------------------------------------------------------------------
 
+    protected function loadImageCache(): void
+    {
+        if (Storage::exists(self::IMAGE_CACHE_FILE)) {
+            $this->imageCache = json_decode(Storage::get(self::IMAGE_CACHE_FILE), true) ?? [];
+        }
+    }
+
+    protected function saveImageCache(): void
+    {
+        Storage::put(self::IMAGE_CACHE_FILE, json_encode($this->imageCache));
+    }
+
     protected function downloadImage(string $url, int $productId): ?string
     {
         // Normalise common WooCommerce sitemap bug: /store/store/ → /store/
         $url = preg_replace('|(https?://[^/]+(?:/[^/]+)*)/([^/]+)/\2/|', '$1/$2/', $url) ?? $url;
 
+        $cacheKey = md5($url);
+
+        // Return cached path if the file still exists on disk.
+        if (isset($this->imageCache[$cacheKey])) {
+            $cachedPath = $this->imageCache[$cacheKey];
+
+            if (Storage::exists($cachedPath)) {
+                return $cachedPath;
+            }
+
+            // File was deleted — remove stale cache entry and re-download.
+            unset($this->imageCache[$cacheKey]);
+        }
+
         $attempts = [$url];
 
-        // If the URL contains a doubled segment after the host, also try without the first occurrence.
         if (preg_match('|(https?://[^/]+)/([^/]+)/\2/|', $url, $m)) {
             $attempts[] = $m[1].'/'.$m[2].'/'.substr($url, strlen($m[0]));
         }
@@ -418,6 +448,9 @@ class WooCommerceImporter
             $path = $this->tryDownload($attempt, $productId);
 
             if ($path) {
+                $this->imageCache[$cacheKey] = $path;
+                $this->saveImageCache();
+
                 return $path;
             }
         }
