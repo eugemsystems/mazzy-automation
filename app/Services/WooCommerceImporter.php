@@ -64,6 +64,9 @@ class WooCommerceImporter
             if ($progress) {
                 $progress($imported + $failed, $total);
             }
+
+            unset($productData);
+            gc_collect_cycles();
         }
 
         return compact('imported', 'failed', 'errors');
@@ -356,19 +359,22 @@ class WooCommerceImporter
 
     protected function tryDownload(string $url, int $productId): ?string
     {
+        $tempFile = tempnam(sys_get_temp_dir(), 'mazzy_img_');
+
         try {
+            // Stream directly to a temp file — avoids loading the whole image body into PHP memory.
             $response = Http::timeout(20)->withHeaders([
                 'User-Agent'      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
                 'Accept'          => 'image/webp,image/apng,image/*,*/*;q=0.8',
                 'Accept-Encoding' => 'gzip, deflate, br',
                 'Referer'         => config('app.url'),
-            ])->get($url);
+            ])->sink($tempFile)->get($url);
 
             if (! $response->ok()) {
                 return null;
             }
 
-            // Detect extension from Content-Type header if path has none.
+            // Detect extension from Content-Type header if URL path has none.
             $ext = pathinfo((string) parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
 
             if (! $ext || ! in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
@@ -384,11 +390,15 @@ class WooCommerceImporter
             $filename = Str::uuid().'.'.strtolower($ext);
             $path     = "product/{$productId}/{$filename}";
 
-            Storage::put($path, $response->body());
+            Storage::put($path, fopen($tempFile, 'r'));
 
             return $path;
         } catch (\Throwable) {
             return null;
+        } finally {
+            if (file_exists($tempFile)) {
+                @unlink($tempFile);
+            }
         }
     }
 }

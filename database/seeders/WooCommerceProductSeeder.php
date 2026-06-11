@@ -25,6 +25,8 @@ class WooCommerceProductSeeder extends Seeder
 
     public function run(): void
     {
+        ini_set('memory_limit', '512M');
+
         $file = self::JSON_FILE;
 
         // Auto-generate JSON if it doesn't exist yet.
