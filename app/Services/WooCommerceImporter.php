@@ -218,6 +218,19 @@ class WooCommerceImporter
 
     protected function importSingleProduct(array $productData, array $categoryMap): void
     {
+        DB::beginTransaction();
+
+        try {
+            $this->doImportSingleProduct($productData, $categoryMap);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    protected function doImportSingleProduct(array $productData, array $categoryMap): void
+    {
         $now = now();
 
         $productId = DB::table('products')->insertGetId([
@@ -270,11 +283,19 @@ class WooCommerceImporter
 
     protected function insertAttributeValues(int $productId, array $productData): void
     {
+        $baseUrlKey = $productData['url_key'] ?? Str::slug($productData['name'] ?? '');
+        $urlKey     = $baseUrlKey;
+        $suffix     = 2;
+
+        while (DB::table('product_flat')->where('url_key', $urlKey)->exists()) {
+            $urlKey = $baseUrlKey.'-'.$suffix++;
+        }
+
         $attrValues = [
             'name'                => $productData['name'] ?? '',
-            'url_key'             => $productData['url_key'] ?? Str::slug($productData['name'] ?? ''),
-            'short_description'   => $productData['short_description'] ?? '',
-            'description'         => $productData['description'] ?? '',
+            'url_key'             => $urlKey,
+            'short_description'   => $this->sanitizeHtml($productData['short_description'] ?? ''),
+            'description'         => $this->sanitizeHtml($productData['description'] ?? ''),
             'meta_title'          => $productData['meta_title'] ?? ($productData['name'] ?? ''),
             'meta_keywords'       => $productData['meta_keywords'] ?? '',
             'meta_description'    => $productData['meta_description'] ?? '',
@@ -282,6 +303,7 @@ class WooCommerceImporter
             'special_price'       => $productData['special_price'] ? (float) $productData['special_price'] : null,
             'weight'              => (string) ($productData['weight'] ?? '1'),
             'status'              => 1,
+            'manage_stock'        => 0,
             'new'                 => (int) (bool) ($productData['new'] ?? false),
             'featured'            => (int) (bool) ($productData['featured'] ?? false),
             'visible_individually'=> 1,
@@ -328,6 +350,52 @@ class WooCommerceImporter
         if ($rows) {
             collect($rows)->chunk(200)->each(fn ($chunk) => DB::table('product_attribute_values')->insert($chunk->all()));
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // HTML sanitisation
+    // -------------------------------------------------------------------------
+
+    protected function sanitizeHtml(string $html): string
+    {
+        if (! $html) {
+            return '';
+        }
+
+        // Strip elements that should never appear in a product description.
+        $html = preg_replace(
+            '/<(script|style|form|input|button|select|textarea|label|noscript|iframe|object|embed)[^>]*>.*?<\/\1>/si',
+            '',
+            $html
+        ) ?? $html;
+
+        $html = preg_replace(
+            '/<(script|style|form|input|button|select|textarea|label|link|meta|noscript|iframe)[^>]*\/?>/si',
+            '',
+            $html
+        ) ?? $html;
+
+        // Feed through DOMDocument so it fixes orphaned closing tags (e.g. a stray </div>
+        // with no opener) that would break Vue's template compiler.
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        libxml_use_internal_errors(true);
+        $doc->loadHTML('<html><head><meta charset="UTF-8"></head><body>'.$html.'</body></html>', LIBXML_NOERROR);
+        libxml_clear_errors();
+
+        $body   = $doc->getElementsByTagName('body')->item(0);
+        $result = '';
+
+        if ($body) {
+            foreach ($body->childNodes as $node) {
+                $result .= $doc->saveHTML($node);
+            }
+        }
+
+        // Keep only safe formatting tags — strip everything else.
+        $safe   = '<p><br><strong><b><em><i><u><ul><ol><li><h2><h3><h4><h5><h6><span><div><table><thead><tbody><tr><th><td><img><a>';
+        $result = strip_tags($result, $safe);
+
+        return trim($result);
     }
 
     // -------------------------------------------------------------------------
