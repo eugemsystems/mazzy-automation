@@ -853,10 +853,15 @@
         <script>
             // Decode product description/short_description content from data attributes.
             // Content is base64-encoded so Vue's template compiler never sees the raw HTML.
-            document.addEventListener('DOMContentLoaded', function () {
-                document.querySelectorAll('.mz-html-content[data-html]').forEach(function (el) {
-                    try { el.innerHTML = atob(el.dataset.html); } catch (e) {}
-                });
+            // Must run AFTER Vue mounts (window load) so Vue doesn't overwrite the injected content.
+            window.addEventListener('load', function () {
+                function injectDescriptions() {
+                    document.querySelectorAll('.mz-html-content[data-html]').forEach(function (el) {
+                        try { el.innerHTML = atob(el.dataset.html); } catch (e) {}
+                    });
+                }
+                // setTimeout 0 ensures this runs after Vue's own load listener finishes mounting.
+                setTimeout(injectDescriptions, 0);
             });
         </script>
     @endPushOnce
