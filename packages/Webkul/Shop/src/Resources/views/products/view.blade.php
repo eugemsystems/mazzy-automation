@@ -90,9 +90,8 @@
                     :is-selected="true"
                 >
                     <div class="container mt-[60px] max-1180:px-5">
-                        <p class="text-lg text-zinc-500 max-1180:text-sm">
-                            {!! $product->description !!}
-                        </p>
+                        <div class="text-lg text-zinc-500 max-1180:text-sm mz-html-content"
+                             data-html="{{ base64_encode($product->description ?? '') }}"></div>
                     </div>
                 </x-shop::tabs.item>
 
@@ -174,9 +173,8 @@
             </x-slot>
 
             <x-slot:content class="max-sm:px-0">
-                <div class="mb-5 text-lg text-zinc-500 max-1180:text-sm max-md:mb-1 max-md:px-4">
-                    {!! $product->description !!}
-                </div>
+                <div class="mb-5 text-lg text-zinc-500 max-1180:text-sm max-md:mb-1 max-md:px-4 mz-html-content"
+                     data-html="{{ base64_encode($product->description ?? '') }}"></div>
             </x-slot>
         </x-shop::accordion>
 
@@ -369,9 +367,8 @@
 
                                 {!! view_render_event('bagisto.shop.products.short_description.before', ['product' => $product]) !!}
 
-                                <p class="mt-6 text-lg text-zinc-500 max-sm:mt-1.5 max-sm:text-sm">
-                                    {!! $product->short_description !!}
-                                </p>
+                                <div class="mt-6 text-lg text-zinc-500 max-sm:mt-1.5 max-sm:text-sm mz-html-content"
+                                     data-html="{{ base64_encode($product->short_description ?? '') }}"></div>
 
                                 {!! view_render_event('bagisto.shop.products.short_description.after', ['product' => $product]) !!}
 
@@ -852,5 +849,15 @@
         @if (core()->getConfigData('customer.captcha.credentials.status'))
             {!! \Webkul\Customer\Facades\Captcha::renderJS() !!}
         @endif
+
+        <script>
+            // Decode product description/short_description content from data attributes.
+            // Content is base64-encoded so Vue's template compiler never sees the raw HTML.
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.mz-html-content[data-html]').forEach(function (el) {
+                    try { el.innerHTML = atob(el.dataset.html); } catch (e) {}
+                });
+            });
+        </script>
     @endPushOnce
 </x-shop::layouts>
