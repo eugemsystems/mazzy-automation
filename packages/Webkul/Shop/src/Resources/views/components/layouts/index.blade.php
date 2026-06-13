@@ -30,10 +30,16 @@
     {{-- Bagisto Vite: Tailwind CSS + Vue.js (always loaded) --}}
     @bagistoVite(['src/Resources/assets/css/app.css', 'src/Resources/assets/js/app.js'])
 
-    {{-- Shared: fonts + Konta theme CSS loaded on ALL pages --}}
+    {{-- Shared: fonts + Konta theme CSS loaded on ALL pages.
+         Fonts load NON-render-blocking (media=print swap trick) with a trimmed weight set,
+         so a slow connection to fonts.gstatic.com can never stall page load. --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&family=Public+Sans:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    @php
+        $fontsHref = 'https://fonts.googleapis.com/css2?family=Exo:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap';
+    @endphp
+    <link rel="stylesheet" href="{{ $fontsHref }}" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{{ $fontsHref }}"></noscript>
     <link rel="stylesheet" href="{{ asset('themes/shop/konta/css/app.min.css') }}">
     <link rel="stylesheet" href="{{ asset('themes/shop/konta/css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('themes/shop/konta/css/style.css') }}">
@@ -419,6 +425,14 @@
             <div class="preloader-inner"><span class="loader"></span></div>
         </div>
 
+        <script>
+            /* Safety: never let the preloader hang waiting on window.load (e.g. slow font CDN). Hide after 5s max. */
+            setTimeout(function () {
+                var p = document.querySelector('.preloader');
+                if (p) { p.style.opacity = '0'; p.style.display = 'none'; }
+            }, 5000);
+        </script>
+
         {{-- Side Widget Panel (main site only) --}}
         <div class="sidemenu-wrapper d-none d-lg-block">
             <div class="sidemenu-content sidemenu-area">
@@ -537,7 +551,7 @@
     @endif
 
     {{-- Vue App Root --}}
-    <div style="margin-top: -30px;" id="app">
+    <div id="app">
         <x-shop::flash-group />
         <x-shop::modal.confirm />
 
