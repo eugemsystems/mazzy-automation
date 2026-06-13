@@ -1,18 +1,18 @@
 {!! view_render_event('bagisto.shop.checkout.onepage.address.before') !!}
 
 <!-- Accordion Blade Component -->
-<x-shop::accordion class="mb-7 mt-8 overflow-hidden rounded-xl !border-b-0 max-md:mb-0 max-md:mt-0 max-md:rounded-lg max-md:!border-none max-md:!bg-gray-100">
+<x-shop::accordion class="mb-4 overflow-hidden rounded-2xl border border-slate-100 bg-white !border-b shadow-sm">
     <!-- Accordion Header Component Slot -->
-    <x-slot:header class="!p-0 max-md:!mb-0 max-md:rounded-t-md max-md:!p-3 max-md:text-sm max-md:font-medium max-sm:!p-2">
+    <x-slot:header class="!px-5 !py-4">
         <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-medium max-md:text-base">
+            <h2 class="text-base font-semibold text-slate-900">
                 @lang('shop::app.checkout.onepage.address.title')
             </h2>
         </div>
     </x-slot>
 
     <!-- Accordion Content Component Slot -->
-    <x-slot:content class="mt-8 !p-0 max-md:mt-0 max-md:rounded-t-none max-md:border max-md:border-t-0 max-md:!p-4">
+    <x-slot:content class="!px-5 !pb-5 !pt-0">
         <!-- If the customer is guest -->
         <template v-if="cart.is_guest">
             @include('shop::checkout.onepage.address.guest')

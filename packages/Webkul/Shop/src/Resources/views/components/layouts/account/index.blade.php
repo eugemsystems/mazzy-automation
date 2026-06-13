@@ -5,7 +5,7 @@
     </x-slot>
 
     <!-- Page Content -->
-    <div class="bg-zinc-50 min-h-screen py-8 max-md:py-4">
+    <div class="min-h-screen bg-slate-50 py-8 max-md:py-4">
         <div class="container px-[60px] max-lg:px-8 max-md:px-4">
             <x-shop::layouts.account.breadcrumb />
 

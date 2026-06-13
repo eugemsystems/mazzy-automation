@@ -15,14 +15,14 @@
         <x-shop::layouts.account.navigation />
     </div>
 
-    <div class="flex-auto min-w-0 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none">
+    <div class="flex-auto min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none">
         <!-- Page Header -->
-        <div class="flex items-center justify-between border-b border-zinc-100 px-6 py-4 max-sm:px-4">
+        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 max-sm:px-4">
             <div class="flex items-center gap-2">
                 <a class="flex md:hidden" href="{{ route('shop.customers.account.index') }}">
                     <span class="text-2xl icon-arrow-left rtl:icon-arrow-right"></span>
                 </a>
-                <h2 class="text-base font-semibold text-zinc-900">
+                <h2 class="text-base font-semibold text-slate-900">
                     @lang('shop::app.customers.account.profile.index.title')
                 </h2>
             </div>
@@ -31,7 +31,7 @@
 
             <a
                 href="{{ route('shop.customers.account.profile.edit') }}"
-                class="secondary-button border-zinc-200 px-4 py-2 text-sm font-normal"
+                class="secondary-button border-slate-200 px-4 py-2 text-sm font-normal"
             >
                 @lang('shop::app.customers.account.profile.index.edit')
             </a>
@@ -42,14 +42,14 @@
         <div class="p-6 max-sm:p-4">
 
         <!-- Profile Information Card -->
-        <div class="rounded-2xl border border-zinc-200 overflow-hidden">
+        <div class="rounded-2xl border border-slate-200 overflow-hidden">
             {!! view_render_event('bagisto.shop.customers.account.profile.first_name.before') !!}
 
-            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 border-b border-zinc-100 hover:bg-zinc-50/50 max-md:px-4">
-                <p class="text-sm font-medium text-zinc-500">
+            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 border-b border-slate-100 hover:bg-slate-50/50 max-md:px-4">
+                <p class="text-sm font-medium text-slate-500">
                     @lang('shop::app.customers.account.profile.index.first-name')
                 </p>
-                <p class="text-sm font-medium text-zinc-900" v-pre>
+                <p class="text-sm font-medium text-slate-900" v-pre>
                     {{ $customer->first_name }}
                 </p>
             </div>
@@ -57,11 +57,11 @@
             {!! view_render_event('bagisto.shop.customers.account.profile.first_name.after') !!}
             {!! view_render_event('bagisto.shop.customers.account.profile.last_name.before') !!}
 
-            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 border-b border-zinc-100 hover:bg-zinc-50/50 max-md:px-4">
-                <p class="text-sm font-medium text-zinc-500">
+            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 border-b border-slate-100 hover:bg-slate-50/50 max-md:px-4">
+                <p class="text-sm font-medium text-slate-500">
                     @lang('shop::app.customers.account.profile.index.last-name')
                 </p>
-                <p class="text-sm font-medium text-zinc-900" v-pre>
+                <p class="text-sm font-medium text-slate-900" v-pre>
                     {{ $customer->last_name }}
                 </p>
             </div>
@@ -69,11 +69,11 @@
             {!! view_render_event('bagisto.shop.customers.account.profile.last_name.after') !!}
             {!! view_render_event('bagisto.shop.customers.account.profile.gender.before') !!}
 
-            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 border-b border-zinc-100 hover:bg-zinc-50/50 max-md:px-4">
-                <p class="text-sm font-medium text-zinc-500">
+            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 border-b border-slate-100 hover:bg-slate-50/50 max-md:px-4">
+                <p class="text-sm font-medium text-slate-500">
                     @lang('shop::app.customers.account.profile.index.gender')
                 </p>
-                <p class="text-sm font-medium text-zinc-900" v-pre>
+                <p class="text-sm font-medium text-slate-900" v-pre>
                     {{ $customer->gender ?? '-' }}
                 </p>
             </div>
@@ -81,11 +81,11 @@
             {!! view_render_event('bagisto.shop.customers.account.profile.gender.after') !!}
             {!! view_render_event('bagisto.shop.customers.account.profile.date_of_birth.before') !!}
 
-            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 border-b border-zinc-100 hover:bg-zinc-50/50 max-md:px-4">
-                <p class="text-sm font-medium text-zinc-500">
+            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 border-b border-slate-100 hover:bg-slate-50/50 max-md:px-4">
+                <p class="text-sm font-medium text-slate-500">
                     @lang('shop::app.customers.account.profile.index.dob')
                 </p>
-                <p class="text-sm font-medium text-zinc-900" v-pre>
+                <p class="text-sm font-medium text-slate-900" v-pre>
                     {{ $customer->date_of_birth ?? '-' }}
                 </p>
             </div>
@@ -93,11 +93,11 @@
             {!! view_render_event('bagisto.shop.customers.account.profile.date_of_birth.after') !!}
             {!! view_render_event('bagisto.shop.customers.account.profile.email.before') !!}
 
-            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 hover:bg-zinc-50/50 max-md:px-4">
-                <p class="text-sm font-medium text-zinc-500">
+            <div class="grid grid-cols-[2fr_3fr] px-6 py-2.5 hover:bg-slate-50/50 max-md:px-4">
+                <p class="text-sm font-medium text-slate-500">
                     @lang('shop::app.customers.account.profile.index.email')
                 </p>
-                <p class="text-sm font-medium text-zinc-900" v-pre>
+                <p class="text-sm font-medium text-slate-900" v-pre>
                     {{ $customer->email }}
                 </p>
             </div>
@@ -128,7 +128,6 @@
                             <x-shop::form.control-group.control
                                 type="password"
                                 name="password"
-                                class="px-6 py-4"
                                 rules="required"
                                 placeholder="Enter your password"
                             />
@@ -142,7 +141,7 @@
                     <x-slot:footer>
                         <button
                             type="submit"
-                            class="flex py-3 primary-button rounded-2xl px-11 max-md:rounded-lg max-md:px-6 max-md:text-sm"
+                            class="rounded-lg bg-red-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-600"
                         >
                             @lang('shop::app.customers.account.profile.index.delete')
                         </button>

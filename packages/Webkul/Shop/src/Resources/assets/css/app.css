@@ -434,12 +434,27 @@ img.lazy {
         @apply bg-slate-400;
     }
 
+    /* ── Global form controls ── */
+    .mz-input {
+        @apply block w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 transition-colors focus:border-[#332a5e] focus:outline-none focus:ring-2 focus:ring-[#332a5e]/15;
+    }
+
+    .mz-select {
+        @apply block w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 transition-colors focus:border-[#332a5e] focus:outline-none focus:ring-2 focus:ring-[#332a5e]/15 cursor-pointer appearance-none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath stroke='%23718096' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 20px 20px;
+        padding-right: 2.5rem;
+    }
+
+    /* ── Buttons ── */
     .primary-button {
-        @apply flex gap-x-1.5 items-center place-content-center font-medium rounded-xl text-white bg-navyBlue border border-navyBlue px-8 py-4 max-w-max cursor-pointer transition-all hover:opacity-[0.9];
+        @apply inline-flex gap-x-1.5 items-center justify-center font-semibold rounded-lg text-sm text-white bg-[#332a5e] border border-[#332a5e] px-5 py-2.5 max-w-max cursor-pointer transition-all hover:bg-[#3f3472] active:scale-[.98];
     }
 
     .secondary-button {
-        @apply flex gap-x-1.5 items-center place-content-center font-medium rounded-xl bg-white text-navyBlue border border-navyBlue px-8 py-4 max-w-max cursor-pointer transition-all hover:bg-[#050e3a0d];
+        @apply inline-flex gap-x-1.5 items-center justify-center font-semibold rounded-lg text-sm bg-white text-[#332a5e] border border-[#332a5e]/30 px-5 py-2.5 max-w-max cursor-pointer transition-all hover:bg-[#332a5e]/5 active:scale-[.98];
     }
 
     .shimmer {

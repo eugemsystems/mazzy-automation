@@ -1,5 +1,5 @@
 <!-- For large screens greater than 1180px. -->
-<div class="sticky top-20 flex h-max gap-8 max-1180:hidden">
+<div class="sticky top-20 flex h-max gap-5 max-1180:hidden bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
     <!-- Product Image and Videos Slider -->
     <div class="flex-24 h-509 flex min-w-[100px] max-w-[100px] flex-wrap place-content-start justify-center gap-2.5 overflow-y-auto overflow-x-hidden">
         <!-- Arrow Up -->
@@ -21,7 +21,7 @@
             <template v-for="(media, index) in [...media.images, ...media.videos]">
                 <video
                     v-if="media.type == 'videos'"
-                    :class="`transparent max-h-[100px] min-w-[100px] cursor-pointer rounded-xl border ${isActiveMedia(index) ? 'pointer-events-none border-navyBlue' : 'border-white'}`"
+                    :class="`transparent max-h-[100px] min-w-[100px] cursor-pointer rounded-xl border ${isActiveMedia(index) ? 'pointer-events-none border-[#332a5e]' : 'border-white'}`"
                     @click="change(media, index)"
                     alt="{{ $product->name }}"
                     tabindex="0"
@@ -34,7 +34,7 @@
 
                 <img
                     v-else
-                    :class="`transparent max-h-[100px] min-w-[100px] cursor-pointer rounded-xl border ${isActiveMedia(index) ? 'pointer-events-none border border-navyBlue' : 'border-white'}`"
+                    :class="`transparent max-h-[100px] min-w-[100px] cursor-pointer rounded-xl border ${isActiveMedia(index) ? 'pointer-events-none border border-[#332a5e]' : 'border-white'}`"
                     :src="media.small_image_url"
                     alt="{{ $product->name }}"
                     width="100"
@@ -59,18 +59,18 @@
 
     <!-- Product Base Image and Video with Shimmer-->
     <div
-        class="max-h-[610px] max-w-[560px]"
+        class="max-h-[610px] max-w-[500px]"
         v-show="isMediaLoading"
     >
-        <div class="shimmer min-h-[607px] min-w-[560px] rounded-xl bg-zinc-200"></div>
+        <div class="shimmer min-h-[500px] min-w-[460px] rounded-xl bg-slate-100"></div>
     </div>
 
     <div
-        class="max-h-[610px] max-w-[560px]"
+        class="max-h-[610px] max-w-[500px] flex items-center justify-center"
         v-show="! isMediaLoading"
     >
         <img
-            class="min-w-[450px] cursor-pointer rounded-xl"
+            class="min-w-[400px] cursor-pointer rounded-xl object-contain"
             :src="baseFile.path"
             v-if="baseFile.type == 'image'"
             alt="{{ $product->name }}"

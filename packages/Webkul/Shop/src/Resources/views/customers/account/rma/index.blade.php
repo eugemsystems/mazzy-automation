@@ -13,14 +13,14 @@
         <x-shop::layouts.account.navigation />
     </div>
 
-    <div class="flex-auto min-w-0 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none">
-        <div class="flex items-center justify-between border-b border-zinc-100 px-6 py-4 max-sm:px-4">
-            <h2 class="text-base font-semibold text-zinc-900">
+    <div class="flex-auto min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none">
+        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 max-sm:px-4">
+            <h2 class="text-base font-semibold text-slate-900">
                 @lang('shop::app.rma.customer-rma-index.heading')
             </h2>
             <a
                 href="{{ route('shop.customers.account.rma.create') }}"
-                class="secondary-button flex items-center gap-x-2 border-zinc-200 px-4 py-2 text-sm font-normal"
+                class="secondary-button flex items-center gap-x-2 border-slate-200 px-4 py-2 text-sm font-normal"
             >
                 @lang('shop::app.rma.customer.create.heading')
             </a>

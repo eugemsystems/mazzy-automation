@@ -14,19 +14,23 @@
     >
         <div>
             <div
-                class="flex flex-row justify-center gap-8 bg-zinc-100 max-sm:gap-1.5"
+                class="flex"
                 :style="positionStyles"
             >
-                <div
-                    role="button"
-                    tabindex="0"
-                    v-for="tab in tabs"
-                    class="cursor-pointer px-8 py-5 text-xl font-medium text-zinc-600 max-md:px-4 max-md:py-3 max-md:text-sm max-sm:px-2.5 max-sm:py-2.5"
-                    :class="{'border-b-2 border-navyBlue !text-black transition': tab.isActive }"
-                    :id="tab.$attrs.id + '-button'"
-                    @click="change(tab)"
-                >
-                    @{{ tab.title }}
+                <div class="inline-flex flex-wrap gap-1 rounded-xl border border-slate-100 bg-slate-50 p-1">
+                    <div
+                        role="button"
+                        tabindex="0"
+                        v-for="tab in tabs"
+                        class="cursor-pointer whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition-all"
+                        :class="tab.isActive
+                            ? 'bg-white text-[#332a5e] shadow-sm'
+                            : 'text-slate-500 hover:text-slate-900'"
+                        :id="tab.$attrs.id + '-button'"
+                        @click="change(tab)"
+                    >
+                        @{{ tab.title }}
+                    </div>
                 </div>
             </div>
 

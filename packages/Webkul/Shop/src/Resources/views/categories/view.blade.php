@@ -79,8 +79,9 @@
             type="text/x-template"
             id="v-category-template"
         >
-            <div class="container py-5">
-                <div style="display:flex; align-items:flex-start; gap:1.5rem; margin-top:10px;">
+            <div class="bg-[#f5f6fb] py-8 max-sm:py-5">
+            <div class="container">
+                <div class="flex items-start gap-6 max-md:flex-col">
                     <!-- Product Listing Filters -->
                     @include('shop::categories.filters')
 
@@ -93,7 +94,7 @@
 
                         <!-- Product List Card Container -->
                         <div
-                            class="mt-8 grid grid-cols-1 gap-6"
+                            class="grid grid-cols-1 gap-4"
                             v-if="(filters.toolbar.applied.mode ?? filters.toolbar.default.mode) === 'list'"
                         >
                             <!-- Product Card Shimmer Effect -->
@@ -137,10 +138,10 @@
                         </div>
 
                         <!-- Product Grid Card Container -->
-                        <div v-else class="mt-8 max-md:mt-5">
+                        <div v-else>
                             <!-- Product Card Shimmer Effect -->
                             <template v-if="isLoading">
-                                <div class="grid grid-cols-3 gap-8 max-1060:grid-cols-2 max-md:justify-items-center max-md:gap-x-4">
+                                <div class="grid grid-cols-3 gap-5 max-1060:grid-cols-2 max-md:gap-4 max-sm:grid-cols-2 max-sm:gap-3">
                                     <x-shop::shimmer.products.cards.grid count="12" />
                                 </div>
                             </template>
@@ -150,7 +151,7 @@
                             <!-- Product Card Listing -->
                             <template v-else>
                                 <template v-if="products.length">
-                                    <div class="grid grid-cols-3 gap-8 max-1060:grid-cols-2 max-md:justify-items-center max-md:gap-x-4">
+                                    <div class="grid grid-cols-3 gap-5 max-1060:grid-cols-2 max-md:gap-4 max-sm:grid-cols-2 max-sm:gap-3">
                                         <x-shop::products.card
                                             ::mode="'grid'"
                                             v-for="product in products"
@@ -199,7 +200,7 @@
                         >
                             <!-- Spinner -->
                             <img
-                                class="h-5 w-5 animate-spin text-navyBlue"
+                                class="h-5 w-5 animate-spin text-[#332a5e]"
                                 src="{{ bagisto_asset('images/spinner.svg') }}"
                                 alt="Loading"
                             />
@@ -208,6 +209,7 @@
                         {!! view_render_event('bagisto.shop.categories.view.grid.load_more_button.after') !!}
                     </div>
                 </div>
+            </div>
             </div>
         </script>
 

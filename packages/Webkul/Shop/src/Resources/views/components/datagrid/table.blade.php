@@ -17,7 +17,7 @@
         type="text/x-template"
         id="v-datagrid-table-template"
     >
-        <div class="w-full overflow-x-auto rounded-xl border max-md:rounded-none max-md:border-0">
+        <div class="w-full overflow-x-auto">
             <table class="w-full border-collapse bg-white" style="min-width: 600px">
                 <slot
                     name="header"
@@ -34,9 +34,9 @@
 
                     <template v-else>
                         <thead>
-                            <tr class="border-b border-zinc-200 bg-zinc-50">
+                            <tr class="border-b border-slate-200 bg-slate-50">
                                 <!-- Mass Actions -->
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-zinc-500 w-10" v-if="available.massActions.length">
+                                <th class="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 w-10" v-if="available.massActions.length">
                                     <label for="mass_action_select_all_records">
                                         <input
                                             type="checkbox"
@@ -56,8 +56,8 @@
                                 <!-- Columns -->
                                 <template v-for="column in available.columns">
                                     <th
-                                        class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-zinc-500 whitespace-nowrap"
-                                        :class="{'cursor-pointer select-none hover:text-zinc-800': column.sortable}"
+                                        class="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 whitespace-nowrap"
+                                        :class="{'cursor-pointer select-none hover:text-slate-800': column.sortable}"
                                         @click="sort(column)"
                                         v-if="column.visibility"
                                     >
@@ -73,7 +73,7 @@
                                 </template>
 
                                 <!-- Actions -->
-                                <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-zinc-500" v-if="available.actions.length">
+                                <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500" v-if="available.actions.length">
                                     @lang('shop::app.components.datagrid.table.actions')
                                 </th>
                             </tr>
@@ -98,11 +98,11 @@
                         <tbody>
                             <template v-if="available.records.length">
                                 <tr
-                                    class="border-b border-zinc-100 bg-white transition-colors hover:bg-zinc-50/50"
+                                    class="border-b border-slate-100 bg-white transition-colors hover:bg-slate-50/50"
                                     v-for="record in available.records"
                                 >
                                     <!-- Mass Actions -->
-                                    <td class="px-4 py-3" v-if="available.massActions.length">
+                                    <td class="px-4 py-2.5" v-if="available.massActions.length">
                                         <label :for="`mass_action_select_record_${record[available.meta.primary_column]}`">
                                             <input
                                                 type="checkbox"
@@ -119,14 +119,14 @@
                                     <!-- Columns -->
                                     <template v-for="column in available.columns">
                                         <td
-                                            class="px-4 py-3 text-sm text-zinc-700 whitespace-nowrap"
+                                            class="px-4 py-2.5 text-sm text-slate-700 whitespace-nowrap"
                                             v-html="record[column.index]"
                                             v-if="column.visibility"
                                         ></td>
                                     </template>
 
                                     <!-- Actions -->
-                                    <td class="px-4 py-3 text-right" v-if="available.actions.length">
+                                    <td class="px-4 py-2.5 text-right" v-if="available.actions.length">
                                         <span
                                             class="inline-flex cursor-pointer rounded-md p-1.5 text-2xl transition-all hover:bg-gray-100"
                                             :class="action.icon"
@@ -141,7 +141,7 @@
 
                             <template v-else>
                                 <tr>
-                                    <td colspan="99" class="px-5 py-8 text-center text-sm text-zinc-500">
+                                    <td colspan="99" class="px-5 py-8 text-center text-sm text-slate-500">
                                         @lang('shop::app.components.datagrid.table.no-records-available')
                                     </td>
                                 </tr>
@@ -164,30 +164,30 @@
                         <!-- Information Panel -->
                         <tfoot v-if="$parent.available.records.length">
                             <tr>
-                                <td colspan="99" class="border-t border-zinc-100">
+                                <td colspan="99" class="border-t border-slate-100">
                                     <div class="flex items-center justify-between px-5 py-3">
-                                        <p class="text-xs text-zinc-500">
+                                        <p class="text-xs text-slate-500">
                                             @{{ "@lang('shop::app.components.datagrid.table.showing')".replace(':firstItem', $parent.available.meta.from) }}
                                             @{{ "@lang('shop::app.components.datagrid.table.to')".replace(':lastItem', $parent.available.meta.to) }}
                                             @{{ "@lang('shop::app.components.datagrid.table.of')".replace(':total', $parent.available.meta.total) }}
                                         </p>
 
-                                        <div class="inline-flex items-center rounded-lg border border-zinc-200 overflow-hidden text-sm">
+                                        <div class="inline-flex items-center rounded-lg border border-slate-200 overflow-hidden text-sm">
                                             <button
                                                 type="button"
-                                                class="flex h-8 w-8 items-center justify-center text-zinc-500 hover:bg-zinc-50 border-r border-zinc-200 transition-colors"
+                                                class="flex h-8 w-8 items-center justify-center text-slate-500 hover:bg-slate-50 border-r border-slate-200 transition-colors"
                                                 @click="changePage('previous')"
                                             >
                                                 <span class="icon-arrow-left rtl:icon-arrow-right text-lg"></span>
                                             </button>
 
-                                            <span class="px-3 py-1 text-xs font-medium text-zinc-700 min-w-[60px] text-center">
+                                            <span class="px-3 py-1 text-xs font-medium text-slate-700 min-w-[60px] text-center">
                                                 @{{ $parent.available.meta.current_page }} / @{{ $parent.available.meta.last_page }}
                                             </span>
 
                                             <button
                                                 type="button"
-                                                class="flex h-8 w-8 items-center justify-center text-zinc-500 hover:bg-zinc-50 border-l border-zinc-200 transition-colors"
+                                                class="flex h-8 w-8 items-center justify-center text-slate-500 hover:bg-slate-50 border-l border-slate-200 transition-colors"
                                                 @click="changePage('next')"
                                             >
                                                 <span class="icon-arrow-right rtl:icon-arrow-left text-lg"></span>

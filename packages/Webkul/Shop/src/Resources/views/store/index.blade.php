@@ -5,262 +5,145 @@
 
 @push('styles')
 <style>
-    /* ===== LAYOUT ===== */
-    .mz-shop-layout {
-        display: grid;
-        grid-template-columns: 260px 1fr;
-        gap: 28px;
-        align-items: start;
-    }
-    @media (max-width: 991px) {
-        .mz-shop-layout { grid-template-columns: 1fr; }
-        .mz-shop-sidebar { display: none; }
-    }
-
-    /* ===== PRODUCT GRID ===== */
-    .mz-prod-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-    }
-    @media (max-width: 991px) { .mz-prod-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 480px)  { .mz-prod-grid { grid-template-columns: 1fr; } }
-
-    /* ===== PRODUCT CARDS ===== */
-    .mz-product {
-        background: #fff; border: 1px solid #e8eaed; border-radius: 10px;
-        overflow: hidden; transition: box-shadow .25s, transform .25s;
-        height: 100%; display: flex; flex-direction: column;
-    }
-    .mz-product:hover { box-shadow: 0 8px 28px rgba(16,49,120,.14); transform: translateY(-3px); }
-    .mz-product .thumbnail-wrapper { position: relative; overflow: hidden; background: #f7f8fa; }
-    .mz-product .thumbnail-wrapper a { display: block; }
-    .mz-product .thumbnail-wrapper img { width: 100%; height: 220px; object-fit: cover; transition: transform .4s; display: block; }
-    .mz-product:hover .thumbnail-wrapper img { transform: scale(1.06); }
-    .mz-product .product-label { position: absolute; top: 10px; left: 10px; z-index: 2; }
-    .mz-product .onsale    { background: #e74c3c; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 3px; text-transform: uppercase; }
-    .mz-product .badge-new { background: #332a5e; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 3px; }
-    .mz-product .product-group-button {
-        position: absolute; bottom: -50px; left: 0; right: 0;
-        display: flex; align-items: center; justify-content: center; gap: 6px;
-        padding: 10px; background: rgba(255,255,255,.92); transition: bottom .3s; z-index: 3;
-    }
-    .mz-product:hover .product-group-button { bottom: 0; }
-    .mz-product .product-group-button button,
-    .mz-product .product-group-button a {
-        display: inline-flex; align-items: center; justify-content: center;
-        width: 36px; height: 36px; border-radius: 50%;
-        border: 1px solid #e0e4ee; background: #fff; color: #332a5e;
-        font-size: 14px; cursor: pointer; transition: all .2s; text-decoration: none;
-    }
-    .mz-product .product-group-button button:hover,
-    .mz-product .product-group-button a:hover { background: #FF9923; border-color: #FF9923; color: #fff; }
-    .mz-product .meta-wrapper   { padding: 14px 16px 6px; flex: 1; }
-    .mz-product .product-name   { font-size: 14px; font-weight: 600; color: #1a1a2e; margin: 0 0 8px; line-height: 1.4; }
-    .mz-product .product-name a { color: inherit; text-decoration: none; }
-    .mz-product .product-name a:hover { color: #332a5e; }
-    .mz-product .price     { display: block; font-size: 15px; font-weight: 700; color: #332a5e; margin-bottom: 6px; }
-    .mz-product .price del { color: #aaa; font-weight: 400; font-size: 13px; margin-right: 5px; }
-    .mz-product .price ins { text-decoration: none; }
-    .mz-product .meta-wrapper-2 { padding: 10px 16px 16px; }
-    .mz-product .mz-atc-btn {
-        display: block; width: 100%; padding: 10px 16px;
-        background: #332a5e; color: #fff; border: none; border-radius: 6px;
-        font-size: 13px; font-weight: 600; cursor: pointer;
-        text-align: center; text-decoration: none; transition: background .2s; font-family: inherit;
-    }
-    .mz-product .mz-atc-btn:hover    { background: #FF9923; }
-    .mz-product .mz-atc-btn:disabled { opacity: .6; cursor: not-allowed; }
-
-    /* ===== SORT BAR ===== */
-    .mz-sortbar {
-        background: #fff; border: 1px solid #e8eaed; border-radius: 8px;
-        padding: 12px 18px; margin-bottom: 20px;
-        display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-    }
-    .mz-result-count { color: #64748b; font-size: 13.5px; }
-    .mz-ordering { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-    .mz-ordering label { color: #64748b; white-space: nowrap; }
-    .mz-ordering select {
-        border: 1.5px solid #e2e8f0; border-radius: 6px; padding: 6px 12px;
-        font-size: 13px; color: #1e293b; background: #fff; cursor: pointer;
-        min-width: 190px; font-family: inherit;
-    }
-
-    /* ===== SIDEBAR ===== */
-    .mz-cat-sidebar { background: #fff; border: 1px solid #e8eaed; border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
-    .mz-cat-sidebar .mz-cat-title {
-        background: #332a5e; color: #fff; font-size: 13px; font-weight: 700;
-        padding: 13px 18px; letter-spacing: .5px; text-transform: uppercase;
-        display: flex; align-items: center; gap: 8px;
-    }
-    .mz-cat-sidebar ul { list-style: none; margin: 0; padding: 6px 0; }
-    .mz-cat-sidebar li a {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 9px 18px; font-size: 13.5px; color: #334155; text-decoration: none;
-        transition: all .15s; border-left: 3px solid transparent;
-    }
-    .mz-cat-sidebar li a:hover { background: #f8fafc; color: #332a5e; border-left-color: #332a5e; }
-    .mz-cat-sidebar li.active a { color: #332a5e; font-weight: 600; background: #f0f4ff; border-left-color: #332a5e; }
-
-    /* Sidebar search */
-    .mz-sidebar-search {
-        display: flex; border: 1.5px solid #e2e8f0; border-radius: 8px; overflow: hidden;
-        background: #fff; transition: border-color .2s;
-    }
-    .mz-sidebar-search:focus-within { border-color: #332a5e; }
-    .mz-sidebar-search input {
-        flex: 1; border: none; outline: none; padding: 9px 14px;
-        font-size: 13px; font-family: inherit; background: transparent; color: #1e293b;
-    }
-    .mz-sidebar-search button {
-        background: #332a5e; border: none; color: #fff; padding: 9px 14px;
-        cursor: pointer; font-size: 13px; transition: background .2s; font-family: inherit;
-    }
-    .mz-sidebar-search button:hover { background: #FF9923; }
-
-    /* ===== MISC ===== */
-    .mz-section-title { font-size: 19px; font-weight: 700; color: #1e293b; border-bottom: 3px solid #332a5e; display: inline-block; padding-bottom: 4px; margin-bottom: 20px; }
-    .mz-skeleton { background: linear-gradient(90deg,#f0f2f5 25%,#e4e7ec 50%,#f0f2f5 75%); background-size: 400% 100%; animation: mz-shimmer 1.4s ease-in-out infinite; border-radius: 8px; }
     @keyframes mz-shimmer { 0%{background-position:100% 50%} 100%{background-position:0% 50%} }
-    .mz-loadmore {
-        display: inline-block; padding: 11px 44px; border: 2px solid #332a5e;
-        color: #332a5e; border-radius: 6px; font-size: 14px; font-weight: 600;
-        cursor: pointer; background: #fff; transition: all .2s; font-family: inherit;
-    }
-    .mz-loadmore:hover    { background: #332a5e; color: #fff; }
-    .mz-loadmore:disabled { opacity: .6; cursor: not-allowed; }
-    .mz-empty { text-align: center; padding: 60px 20px; }
-    .mz-empty i { font-size: 52px; color: #cbd5e1; display: block; margin-bottom: 14px; }
-    .mz-empty h4 { color: #64748b; font-size: 16px; margin: 0 0 16px; }
-
-    /* Trust strip */
-    .mz-trust-strip { background: #332a5e; padding: 18px 0; }
-    .mz-trust-grid  { display: grid; grid-template-columns: repeat(3,1fr); }
-    .mz-trust-item  { display: flex; align-items: center; justify-content: center; gap: 12px; color: #fff; font-size: 13.5px; font-weight: 600; padding: 4px 0; }
-    .mz-trust-item + .mz-trust-item { border-left: 1px solid rgba(255,255,255,.15); }
-    .mz-trust-item i { font-size: 22px; opacity: .85; }
-    .mz-trust-item p { margin: 0; font-size: 12px; font-weight: 400; opacity: .8; }
+    .mz-skeleton { background: linear-gradient(90deg,#f0f2f5 25%,#e4e7ec 50%,#f0f2f5 75%); background-size: 400% 100%; animation: mz-shimmer 1.4s ease-in-out infinite; border-radius: 8px; }
+    .mz-price del { color: #aaa; font-weight: 400; font-size: 12px; margin-right: 4px; }
+    .mz-price ins { text-decoration: none; }
 </style>
 @endpush
 
 <x-shop::layouts>
     <x-slot:title>Shop - Mazzy Automations</x-slot>
 
-    {{-- Store breadcrumb --}}
-    <div class="mz-breadcrumb-banner">
-        <div class="mz-bb-inner">
-            <h1>Shop</h1>
-            <nav>
-                <a href="{{ route('shop.home.index') }}">Home</a>
-                <span class="sep">/</span>
-                <span class="current">Shop</span>
+    {{-- Breadcrumb --}}
+    <div style="background:#332a5e; padding:28px 0 22px;">
+        <div class="container">
+            <h1 style="color:#fff; font-size:22px; font-weight:700; margin:0 0 6px;">Shop</h1>
+            <nav style="font-size:13px;">
+                <a href="{{ route('shop.home.index') }}" style="color:rgba(255,255,255,.7); text-decoration:none;">Home</a>
+                <span style="color:rgba(255,255,255,.4); margin:0 8px;">/</span>
+                <span style="color:#FF9923;">Shop</span>
             </nav>
         </div>
     </div>
 
-
-
-    {{-- ===== SHOP BODY ===== --}}
-    <section style="padding: 50px 0 70px; background: #f7f8fc;">
+    {{-- Shop Body --}}
+    <section class="bg-[#f5f6fb] py-8 max-sm:py-5">
         <div class="container">
-
-            {{-- Loading placeholder shown before Vue mounts --}}
             <v-mazzy-store>
-                <div class="mz-shop-layout">
-                    <div class="mz-shop-sidebar">
-                        <div class="mz-skeleton" style="height:400px;"></div>
+                {{-- Pre-mount skeleton --}}
+                <div class="flex items-start gap-6 max-md:flex-col">
+                    <div class="min-w-[240px] md:max-w-[240px] max-md:hidden">
+                        <div class="mz-skeleton h-80 rounded-2xl"></div>
                     </div>
-                    <div class="mz-prod-grid">
-                        <div class="mz-skeleton" style="height:320px;"></div>
-                        <div class="mz-skeleton" style="height:320px;"></div>
-                        <div class="mz-skeleton" style="height:320px;"></div>
-                        <div class="mz-skeleton" style="height:320px;"></div>
-                        <div class="mz-skeleton" style="height:320px;"></div>
-                        <div class="mz-skeleton" style="height:320px;"></div>
+                    <div class="flex-1 grid grid-cols-3 gap-5 max-sm:grid-cols-2 max-sm:gap-3">
+                        <div class="mz-skeleton h-72 rounded-xl"></div>
+                        <div class="mz-skeleton h-72 rounded-xl"></div>
+                        <div class="mz-skeleton h-72 rounded-xl"></div>
+                        <div class="mz-skeleton h-72 rounded-xl"></div>
+                        <div class="mz-skeleton h-72 rounded-xl"></div>
+                        <div class="mz-skeleton h-72 rounded-xl"></div>
                     </div>
                 </div>
             </v-mazzy-store>
-
         </div>
     </section>
 
     @pushOnce('scripts')
 
-    {{-- Vue 3 template for v-mazzy-store --}}
     <script type="text/x-template" id="v-mazzy-store-template">
-        <div class="mz-shop-layout">
+        <div class="flex items-start gap-6 max-md:flex-col">
 
             {{-- ===== SIDEBAR ===== --}}
-            <div class="mz-shop-sidebar">
-                <div class="mz-cat-sidebar">
-                    <div class="mz-cat-title"><i class="fas fa-th-large" style="margin-right:8px;"></i> All Categories</div>
-                    <ul>
-                        <li :class="{ active: !activeCategory }">
-                            <a href="#" @click.prevent="filterByCategory(null)">All Products</a>
+            <aside class="min-w-[240px] md:max-w-[240px] self-start max-md:w-full">
+
+                {{-- Categories --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-4">
+                    <div class="bg-[#332a5e] px-4 py-3">
+                        <span class="text-[11px] font-bold uppercase tracking-widest text-white">Categories</span>
+                    </div>
+                    <ul class="list-none m-0 p-0 py-1.5">
+                        <li>
+                            <a
+                                href="#"
+                                @click.prevent="filterByCategory(null)"
+                                class="flex items-center justify-between px-4 py-2.5 text-sm transition-colors hover:bg-[#f5f6fb] border-l-2"
+                                :class="!activeCategory ? 'text-[#332a5e] font-semibold border-[#332a5e] bg-[#f5f6fb]' : 'text-gray-600 border-transparent'"
+                            >
+                                All Products
+                            </a>
                         </li>
                         <template v-if="catsLoading">
-                            <li v-for="n in 8" :key="'cs'+n">
-                                <a href="#"><span class="mz-skeleton" style="display:inline-block; width:70%; height:14px; vertical-align:middle;"></span></a>
+                            <li v-for="n in 6" :key="'cs'+n" class="px-4 py-3">
+                                <span class="mz-skeleton block h-3 w-3/4 rounded"></span>
                             </li>
                         </template>
-                        <li v-for="cat in rootCategories" :key="cat.id" :class="{ active: activeCategory === cat.id }">
-                            <a :href="cat.slug ? '/store/' + cat.slug : '#'" @click.prevent="filterByCategory(cat.id)">
+                        <li v-for="cat in rootCategories" :key="cat.id">
+                            <a
+                                href="#"
+                                @click.prevent="filterByCategory(cat.id)"
+                                class="flex items-center justify-between px-4 py-2.5 text-sm transition-colors hover:bg-[#f5f6fb] border-l-2"
+                                :class="activeCategory === cat.id ? 'text-[#332a5e] font-semibold border-[#332a5e] bg-[#f5f6fb]' : 'text-gray-600 border-transparent'"
+                            >
                                 @{{ cat.name }}
                             </a>
                         </li>
                     </ul>
                 </div>
 
-                {{-- Sidebar search --}}
-                <div style="margin-top:16px;">
+                {{-- Search --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3">
                     <form @submit.prevent="submitSearch">
-                        <div class="mz-sidebar-search">
-                            <input type="text" v-model="searchQuery" placeholder="Search products…">
-                            <button type="submit"><i class="fas fa-search"></i></button>
+                        <div class="flex items-center rounded-lg border border-gray-200 overflow-hidden transition-colors focus-within:border-[#332a5e]">
+                            <input
+                                type="text"
+                                v-model="searchQuery"
+                                placeholder="Search products…"
+                                class="flex-1 text-sm px-3 py-2.5 outline-none border-none bg-transparent text-gray-700 placeholder:text-gray-400"
+                            >
+                            <button type="submit" class="bg-[#332a5e] hover:bg-[#FF9923] text-white px-3.5 py-2.5 transition-colors flex-shrink-0">
+                                <span class="icon-search text-base leading-none"></span>
+                            </button>
                         </div>
                     </form>
                 </div>
-            </div>
+            </aside>
 
             {{-- ===== MAIN CONTENT ===== --}}
-            <div>
+            <div class="flex-1 min-w-0">
 
-                {{-- Category heading --}}
-                <div style="margin-bottom:16px;">
-                    <h2 class="mz-section-title" v-if="activeCategoryName">@{{ activeCategoryName }}</h2>
-                    <h2 class="mz-section-title" v-else>All Products</h2>
-                </div>
-
-                {{-- Sort Bar --}}
-                <div class="mz-sortbar">
-                    <span class="mz-result-count" v-if="!isLoading">
-                        Showing @{{ products.length }}<template v-if="total > products.length"> of @{{ total }}</template> product<template v-if="total !== 1">s</template>
-                    </span>
-                    <span class="mz-result-count" v-else>Loading&hellip;</span>
-                    <div class="mz-ordering">
-                        <label style="white-space:nowrap; color:#64748b; margin-right:8px;">Sort by:</label>
-                        <select v-model="sort" @change="reload">
+                {{-- Toolbar --}}
+                <div class="flex items-center justify-between gap-4 bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-3 mb-5 max-sm:px-3 max-sm:py-2.5">
+                    <div>
+                        <h2 class="text-sm font-bold text-gray-900 m-0 leading-tight" v-if="activeCategoryName">@{{ activeCategoryName }}</h2>
+                        <h2 class="text-sm font-bold text-gray-900 m-0 leading-tight" v-else>All Products</h2>
+                        <p class="text-xs text-gray-400 m-0 mt-0.5" v-if="!isLoading">@{{ total }} product<template v-if="total !== 1">s</template></p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-400 max-sm:hidden">Sort:</span>
+                        <select
+                            v-model="sort"
+                            @change="reload"
+                            class="text-sm border border-[#332a5e]/20 bg-[#f5f6fb] rounded-lg px-3 py-2 text-gray-700 cursor-pointer outline-none transition-colors focus:border-[#332a5e]"
+                        >
                             <option value="latest">Latest</option>
-                            <option value="price-asc">Price: Low to High</option>
-                            <option value="price-desc">Price: High to Low</option>
+                            <option value="price-asc">Price: Low → High</option>
+                            <option value="price-desc">Price: High → Low</option>
                             <option value="name-asc">Name: A–Z</option>
                             <option value="name-desc">Name: Z–A</option>
                         </select>
                     </div>
                 </div>
 
-                {{-- Skeleton loading --}}
+                {{-- Skeleton --}}
                 <template v-if="isLoading">
-                    <div class="mz-prod-grid">
-                        <div class="mz-product" style="transform:none; box-shadow:none;" v-for="n in 9" :key="'sk'+n">
-                            <div class="mz-skeleton" style="height:220px;"></div>
-                            <div style="padding:14px 16px;">
-                                <div class="mz-skeleton" style="height:14px; margin-bottom:10px; width:80%;"></div>
-                                <div class="mz-skeleton" style="height:12px; width:45%;"></div>
-                            </div>
-                            <div style="padding:10px 16px 16px;">
-                                <div class="mz-skeleton" style="height:38px;"></div>
+                    <div class="grid grid-cols-3 gap-5 max-1060:grid-cols-2 max-sm:grid-cols-2 max-sm:gap-3">
+                        <div v-for="n in 9" :key="'sk'+n" class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                            <div class="mz-skeleton aspect-square"></div>
+                            <div class="p-3.5">
+                                <div class="mz-skeleton h-3.5 w-4/5 rounded mb-2.5"></div>
+                                <div class="mz-skeleton h-3 w-2/5 rounded mb-4"></div>
+                                <div class="mz-skeleton h-9 w-full rounded-lg"></div>
                             </div>
                         </div>
                     </div>
@@ -268,63 +151,96 @@
 
                 {{-- Product Grid --}}
                 <template v-else-if="products.length">
-                    <div class="mz-prod-grid">
-                        <div class="mz-product" v-for="(product, idx) in products" :key="product.id">
-                            <div class="thumbnail-wrapper">
-                                <a :href="productUrl(product)">
+                    <div class="grid grid-cols-3 gap-5 max-1060:grid-cols-2 max-sm:grid-cols-2 max-sm:gap-3">
+                        <div
+                            class="group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
+                            v-for="(product, idx) in products"
+                            :key="product.id"
+                        >
+                            {{-- Image --}}
+                            <div class="relative overflow-hidden bg-[#f5f6fb]">
+                                <a :href="productUrl(product)" class="block aspect-square overflow-hidden">
                                     <img
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                         :src="product.base_image && product.base_image.medium_image_url ? product.base_image.medium_image_url : defaultImage"
                                         :alt="product.name"
                                         loading="lazy"
                                     >
                                 </a>
-                                <div class="product-label" v-if="product.on_sale || product.is_new">
-                                    <span class="onsale"    v-if="product.on_sale">Sale!</span>
-                                    <span class="badge-new" v-else-if="product.is_new">New!</span>
+                                {{-- Sale / New badges --}}
+                                <div class="absolute top-2 left-2 flex flex-col gap-1" v-if="product.on_sale || product.is_new">
+                                    <span v-if="product.on_sale" class="text-[10px] font-bold uppercase tracking-wide bg-red-500 text-white px-2 py-0.5 rounded-full leading-tight">Sale</span>
+                                    <span v-else-if="product.is_new" class="text-[10px] font-bold uppercase tracking-wide bg-[#332a5e] text-white px-2 py-0.5 rounded-full leading-tight">New</span>
                                 </div>
-                                <div class="product-group-button">
-                                    <button :style="product.is_wishlist ? 'color:#e74c3c' : ''" title="Wishlist" @click="addToWishlist(product)">
-                                        <i :class="product.is_wishlist ? 'fas fa-heart' : 'far fa-heart'"></i>
-                                    </button>
-                                    <button title="Compare" @click="addToCompare(product)">
-                                        <i class="far fa-exchange-alt"></i>
-                                    </button>
-                                    <a :href="productUrl(product)" title="View Product">
-                                        <i class="far fa-eye"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="meta-wrapper">
-                                <h3 class="product-name">
-                                    <a :href="productUrl(product)">@{{ product.name }}</a>
-                                </h3>
-                                <span class="price" v-html="product.price_html"></span>
-                            </div>
-                            <div class="meta-wrapper-2">
-                                <button class="mz-atc-btn" @click="addToCart(product)" :disabled="addingToCart === product.id">
-                                    <span v-if="addingToCart === product.id"><i class="far fa-spinner fa-spin" style="margin-right:4px;"></i> Adding&hellip;</span>
-                                    <span v-else-if="!product.is_saleable">Select Options</span>
-                                    <span v-else><i class="far fa-cart-plus" style="margin-right:4px;"></i> Add to Cart</span>
+                                {{-- Wishlist button --}}
+                                <button
+                                    class="absolute top-2 right-2 w-8 h-8 bg-white rounded-full shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 max-lg:opacity-100 transition-opacity hover:bg-red-50"
+                                    :class="product.is_wishlist ? 'text-red-500' : 'text-gray-400'"
+                                    @click="addToWishlist(product)"
+                                    title="Wishlist"
+                                >
+                                    <span :class="product.is_wishlist ? 'icon-heart-fill' : 'icon-heart'" class="text-sm leading-none"></span>
                                 </button>
+                            </div>
+
+                            {{-- Info --}}
+                            <div class="flex flex-col flex-1 p-3.5 gap-1.5">
+                                <a
+                                    :href="productUrl(product)"
+                                    class="block text-sm font-semibold text-gray-900 line-clamp-2 hover:text-[#332a5e] transition-colors leading-snug"
+                                    style="min-height:2.6rem"
+                                >@{{ product.name }}</a>
+
+                                <div class="text-base font-bold text-[#332a5e] mz-price" v-html="product.price_html"></div>
+
+                                <div class="mt-auto pt-2.5 flex items-center gap-2">
+                                    <button
+                                        class="flex-1 bg-[#332a5e] hover:bg-[#FF9923] text-white text-xs font-semibold py-2.5 px-3 rounded-lg transition-colors flex items-center justify-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
+                                        @click="addToCart(product)"
+                                        :disabled="addingToCart === product.id"
+                                    >
+                                        <span v-if="addingToCart === product.id" class="icon-loader animate-spin text-sm leading-none"></span>
+                                        <span v-else class="icon-cart text-sm leading-none"></span>
+                                        <span v-if="addingToCart === product.id">Adding…</span>
+                                        <span v-else-if="!product.is_saleable">Options</span>
+                                        <span v-else>Add to Cart</span>
+                                    </button>
+                                    <button
+                                        class="flex-shrink-0 w-9 h-9 border border-gray-200 hover:border-[#332a5e] hover:text-[#332a5e] rounded-lg flex items-center justify-center text-gray-400 transition-colors"
+                                        @click="addToCompare(product)"
+                                        title="Compare"
+                                    >
+                                        <span class="icon-compare text-sm leading-none"></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     {{-- Load More --}}
-                    <div style="text-align:center; margin-top:40px;" v-if="nextPage">
-                        <button class="mz-loadmore" @click="loadMore" :disabled="loadingMore">
-                            <span v-if="loadingMore"><i class="far fa-spinner fa-spin" style="margin-right:6px;"></i>Loading&hellip;</span>
-                            <span v-else>Load More Products</span>
+                    <div class="text-center mt-10" v-if="nextPage">
+                        <button
+                            class="inline-flex items-center gap-2 px-8 py-3 border-2 border-[#332a5e] text-[#332a5e] font-semibold text-sm rounded-lg hover:bg-[#332a5e] hover:text-white transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                            @click="loadMore"
+                            :disabled="loadingMore"
+                        >
+                            <span v-if="loadingMore" class="icon-loader animate-spin text-base leading-none"></span>
+                            <span>@{{ loadingMore ? 'Loading…' : 'Load More Products' }}</span>
                         </button>
                     </div>
                 </template>
 
                 {{-- Empty state --}}
                 <template v-else>
-                    <div class="mz-empty">
-                        <i class="far fa-search"></i>
-                        <h4>No products found</h4>
-                        <button class="mz-loadmore" @click="filterByCategory(null)">View All Products</button>
+                    <div class="text-center py-20">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-white border border-gray-100 shadow-sm flex items-center justify-center">
+                            <span class="icon-search text-3xl text-gray-300 leading-none"></span>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-5">No products found</p>
+                        <button
+                            class="px-6 py-2.5 border border-[#332a5e] text-[#332a5e] text-sm font-semibold rounded-lg hover:bg-[#332a5e] hover:text-white transition-colors"
+                            @click="filterByCategory(null)"
+                        >View All Products</button>
                     </div>
                 </template>
 
@@ -356,7 +272,6 @@
 
             computed: {
                 rootCategories() {
-                    /* Show only top-level categories (exclude the root "All" category with no parent) */
                     return this.categories.filter(c => c.parent_id !== null && c.parent_id > 1);
                 },
                 activeCategoryName() {

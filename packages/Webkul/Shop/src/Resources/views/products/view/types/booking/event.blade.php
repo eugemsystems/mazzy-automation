@@ -83,7 +83,7 @@
             </div>
 
             <!-- Event Price Breakdown -->
-            <div class="rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-sm">
+            <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm">
                 <p class="mb-3 font-semibold">
                     @lang('shop::app.products.view.type.booking.event.summary-title')
                 </p>
@@ -95,7 +95,7 @@
                         :key="line.id"
                     >
                         <span
-                            class="text-zinc-600"
+                            class="text-slate-600"
                             v-text="line.label"
                         >
                         </span>
@@ -103,7 +103,7 @@
                         <span class="flex items-center gap-2">
                             <span
                                 v-if="line.hasDiscount"
-                                class="text-zinc-400 line-through"
+                                class="text-slate-400 line-through"
                                 v-text="line.formattedOriginalSubtotal"
                             >
                             </span>
@@ -121,7 +121,7 @@
                         v-if="Number(basePrice) > 0"
                     >
                         <span
-                            class="text-zinc-600"
+                            class="text-slate-600"
                             v-text="baseFeeLabel"
                         >
                         </span>
@@ -129,7 +129,7 @@
                         <span class="flex items-center gap-2">
                             <span
                                 v-if="hasBaseDiscount"
-                                class="text-zinc-400 line-through"
+                                class="text-slate-400 line-through"
                                 v-text="formattedBaseFeeRegularTotal"
                             >
                             </span>
@@ -142,7 +142,7 @@
                         </span>
                     </div>
 
-                    <div class="mt-3 flex items-center justify-between border-t border-zinc-200 pt-3">
+                    <div class="mt-3 flex items-center justify-between border-t border-slate-200 pt-3">
                         <span class="font-semibold">
                             @lang('shop::app.products.view.type.booking.event.total')
                         </span>
@@ -156,7 +156,7 @@
                 </template>
 
                 <template v-else>
-                    <p class="text-xs text-zinc-500">
+                    <p class="text-xs text-slate-500">
                         @lang('shop::app.products.view.type.booking.event.select-tickets-hint')
                     </p>
                 </template>

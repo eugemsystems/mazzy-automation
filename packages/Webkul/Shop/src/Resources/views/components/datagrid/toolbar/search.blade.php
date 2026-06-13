@@ -24,28 +24,25 @@
             </template>
 
             <template v-else>
-                <div class="flex w-full items-center gap-x-1">
+                <div class="flex w-full items-center gap-x-3">
                     <!-- Search Panel -->
-                    <div class="flex max-w-[445px] items-center max-md:w-full max-md:max-w-[250px]">
-                        <div class="relative w-full">
-                            <input
-                                type="text"
-                                name="search"
-                                :value="getSearchedValues('all')"
-                                class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-base text-gray-600 transition-all hover:border-gray-400 focus:border-gray-400 max-md:max-w-[250px] max-md:py-2 max-sm:py-1.5 ltr:pr-8 rtl:pl-8"
-                                placeholder="@lang('shop::app.components.datagrid.toolbar.search.title')"
-                                autocomplete="off"
-                                @keyup.enter="search"
-                            >
+                    <div class="relative w-full max-w-[320px] max-md:max-w-[250px]">
+                        <span class="icon-search pointer-events-none absolute top-1/2 -translate-y-1/2 text-base text-slate-400 ltr:left-3 rtl:right-3"></span>
 
-                            <div class="icon-search pointer-events-none absolute top-2.5 flex items-center text-xl max-sm:top-2 ltr:right-2.5 rtl:left-2.5">
-                            </div>
-                        </div>
+                        <input
+                            type="text"
+                            name="search"
+                            :value="getSearchedValues('all')"
+                            class="h-auto w-full rounded-lg border border-slate-200 bg-white py-2.5 text-sm text-slate-700 shadow-sm transition placeholder:text-slate-400 hover:border-slate-300 focus:border-[#332a5e] focus:outline-none focus:ring-4 focus:ring-[#332a5e]/10 ltr:pl-9 ltr:pr-3 rtl:pr-9 rtl:pl-3"
+                            placeholder="@lang('shop::app.components.datagrid.toolbar.search.title')"
+                            autocomplete="off"
+                            @keyup.enter="search"
+                        >
                     </div>
 
                     <!-- Information Panel -->
-                    <div class="max-md:hidden ltr:pl-2.5 rtl:pr-2.5">
-                        <p class="text-sm font-light text-gray-800 max-md:w-full">
+                    <div class="max-md:hidden">
+                        <p class="whitespace-nowrap text-sm text-slate-500">
                             @{{ "@lang('shop::app.components.datagrid.toolbar.results')".replace(':total', available.meta.total) }}
                         </p>
                     </div>

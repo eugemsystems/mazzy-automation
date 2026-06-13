@@ -24,27 +24,27 @@
 
             <template v-else>
                 <!-- Accordion Blade Component -->
-                <x-shop::accordion class="overflow-hidden !border-b-0 max-md:rounded-lg max-md:!border-none max-md:!bg-gray-100">
+                <x-shop::accordion class="mb-4 overflow-hidden rounded-2xl border border-slate-100 bg-white !border-b shadow-sm">
                     <!-- Accordion Blade Component Header -->
-                    <x-slot:header class="px-0 py-4 max-md:p-3 max-md:text-sm max-md:font-medium max-sm:p-2">
+                    <x-slot:header class="!px-5 !py-4">
                         <div class="flex items-center justify-between">
-                            <h2 class="text-2xl font-medium max-md:text-base">
+                            <h2 class="text-base font-semibold text-slate-900">
                                 @lang('shop::app.checkout.onepage.shipping.shipping-method')
                             </h2>
                         </div>
                     </x-slot>
 
                     <!-- Accordion Blade Component Content -->
-                    <x-slot:content class="mt-8 !p-0 max-md:mt-0 max-md:rounded-t-none max-md:border max-md:border-t-0 max-md:!p-4">
-                        <div class="flex flex-wrap gap-8 max-md:gap-4 max-sm:gap-2.5">
+                    <x-slot:content class="!px-5 !pb-5 !pt-0">
+                        <div class="grid gap-3 sm:grid-cols-2">
                             <template v-for="method in methods">
                                 {!! view_render_event('bagisto.shop.checkout.onepage.shipping_method.before') !!}
 
                                 <div
-                                    class="relative max-w-[218px] select-none max-md:max-w-full max-md:flex-auto"
+                                    class="relative select-none"
                                     v-for="rate in method.rates"
                                 >
-                                    <input 
+                                    <input
                                         type="radio"
                                         name="shipping_method"
                                         :id="rate.method"
@@ -53,27 +53,31 @@
                                         @change="store(rate.method)"
                                     >
 
-                                    <label 
-                                        class="icon-radio-unselect peer-checked:icon-radio-select absolute top-5 cursor-pointer text-2xl text-navyBlue ltr:right-5 rtl:left-5"
+                                    <label
+                                        class="flex h-full cursor-pointer items-center gap-3.5 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 peer-checked:border-[#332a5e] peer-checked:bg-[#332a5e]/5 peer-checked:ring-1 peer-checked:ring-[#332a5e] ltr:pr-10 rtl:pl-10"
                                         :for="rate.method"
                                     >
-                                    </label>
+                                        <span class="icon-flate-rate shrink-0 text-3xl text-[#332a5e]"></span>
 
-                                    <label 
-                                        class="block cursor-pointer rounded-xl border border-zinc-200 p-5 max-sm:flex max-sm:gap-4 max-sm:rounded-lg max-sm:px-4 max-sm:py-2.5"
-                                        :for="rate.method"
-                                    >
-                                        <span class="icon-flate-rate text-6xl text-navyBlue max-sm:text-5xl"></span>
+                                        <div class="min-w-0 flex-1">
+                                            <p class="text-sm font-semibold text-slate-800">
+                                                @{{ rate.method_title }}
+                                            </p>
 
-                                        <div>
-                                            <p class="mt-1.5 text-2xl font-semibold max-md:text-base">
+                                            <p class="mt-0.5 text-xs text-slate-500">
+                                                @{{ rate.method_description }}
+                                            </p>
+
+                                            <p class="mt-1 text-base font-bold text-[#332a5e]">
                                                 @{{ rate.base_formatted_price }}
                                             </p>
-                                            
-                                            <p class="mt-2.5 text-xs font-medium max-md:mt-1 max-sm:mt-0 max-sm:font-normal max-sm:text-zinc-500">
-                                                <span class="font-medium">@{{ rate.method_title }}</span> - @{{ rate.method_description }}
-                                            </p>
                                         </div>
+                                    </label>
+
+                                    <label
+                                        class="icon-radio-unselect peer-checked:icon-radio-select pointer-events-none absolute top-4 text-xl text-slate-300 peer-checked:text-[#332a5e] ltr:right-4 rtl:left-4"
+                                        :for="rate.method"
+                                    >
                                     </label>
                                 </div>
 

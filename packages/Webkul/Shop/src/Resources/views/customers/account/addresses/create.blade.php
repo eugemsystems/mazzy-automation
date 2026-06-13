@@ -15,7 +15,7 @@
         <x-shop::layouts.account.navigation />
     </div>
 
-    <div class="flex-auto min-w-0 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
+    <div class="flex-auto min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
         <div class="mb-5 flex items-center gap-2">
             <!-- Back Button -->
             <a
@@ -25,7 +25,7 @@
                 <span class="icon-arrow-left rtl:icon-arrow-right text-2xl"></span>
             </a>
 
-            <h2 class="text-xl font-semibold text-zinc-900 max-sm:text-base">
+            <h2 class="text-xl font-semibold text-slate-900 max-sm:text-base">
                 @lang('shop::app.customers.account.addresses.create.add-address')
             </h2>
         </div>
@@ -315,7 +315,7 @@
                     {!! view_render_event('bagisto.shop.customers.account.addresses.create_form_controls.phone.after') !!}
 
                     <!-- Set As Default -->
-                    <div class="text-md mb-4 flex select-none items-center gap-x-1.5 text-zinc-500">
+                    <div class="text-md mb-4 flex select-none items-center gap-x-1.5 text-slate-500">
                         <input
                             type="checkbox"
                             name="default_address"
@@ -325,7 +325,7 @@
                         >
 
                         <label
-                            class="icon-uncheck peer-checked:icon-check-box cursor-pointer text-2xl text-navyBlue peer-checked:text-navyBlue"
+                            class="icon-uncheck peer-checked:icon-check-box cursor-pointer text-2xl text-[#332a5e] peer-checked:text-[#332a5e]"
                             for="default_address"
                         >
                         </label>
@@ -340,7 +340,7 @@
 
                     <button
                         type="submit"
-                        class="primary-button m-0 block rounded-2xl px-11 py-3 text-center text-base max-md:w-full max-md:max-w-full max-md:rounded-lg max-md:py-2 max-sm:py-1.5"
+                        class="primary-button max-md:w-full max-md:max-w-none max-md:justify-center"
                     >
                         @lang('shop::app.customers.account.addresses.create.save')
                     </button>

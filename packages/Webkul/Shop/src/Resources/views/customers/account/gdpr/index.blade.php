@@ -15,7 +15,7 @@
         <x-shop::layouts.account.navigation />
     </div>
 
-    <div class="flex-auto min-w-0 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
+    <div class="flex-auto min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
         <div class="mb-5 flex items-center justify-between gap-4 max-md:flex-wrap">
             <div class="flex items-center gap-2">
                 <!-- Back Button -->
@@ -26,7 +26,7 @@
                     <span class="icon-arrow-left rtl:icon-arrow-right text-2xl"></span>
                 </a>
 
-                <h2 class="text-xl font-semibold text-zinc-900 max-sm:text-base">
+                <h2 class="text-xl font-semibold text-slate-900 max-sm:text-base">
                     @lang('shop::app.customers.account.gdpr.index.title')
                 </h2>
             </div>
@@ -34,7 +34,7 @@
             <div class="flex gap-4">
                 <a 
                     href="{{ route('shop.customers.account.gdpr.pdf-view') }}"
-                    class="secondary-button border-zinc-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
+                    class="secondary-button border-slate-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
                 >
                     @lang('shop::app.customers.account.gdpr.index.pdf') 
                 </a>
@@ -42,14 +42,14 @@
                 <a
                     href="{{ route('shop.customers.account.gdpr.html-view') }}"
                     target="_blank"
-                    class="secondary-button border-zinc-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
+                    class="secondary-button border-slate-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
                 >
                     @lang('shop::app.customers.account.gdpr.index.html') 
                 </a>
     
                 <button
                     type="button"
-                    class="primary-button border-zinc-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
+                    class="primary-button border-slate-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
                     @click="$emitter.emit('open-gdpr-modal')"
                 >
                     @lang('shop::app.customers.account.gdpr.index.create-btn')

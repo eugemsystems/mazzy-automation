@@ -18,12 +18,12 @@
 
     @isset($header)
         <template v-slot:header="{ close }">
-            <div {{ $header->attributes->merge(['class' => 'grid gap-y-2.5 p-6 pb-5 max-md:gap-y-1.5 max-md:border-b max-md:border-zinc-200 max-md:p-4 max-md:gap-y-1 max-md:font-semibold']) }}>
+            <div {{ $header->attributes->merge(['class' => 'relative grid gap-y-0.5 border-b border-slate-100 p-4 pr-12']) }}>
                 {{ $header }}
 
-                <div class="absolute top-5 max-sm:top-4 ltr:right-5 rtl:left-5">
+                <div class="absolute top-4 ltr:right-4 rtl:left-4">
                     <span
-                        class="icon-cancel cursor-pointer text-3xl max-md:text-2xl"
+                        class="icon-cancel flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
                         @click="close"
                     >
                     </span>
@@ -34,7 +34,7 @@
 
     @isset($content)
         <template v-slot:content>
-            <div {{ $content->attributes->merge(['class' => 'flex-1 overflow-auto px-6 max-md:px-4']) }}>
+            <div {{ $content->attributes->merge(['class' => 'flex-1 overflow-auto px-4']) }}>
                 {{ $content }}
             </div>
         </template>
@@ -42,7 +42,7 @@
 
     @isset($footer)
         <template v-slot:footer>
-            <div {{ $footer->attributes->merge(['class' => 'pb-8 max-md:pb-2']) }}>
+            <div {{ $footer->attributes->merge(['class' => 'pb-2']) }}>
                 {{ $footer }}
             </div>
         </template>
@@ -72,7 +72,7 @@
                 leave-to-class="opacity-0"
             >
                 <div
-                    class="fixed inset-0 z-20 bg-gray-500 bg-opacity-50 transition-opacity"
+                    class="fixed inset-0 z-20 bg-slate-900/50 backdrop-blur-sm transition-opacity"
                     v-show="isOpen"
                 ></div>
             </transition>

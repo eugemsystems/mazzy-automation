@@ -3,8 +3,10 @@
         $message = core()->getConfigData('catalog.products.social_share.share_message');
     @endphp
 
-    <div class="flex gap-6">
+    <div class="flex items-center gap-4">
         {!! view_render_event('bagisto.shop.products.view.share.before', ['product' => $product]) !!}
+
+        <span class="text-sm font-medium text-gray-400 max-md:hidden">Share:</span>
 
         <!-- For Mobile View -->
         <div class="md:hidden flex gap-2.5 justify-center items-center max-sm:gap-1.5">
@@ -20,7 +22,7 @@
 
         <!-- For Desktop View -->
         <div class="max-md:hidden">
-            <ul class="flex gap-3">
+            <ul class="flex items-center gap-2 list-none m-0 p-0">
                 @foreach(['facebook', 'twitter', 'instagram', 'pinterest', 'linkedin', 'whatsapp', 'email'] as $social)
                     @if (! core()->getConfigData('catalog.products.social_share.' . $social))
                         @continue

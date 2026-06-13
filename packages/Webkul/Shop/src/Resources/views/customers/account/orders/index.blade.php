@@ -15,13 +15,13 @@
         <x-shop::layouts.account.navigation />
     </div>
 
-    <div class="flex-auto min-w-0 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none">
-        <div class="flex items-center justify-between border-b border-zinc-100 px-6 py-4 max-sm:px-4">
+    <div class="flex-auto min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none">
+        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 max-sm:px-4">
             <div class="flex items-center gap-2">
                 <a class="flex md:hidden" href="{{ route('shop.customers.account.index') }}">
                     <span class="icon-arrow-left rtl:icon-arrow-right text-2xl"></span>
                 </a>
-                <h2 class="text-base font-semibold text-zinc-900">
+                <h2 class="text-base font-semibold text-slate-900">
                     @lang('shop::app.customers.account.orders.title')
                 </h2>
             </div>

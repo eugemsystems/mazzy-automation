@@ -17,7 +17,7 @@
         <x-shop::layouts.account.navigation />
     </div>
     
-    <div class="flex-auto min-w-0 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
+    <div class="flex-auto min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
         <!-- Heading of the page -->
         <div class="flex items-center justify-between">
             <div class="mb-5 flex items-center gap-2">
@@ -29,14 +29,14 @@
                     <span class="icon-arrow-left rtl:icon-arrow-right text-2xl"></span>
                 </a>
 
-                <h2 class="text-xl font-semibold text-zinc-900 max-sm:text-base">
+                <h2 class="text-xl font-semibold text-slate-900 max-sm:text-base">
                     @lang('shop::app.rma.customer.create.heading')
                 </h2>
             </div>
 
             <a
                 href="{{ route('shop.customers.account.rma.index') }}"
-                class="secondary-button flex items-center gap-x-2 border-zinc-200 px-4 py-2 text-sm font-normal"
+                class="secondary-button flex items-center gap-x-2 border-slate-200 px-4 py-2 text-sm font-normal"
             >
                 @lang('shop::app.checkout.onepage.address.back')
             </a>
@@ -72,7 +72,7 @@
 
                             <template v-else>
                                 <div
-                                    class="row grid items-center gap-2.5 border-b border-zinc-200 bg-zinc-100 px-6 py-4 text-sm font-medium text-black max-md:p-4"
+                                    class="row grid items-center gap-2.5 border-b border-slate-200 bg-slate-100 px-6 py-4 text-sm font-medium text-black max-md:p-4"
                                     style="grid-template-columns: repeat(6, minmax(0, 1fr));"
                                 >
                                     <div
@@ -189,7 +189,7 @@
 
                             <template v-else>
                                 <div
-                                    class="row grid items-center gap-2.5 border-b border-zinc-200 bg-zinc-100 px-6 py-4 text-sm font-medium text-black max-md:p-4"
+                                    class="row grid items-center gap-2.5 border-b border-slate-200 bg-slate-100 px-6 py-4 text-sm font-medium text-black max-md:p-4"
                                     style="grid-template-columns: repeat(2, minmax(0, 1fr));"
                                 >
                                     <div
@@ -830,7 +830,7 @@
                                             </v-field>
 
                                             <label
-                                                class="icon-uncheck peer-checked:icon-check-box cursor-pointer text-base peer-checked:text-navyBlue"
+                                                class="icon-uncheck peer-checked:icon-check-box cursor-pointer text-base peer-checked:text-[#332a5e]"
                                                 for="{{ $attribute->id }}-{{ $index }}"
                                             >
                                                 {{ $option->name }}
@@ -868,7 +868,7 @@
                                             </v-field>
 
                                             <label
-                                                class="icon-radio-unselect text-base peer-checked:icon-radio-select peer-checked:text-navyBlue cursor-pointer"
+                                                class="icon-radio-unselect text-base peer-checked:icon-radio-select peer-checked:text-[#332a5e] cursor-pointer"
                                                 for="option_{{ $loop->index }}"
                                             >
                                                 {{ $option->name }}

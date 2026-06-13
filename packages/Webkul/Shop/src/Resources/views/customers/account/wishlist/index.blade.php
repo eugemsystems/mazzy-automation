@@ -15,7 +15,7 @@
         <x-shop::layouts.account.navigation />
     </div>
 
-    <div class="flex-auto min-w-0 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
+    <div class="flex-auto min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
         <!-- Wishlist Vue Component -->
         <v-wishlist-products>
             <!-- Wishlist Shimmer Effect -->
@@ -56,7 +56,7 @@
                         {!! view_render_event('bagisto.shop.customers.account.wishlist.delete_all.before') !!}
 
                         <div
-                            class="secondary-button border-zinc-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
+                            class="secondary-button border-slate-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
                             @click="removeAll"
                             v-if="wishlistItems.length"
                         >
@@ -109,7 +109,7 @@
                 <div class="grid flex-1 gap-8 max-md:flex-none">
                     <div class="grid gap-y-6 max-md:gap-y-0">
                         <!-- Wishlist item -->
-                        <div class="flex justify-between gap-x-2.5 border-b border-zinc-200 pb-5">
+                        <div class="flex justify-between gap-x-2.5 border-b border-slate-200 pb-5">
                             <div class="flex gap-x-5 max-md:w-full max-md:gap-x-5">
                                 <div>
                                     {!! view_render_event('bagisto.shop.customers.account.wishlist.image.before') !!}
@@ -216,7 +216,7 @@
                                         <x-shop::quantity-changer
                                             name="quantity"
                                             ::value="wishlist.options.quantity ?? 1"
-                                            class="flex max-h-10 items-center gap-x-2.5 rounded-[54px] border border-navyBlue px-3.5 py-1.5 max-md:gap-x-1 max-md:px-1.5 max-md:py-1"
+                                            class="flex max-h-10 items-center gap-x-2.5 rounded-[54px] border border-[#332a5e] px-3.5 py-1.5 max-md:gap-x-1 max-md:px-1.5 max-md:py-1"
                                             @change="(qty) => wishlist.quantity = qty"
                                         />
 

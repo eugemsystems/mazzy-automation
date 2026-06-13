@@ -3,7 +3,7 @@
 </template>
 
 <template v-else>
-    <div class="flex items-center justify-between gap-4 px-5 py-3 border-b border-zinc-100 max-md:flex-col max-md:items-start">
+    <div class="flex items-center justify-between gap-4 px-5 py-3 border-b border-slate-100 max-md:flex-col max-md:items-start">
         <!-- Left Toolbar -->
         <div class="flex w-full gap-x-1">
             <!-- Mass Actions Panel -->

@@ -5,7 +5,7 @@
 ])
 
 <v-product-ratings
-    {{ $attributes->merge(['class' => 'flex w-max items-center rounded-md border border-zinc-200 px-4 py-2']) }}
+    {{ $attributes->merge(['class' => 'flex w-max items-center rounded-md border border-slate-200 px-4 py-2']) }}
     average="{{ $average }}"
     total="{{ $total }}"
 >
@@ -27,7 +27,7 @@
             >
             </span>
             
-            <span class="border-l border-zinc-300 text-sm font-medium text-black max-sm:border-zinc-300 max-sm:text-xs ltr:pl-1 rtl:pr-1">
+            <span class="border-l border-slate-300 text-sm font-medium text-black max-sm:border-slate-300 max-sm:text-xs ltr:pl-1 rtl:pr-1">
                 @{{ abbreviatedTotal }}
 
                 <span v-if="rating">@lang('shop::app.components.products.ratings.title')</span>

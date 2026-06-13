@@ -15,7 +15,7 @@
         <x-shop::layouts.account.navigation />
     </div>
 
-    <div class="flex-auto min-w-0 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
+    <div class="flex-auto min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
         <div class="mb-5 flex items-center gap-2">
             <!-- Back Button -->
             <a
@@ -25,7 +25,7 @@
                 <span class="icon-arrow-left rtl:icon-arrow-right text-2xl"></span>
             </a>
 
-            <h2 class="text-xl font-semibold text-zinc-900 max-sm:text-base">
+            <h2 class="text-xl font-semibold text-slate-900 max-sm:text-base">
                 @lang('shop::app.customers.account.profile.edit.edit-profile')
             </h2>
         </div>
@@ -246,22 +246,17 @@
 
             {!! view_render_event('bagisto.shop.customers.account.profile.edit_form_controls.new_password_confirmation.after') !!}
 
-            <div class="mb-4 flex select-none items-center gap-1.5">
+            <div class="mb-5 flex select-none items-center gap-2">
                 <input
                     type="checkbox"
                     name="subscribed_to_news_letter"
                     id="is-subscribed"
-                    class="peer hidden"
+                    class="h-4 w-4 cursor-pointer rounded border-slate-300 accent-[#332a5e]"
                     @checked($customer->subscribed_to_news_letter)
                 />
 
                 <label
-                    class="icon-uncheck peer-checked:icon-check-box cursor-pointer text-2xl text-navyBlue peer-checked:text-navyBlue"
-                    for="is-subscribed"
-                ></label>
-
-                <label
-                    class="cursor-pointer select-none text-base text-zinc-500 max-md:text-sm ltr:pl-0 rtl:pr-0"
+                    class="cursor-pointer select-none text-sm text-slate-500"
                     for="is-subscribed"
                 >
                     @lang('shop::app.customers.account.profile.edit.subscribe-to-newsletter')
@@ -270,7 +265,7 @@
 
             <button
                 type="submit"
-                class="primary-button m-0 block rounded-2xl px-11 py-3 text-center text-base max-md:w-full max-md:max-w-full max-md:rounded-lg max-md:py-1.5"
+                class="primary-button"
             >
                 @lang('shop::app.customers.account.profile.edit.save')
             </button>

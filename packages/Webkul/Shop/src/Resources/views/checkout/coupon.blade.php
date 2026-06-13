@@ -32,8 +32,8 @@
                         <x-shop::modal ref="couponModel">
                             <!-- Modal Toggler -->
                             <x-slot:toggle>
-                                <span 
-                                    class="cursor-pointer text-base text-blue-700 max-sm:text-sm"
+                                <span
+                                    class="cursor-pointer text-sm font-semibold text-[#332a5e] hover:underline"
                                     role="button"
                                     tabindex="0"
                                     v-if="! cart.coupon_code"
@@ -43,18 +43,17 @@
                             </x-slot>
 
                             <!-- Modal Header -->
-                            <x-slot:header class="max-md:p-5">
-                                <h2 class="text-2xl font-medium max-md:text-base">
+                            <x-slot:header>
+                                <h2 class="text-base font-semibold text-slate-900">
                                     @lang('shop::app.checkout.coupon.apply')
                                 </h2>
                             </x-slot>
 
                             <!-- Modal Content -->
-                            <x-slot:content class="!px-4">
+                            <x-slot:content>
                                 <x-shop::form.control-group class="!mb-0">
                                     <x-shop::form.control-group.control
                                         type="text"
-                                        class="px-6 py-4 max-md:!mb-0 max-md:!p-3 max-sm:!p-2"
                                         name="code"
                                         rules="required"
                                         :placeholder="trans('shop::app.checkout.coupon.enter-your-code')"
@@ -71,18 +70,18 @@
                             <x-slot:footer>
                                 <!-- Coupon Form Action Container -->
                                 <div class="flex flex-wrap items-center gap-4 max-md:justify-between">
-                                    <div class="flex items-center gap-4 max-md:block">
-                                        <p class="text-sm font-medium text-zinc-500 max-md:text-left max-md:text-xs">
+                                    <div class="flex items-center gap-2 max-md:block">
+                                        <p class="text-xs font-medium uppercase tracking-wide text-slate-400 max-md:text-left">
                                             @lang('shop::app.checkout.coupon.subtotal')
                                         </p>
 
-                                        <p class="text-3xl font-semibold max-md:text-lg">
+                                        <p class="text-lg font-bold text-[#332a5e]">
                                             @{{ cart.formatted_sub_total }}
                                         </p>
                                     </div>
 
                                     <x-shop::button
-                                        class="primary-button max-w-none flex-auto rounded-2xl px-11 py-3 max-md:max-w-[153px] max-md:rounded-lg max-md:py-2"
+                                        class="primary-button"
                                         :title="trans('shop::app.checkout.coupon.button-title')"
                                         ::loading="isStoring"
                                         ::disabled="isStoring"

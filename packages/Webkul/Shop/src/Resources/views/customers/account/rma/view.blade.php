@@ -15,7 +15,7 @@
         <x-shop::layouts.account.navigation />
     </div>
 
-    <div class="flex-auto min-w-0 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
+    <div class="flex-auto min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none max-sm:p-4">
         <div class="mb-5 flex items-center gap-2">
             <!-- Back Button -->
             <a
@@ -25,7 +25,7 @@
                 <span class="icon-arrow-left rtl:icon-arrow-right text-2xl"></span>
             </a>
 
-            <h2 class="text-xl font-semibold text-zinc-900 max-sm:text-base">
+            <h2 class="text-xl font-semibold text-slate-900 max-sm:text-base">
                 @lang('shop::app.customers.account.rma.view.id') #{{ $rma->id }}
             </h2>
         </div>

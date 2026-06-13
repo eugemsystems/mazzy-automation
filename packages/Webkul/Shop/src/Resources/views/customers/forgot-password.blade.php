@@ -15,18 +15,18 @@
         @lang('shop::app.customers.forgot-password.title')
     </x-slot>
 
-    <div class="container mt-20 max-1180:px-5 max-md:mt-12">
+    <div class="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+        <div class="w-full max-w-md">
         {!! view_render_event('bagisto.shop.customers.forget_password.logo.before') !!}
 
         <!-- Company Logo -->
-        <div class="flex items-center gap-x-14 max-[1180px]:gap-x-9">
+        <div class="mb-8 flex justify-center">
             <a
                 href="{{ route('shop.home.index') }}"
-                class="m-[0_auto_20px_auto]"
                 aria-label="@lang('shop::app.customers.forgot-password.bagisto')"
             >
                 <img
-                    src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
+                    src="{{ core()->getCurrentChannel()->logo_url ?? asset('themes/shop/konta/img/logo-shop.png') }}"
                     alt="{{ config('app.name') }}"
                     width="131"
                     height="29"
@@ -38,31 +38,30 @@
 
         <!-- Form Container -->
         <div
-            class="m-auto w-full max-w-[870px] rounded-xl border border-zinc-200 p-16 px-[90px] max-md:px-8 max-md:py-8 max-sm:border-none max-sm:p-0"
+            class="rounded-2xl border border-slate-100 bg-white p-8 shadow-sm max-sm:p-6"
         >
-            <h1 class="font-dmserif text-4xl max-md:text-3xl max-sm:text-xl">
+            <h1 class="text-2xl font-bold text-slate-900">
                 @lang('shop::app.customers.forgot-password.title')
             </h1>
 
-            <p class="mt-4 text-xl text-zinc-500 max-sm:mt-0 max-sm:text-sm">
+            <p class="mt-1.5 text-sm text-slate-500">
                 @lang('shop::app.customers.forgot-password.forgot-password-text')
             </p>
 
             {!! view_render_event('bagisto.shop.customers.forget_password.before') !!}
 
-            <div class="mt-14 rounded max-sm:mt-8">
+            <div class="mt-7">
                 <x-shop::form :action="route('shop.customers.forgot_password.store')">
                     {!! view_render_event('bagisto.shop.customers.forget_password_form_controls.before') !!}
 
                     <!-- Email -->
-                    <x-shop::form.control-group class="max-sm:mb-1.5">
+                    <x-shop::form.control-group>
                         <x-shop::form.control-group.label class="required">
                             @lang('shop::app.customers.login-form.email')
                         </x-shop::form.control-group.label>
 
                         <x-shop::form.control-group.control
                             type="email"
-                            class="px-6 py-4 max-sm:py-1.5"
                             name="email"
                             rules="required|email"
                             value=""
@@ -87,20 +86,20 @@
                     @endif
 
                     <!-- Submit Button -->
-                    <div class="mt-8 flex flex-wrap items-center gap-9 max-sm:mt-0 max-sm:justify-center max-sm:text-center">
+                    <div class="mt-7">
                         <button
-                            class="primary-button m-0 mx-auto block w-full max-w-[374px] rounded-2xl px-11 py-4 text-center text-base max-md:max-w-full max-md:rounded-lg max-md:py-3 max-sm:py-1.5 max-sm:text-sm ltr:ml-0 rtl:mr-0"
+                            class="block w-full rounded-lg bg-[#332a5e] px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-[#332a5e]/90"
                             type="submit"
                         >
                             @lang('shop::app.customers.forgot-password.submit')
                         </button>
                     </div>
 
-                    <p class="mt-5 font-medium text-zinc-500 max-sm:text-center max-sm:text-sm">
+                    <p class="mt-6 text-center text-sm font-medium text-slate-500">
                         @lang('shop::app.customers.forgot-password.back')
 
-                        <a 
-                            class="text-navyBlue"
+                        <a
+                            class="text-[#332a5e] hover:underline"
                             href="{{ route('shop.customer.session.index') }}"
                         >
                             @lang('shop::app.customers.forgot-password.sign-in-button')
@@ -116,9 +115,10 @@
 
         </div>
 
-        <p class="mb-4 mt-8 text-center text-xs text-zinc-500">
-            @lang('shop::app.customers.forgot-password.footer', ['current_year'=> date('Y') ])
+        <p class="mt-8 text-center text-xs text-slate-400">
+            @lang('shop::app.customers.forgot-password.footer', ['current_year'=> date('Y'), 'company_name' => config('app.name') ])
         </p>
+        </div>
     </div>
 
     @push('scripts')

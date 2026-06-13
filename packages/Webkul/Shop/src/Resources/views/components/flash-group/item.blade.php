@@ -11,15 +11,15 @@
         id="v-flash-item-template"
     >
         <div
-            class="flex w-max max-w-[408px] justify-between gap-12 rounded-lg px-5 py-3 max-sm:max-w-80 max-sm:items-center max-sm:gap-2 max-sm:p-3"
+            class="flex w-max max-w-[408px] items-center justify-between gap-6 rounded-xl px-4 py-3 shadow-lg shadow-slate-900/10 ring-1 ring-black/5 max-sm:max-w-80 max-sm:gap-3 max-sm:p-3"
             :style="typeStyles[flash.type]['container']"
         >
             <p
-                class="flex items-center break-words text-sm"
+                class="flex items-center break-words text-sm font-medium"
                 :style="typeStyles[flash.type]['message']"
             >
                 <span
-                    class="icon-toast-done text-2xl ltr:mr-2.5 rtl:ml-2.5"
+                    class="icon-toast-done text-xl ltr:mr-2.5 rtl:ml-2.5"
                     :class="iconClasses[flash.type]"
                     :style="typeStyles[flash.type]['icon']"
                 ></span>
@@ -28,7 +28,7 @@
             </p>
 
 			<span
-                class="icon-cancel max-h-4 max-w-4 cursor-pointer"
+                class="icon-cancel cursor-pointer text-base opacity-70 transition hover:opacity-100"
                 :style="typeStyles[flash.type]['icon']"
                 @click="remove"
             ></span>

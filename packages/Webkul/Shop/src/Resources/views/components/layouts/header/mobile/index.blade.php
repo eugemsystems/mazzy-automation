@@ -82,7 +82,7 @@
                                         </p>
                                     </div>
 
-                                    <p class="w-full mt-3 border border-zinc-200"></p>
+                                    <p class="w-full mt-3 border border-slate-200"></p>
 
                                     {!! view_render_event('bagisto.shop.components.layouts.header.mobile.index.customers_action.before') !!}
 
@@ -91,14 +91,14 @@
 
                                     <a
                                         href="{{ route('shop.customer.session.create') }}"
-                                        class="block py-4 m-0 mx-auto text-base font-medium text-center text-white cursor-pointer w-max rounded-2xl bg-navyBlue px-7 ltr:ml-0 rtl:mr-0"
+                                        class="block py-4 m-0 mx-auto text-base font-medium text-center text-white cursor-pointer w-max rounded-2xl bg-[#332a5e] px-7 ltr:ml-0 rtl:mr-0"
                                     >
                                             @lang('shop::app.components.layouts.header.mobile.sign-in')
                                         </a>
 
                                     <a
                                         href="{{ route('shop.customers.register.index') }}"
-                                        class="m-0 mx-auto block w-max cursor-pointer rounded-2xl border-2 border-navyBlue bg-white px-7 py-3.5 text-center text-base font-medium text-navyBlue ltr:ml-0 rtl:mr-0"
+                                        class="m-0 mx-auto block w-max cursor-pointer rounded-2xl border-2 border-[#332a5e] bg-white px-7 py-3.5 text-center text-base font-medium text-[#332a5e] ltr:ml-0 rtl:mr-0"
                                     >
                                             @lang('shop::app.components.layouts.header.mobile.sign-up')
                                         </a>
@@ -124,7 +124,7 @@
                                             </p>
                                         </div>
 
-                                        <p class="w-full mt-3 border border-zinc-200"></p>
+                                        <p class="w-full mt-3 border border-slate-200"></p>
 
                                         <div class="mt-2.5 grid gap-1 pb-2.5">
                                             {!! view_render_event('bagisto.shop.components.layouts.header.mobile.index.profile_dropdown.links.before') !!}
@@ -259,8 +259,8 @@
 
                 <x-slot:content class="!p-0">
                     <!-- Account Profile Hero Section -->
-                    <div class="p-4 border-b border-zinc-200">
-                        <div class="grid grid-cols-[auto_1fr] items-center gap-4 rounded-xl border border-zinc-200 p-2.5">
+                    <div class="p-4 border-b border-slate-200">
+                        <div class="grid grid-cols-[auto_1fr] items-center gap-4 rounded-xl border border-slate-200 p-2.5">
                             <div>
                                 <img
                                 src="{{ auth()->user()?->image_url ??  bagisto_asset('images/user-placeholder.png') }}"
@@ -286,7 +286,7 @@
                                 >
                                     <p class="text-2xl break-all font-mediums max-md:text-xl">Hello! {{ auth()->user()?->first_name }}</p>
 
-                                    <p class="no-underline text-zinc-500 max-md:text-sm">{{ auth()->user()?->email }}</p>
+                                    <p class="no-underline text-slate-500 max-md:text-sm">{{ auth()->user()?->email }}</p>
                                 </div>
                             @endauth
                         </div>
@@ -303,7 +303,7 @@
                 <x-slot:footer>
                     <!-- Localization & Currency Section -->
                 @if(core()->getCurrentChannel()->locales()->count() > 1 || core()->getCurrentChannel()->currencies()->count() > 1 )
-                                    <div class="fixed bottom-0 z-10 grid w-full max-w-full grid-cols-[1fr_auto_1fr] items-center justify-items-center border-t border-zinc-200 bg-white px-5 ltr:left-0 rtl:right-0">
+                                    <div class="fixed bottom-0 z-10 grid w-full max-w-full grid-cols-[1fr_auto_1fr] items-center justify-items-center border-t border-slate-200 bg-white px-5 ltr:left-0 rtl:right-0">
                                         <!-- Filter Drawer -->
                                         <x-shop::drawer
                                             position="bottom"
@@ -341,7 +341,7 @@
                                         </x-shop::drawer>
 
                                         <!-- Seperator -->
-                                        <span class="h-5 w-0.5 bg-zinc-200"></span>
+                                        <span class="h-5 w-0.5 bg-slate-200"></span>
 
                                         <!-- Sort Drawer -->
                                         <x-shop::drawer

@@ -17,16 +17,16 @@
 
     {!! view_render_event('bagisto.shop.checkout.onepage.header.before') !!}
 
-    <div style="background:#332a5e; padding:28px 0 22px;">
-        <div class="container">
-            <h1 style="color:#fff; font-size:22px; font-weight:700; margin:0 0 6px;">Checkout</h1>
-            <nav style="font-size:13px;">
-                <a href="{{ route('shop.home.index') }}" style="color:rgba(255,255,255,.7); text-decoration:none;">Home</a>
-                <span style="color:rgba(255,255,255,.4); margin:0 8px;">/</span>
-                <a href="{{ route('shop.checkout.cart.index') }}" style="color:rgba(255,255,255,.7); text-decoration:none;">Cart</a>
-                <span style="color:rgba(255,255,255,.4); margin:0 8px;">/</span>
-                <span style="color:#FF9923;">Checkout</span>
+    <div class="border-b border-slate-200 bg-white">
+        <div class="container px-[60px] py-6 max-1180:px-4">
+            <nav class="mb-1.5 flex items-center gap-2 text-xs font-medium text-slate-400">
+                <a href="{{ route('shop.home.index') }}" class="transition-colors hover:text-[#332a5e]">Home</a>
+                <span class="icon-arrow-right rtl:icon-arrow-left text-sm text-slate-300"></span>
+                <a href="{{ route('shop.checkout.cart.index') }}" class="transition-colors hover:text-[#332a5e]">Cart</a>
+                <span class="icon-arrow-right rtl:icon-arrow-left text-sm text-slate-300"></span>
+                <span class="text-[#332a5e]">Checkout</span>
             </nav>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900">Checkout</h1>
         </div>
     </div>
 
@@ -104,7 +104,7 @@
                             <template v-else>
                                 <x-shop::button
                                     type="button"
-                                    class="primary-button w-max rounded-2xl bg-navyBlue px-11 py-3 max-md:mb-4 max-md:w-full max-md:max-w-full max-md:rounded-lg max-sm:py-1.5"
+                                    class="primary-button w-full justify-center max-md:mb-4"
                                     :title="trans('shop::app.checkout.onepage.summary.place-order')"
                                     ::disabled="isPlacingOrder"
                                     ::loading="isPlacingOrder"

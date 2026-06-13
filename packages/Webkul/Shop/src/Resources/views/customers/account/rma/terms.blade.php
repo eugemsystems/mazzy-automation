@@ -28,12 +28,12 @@
                     />
 
                     <span 
-                        class="icon-uncheck peer-checked:icon-check-box cursor-pointer text-2xl peer-checked:text-navyBlue"
+                        class="icon-uncheck peer-checked:icon-check-box cursor-pointer text-2xl peer-checked:text-[#332a5e]"
                     >
                     </span>
 
                     <span class="ml-2 mt-4 block">
-                        <span class="text-zinc-500 max-md:text-xs">
+                        <span class="text-slate-500 max-md:text-xs">
                             @lang('shop::app.customers.account.rma.terms.terms')
                         </span>
                         

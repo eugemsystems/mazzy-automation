@@ -15,19 +15,19 @@
         <x-shop::layouts.account.navigation />
     </div>
 
-    <div class="flex-auto min-w-0 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none">
-        <div class="flex items-center justify-between border-b border-zinc-100 px-6 py-4 max-sm:px-4">
+    <div class="flex-auto min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm max-md:mx-0 max-md:rounded-none max-md:border-x-0 max-md:shadow-none">
+        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 max-sm:px-4">
             <div class="flex items-center gap-2">
                 <a class="flex md:hidden" href="{{ route('shop.customers.account.index') }}">
                     <span class="text-2xl icon-arrow-left rtl:icon-arrow-right"></span>
                 </a>
-                <h2 class="text-base font-semibold text-zinc-900">
+                <h2 class="text-base font-semibold text-slate-900">
                     @lang('shop::app.customers.account.addresses.index.title')
                 </h2>
             </div>
             <a
                 href="{{ route('shop.customers.account.addresses.create') }}"
-                class="secondary-button border-zinc-200 px-4 py-2 text-sm font-normal"
+                class="secondary-button border-slate-200 px-4 py-2 text-sm font-normal"
             >
                 @lang('shop::app.customers.account.addresses.index.add-address')
             </a>
@@ -39,7 +39,7 @@
 
             <div class="grid grid-cols-2 gap-4 max-1060:grid-cols-[1fr]">
                 @foreach ($addresses as $address)
-                    <div class="rounded-xl border border-zinc-200 p-5 hover:border-zinc-300 transition-colors max-md:flex-wrap">
+                    <div class="rounded-xl border border-slate-200 p-5 hover:border-slate-300 transition-colors max-md:flex-wrap">
                         <div class="flex justify-between">
                             <p class="text-base font-medium" v-pre>
                                 {{ $address->first_name }} {{ $address->last_name }}
@@ -60,7 +60,7 @@
                                 <x-shop::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
                                     <x-slot:toggle>
                                         <button 
-                                            class="icon-more cursor-pointer rounded-md px-1.5 py-1 text-2xl text-zinc-500 transition-all hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black max-md:p-0" 
+                                            class="icon-more cursor-pointer rounded-md px-1.5 py-1 text-2xl text-slate-500 transition-all hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black max-md:p-0" 
                                             aria-label="More Options"
                                         >
                                         </button>

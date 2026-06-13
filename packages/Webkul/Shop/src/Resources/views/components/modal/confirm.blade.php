@@ -17,7 +17,7 @@
                 leave-to-class="opacity-0"
             >
                 <div
-                    class="fixed inset-0 z-20 bg-gray-500 bg-opacity-50 transition-opacity"
+                    class="fixed inset-0 z-20 bg-slate-900/50 backdrop-blur-sm transition-opacity"
                     v-show="isOpen"
                 ></div>
             </transition>
@@ -36,27 +36,27 @@
                     class="fixed inset-0 z-20 transform overflow-y-auto transition" v-show="isOpen"
                 >
                     <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div class="absolute left-1/2 top-1/2 z-[999] w-full max-w-[475px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl bg-white p-5 max-md:w-[90%] max-sm:p-4">
-                            <div class="flex gap-2.5">
-                                <div>
-                                    <span class="flex rounded-full border border-gray-300 p-2.5">
-                                        <i class="icon-error text-3xl max-sm:text-xl"></i>
+                        <div class="absolute left-1/2 top-1/2 z-[999] w-full max-w-[440px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl bg-white p-6 text-left shadow-2xl ring-1 ring-slate-100 max-md:w-[90%] max-sm:p-5">
+                            <div class="flex gap-4">
+                                <div class="shrink-0">
+                                    <span class="flex h-11 w-11 items-center justify-center rounded-full bg-red-50 text-red-500">
+                                        <i class="icon-error text-2xl"></i>
                                     </span>
                                 </div>
 
-                                <div>
-                                    <div class="flex items-center justify-between gap-5 text-xl max-sm:text-lg">
+                                <div class="min-w-0 flex-1">
+                                    <div class="text-base font-semibold text-slate-900">
                                         @{{ title }}
                                     </div>
 
-                                    <div class="pb-5 pt-1.5 text-left text-sm text-gray-500">
+                                    <div class="pb-5 pt-1 text-left text-sm leading-relaxed text-slate-500">
                                         @{{ message }}
                                     </div>
 
-                                    <div class="flex justify-end gap-2.5">
+                                    <div class="flex justify-end gap-3">
                                         <button
                                             type="button"
-                                            class="secondary-button max-md:py-3 max-sm:px-6 max-sm:py-2.5"
+                                            class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
                                             @click="disagree"
                                         >
                                             @{{ options.btnDisagree }}
@@ -64,10 +64,10 @@
 
                                         <button
                                             type="button"
-                                            class="primary-button max-md:py-3 max-sm:px-6 max-sm:py-2.5"
+                                            class="rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600"
                                             @click="agree"
                                         >
-                                            @{{ options.btnAgree }} 
+                                            @{{ options.btnAgree }}
                                         </button>
                                     </div>
                                 </div>

@@ -108,9 +108,9 @@
                 <div class="mb-4 flex justify-center gap-x-2">
                     <template v-for="(attachment, index) in attachments">
                         <img
-                            class="h-16 w-16 transform cursor-pointer rounded-md border border-navyBlue border-transparent object-cover transition-transform hover:!border-navyBlue"
+                            class="h-16 w-16 transform cursor-pointer rounded-md border border-[#332a5e] border-transparent object-cover transition-transform hover:!border-[#332a5e]"
                             :class="{
-                                '!border-navyBlue': currentIndex === index + 1,
+                                '!border-[#332a5e]': currentIndex === index + 1,
                             }"
                             :src="attachment.url"
                             :key="index"
@@ -119,9 +119,9 @@
                         />
 
                         <video
-                            class="h-16 w-16 transform cursor-pointer rounded-md border border-navyBlue border-transparent object-cover transition-transform hover:!border-navyBlue"
+                            class="h-16 w-16 transform cursor-pointer rounded-md border border-[#332a5e] border-transparent object-cover transition-transform hover:!border-[#332a5e]"
                             :class="{
-                                '!border-navyBlue': currentIndex === index + 1,
+                                '!border-[#332a5e]': currentIndex === index + 1,
                             }"
                             :src="attachment.url"
                             :key="index"

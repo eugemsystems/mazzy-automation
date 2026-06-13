@@ -32,7 +32,7 @@
                 aria-label="@lang('shop::app.customers.reset-password.bagisto')"
             >
                 <img
-                    src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
+                    src="{{ core()->getCurrentChannel()->logo_url ?? asset('themes/shop/konta/img/logo-shop.png') }}"
                     alt="{{ config('app.name') }}"
                     width="131"
                     height="29"
@@ -43,7 +43,7 @@
         {!! view_render_event('bagisto.shop.customers.reset_password.logo.after') !!}
 
         <!-- Form Container -->
-        <div class="m-auto w-full max-w-[870px] rounded-xl border border-zinc-200 p-16 px-[90px] max-md:px-8 max-md:py-8 max-sm:border-none max-sm:p-0">
+        <div class="m-auto w-full max-w-[870px] rounded-xl border border-slate-200 p-16 px-[90px] max-md:px-8 max-md:py-8 max-sm:border-none max-sm:p-0">
             <h1 class="font-dmserif text-4xl max-md:text-3xl max-sm:text-xl">
                 @lang('shop::app.customers.reset-password.title')
             </h1>
@@ -148,8 +148,8 @@
 
         </div>
 
-        <p class="mb-4 mt-8 text-center text-xs text-zinc-500">
-            @lang('shop::app.customers.reset-password.footer', ['current_year'=> date('Y') ])
+        <p class="mb-4 mt-8 text-center text-xs text-slate-500">
+            @lang('shop::app.customers.reset-password.footer', ['current_year'=> date('Y'), 'company_name' => config('app.name') ])
         </p>
     </div>
 </x-shop::layouts>

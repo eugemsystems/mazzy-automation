@@ -13,7 +13,7 @@
     >
         <div>
             <!-- Desktop Toolbar -->
-            <div class="flex justify-between max-md:hidden">
+            <div class="flex justify-between items-center max-md:hidden bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-3 mb-5">
                 {!! view_render_event('bagisto.shop.categories.toolbar.filter.before') !!}
 
                 <!-- Product Sorting Filters -->
@@ -23,7 +23,7 @@
                 >
                     <x-slot:toggle>
                         <!-- Dropdown Toggler -->
-                        <button class="flex w-full max-w-[200px] cursor-pointer items-center justify-between gap-4 rounded-lg border border-zinc-200 bg-white p-3.5 text-base transition-all hover:border-gray-400 focus:border-gray-400 max-md:w-[110px] max-md:border-0 max-md:pl-2.5 max-md:pr-2.5">
+                        <button class="flex w-full max-w-[220px] cursor-pointer items-center justify-between gap-3 rounded-lg border border-[#332a5e]/20 bg-[#f5f6fb] px-4 py-2.5 text-sm font-medium text-gray-700 transition-all hover:border-[#332a5e]/50 max-md:w-[110px] max-md:border-0 max-md:pl-2.5 max-md:pr-2.5">
                             @{{ sortLabel ?? "@lang('shop::app.products.sort-by.title')" }}
 
                             <span
@@ -50,12 +50,12 @@
                 {!! view_render_event('bagisto.shop.categories.toolbar.pagination.before') !!}
 
                 <!-- Product Pagination Limit -->
-                <div class="flex items-center gap-10">
+                <div class="flex items-center gap-4">
                     <!-- Product Pagination Limit -->
                     <x-shop::dropdown position="bottom-right">
                         <x-slot:toggle>
                             <!-- Dropdown Toggler -->
-                            <button class="flex w-full max-w-[200px] cursor-pointer items-center justify-between gap-4 rounded-lg border border-zinc-200 bg-white p-3.5 text-base transition-all hover:border-gray-400 focus:border-gray-400 max-md:w-[110px] max-md:border-0 max-md:pl-2.5 max-md:pr-2.5">
+                            <button class="flex w-full max-w-[120px] cursor-pointer items-center justify-between gap-3 rounded-lg border border-[#332a5e]/20 bg-[#f5f6fb] px-4 py-2.5 text-sm font-medium text-gray-700 transition-all hover:border-[#332a5e]/50 max-md:w-[110px] max-md:border-0 max-md:pl-2.5 max-md:pr-2.5">
                                 @{{ filters.applied.limit ?? "@lang('shop::app.categories.toolbar.show')" }}
 
                                 <span
@@ -78,23 +78,23 @@
                     </x-shop::dropdown>
 
                     <!-- Listing Mode Switcher -->
-                    <div class="flex items-center gap-5">
+                    <div class="flex items-center gap-1 rounded-lg border border-[#332a5e]/20 bg-[#f5f6fb] p-1">
                         <span
-                            class="cursor-pointer text-2xl"
+                            class="cursor-pointer text-xl p-1.5 rounded-md transition-all"
                             role="button"
                             aria-label="@lang('shop::app.categories.toolbar.list')"
                             tabindex="0"
-                            :class="(filters.applied.mode === 'list') ? 'icon-listing-fill' : 'icon-listing'"
+                            :class="(filters.applied.mode === 'list') ? 'icon-listing-fill bg-[#332a5e] text-white shadow-sm' : 'icon-listing text-gray-400 hover:text-[#332a5e]'"
                             @click="changeMode('list')"
                         >
                         </span>
 
                         <span
-                            class="cursor-pointer text-2xl"
+                            class="cursor-pointer text-xl p-1.5 rounded-md transition-all"
                             role="button"
                             aria-label="@lang('shop::app.categories.toolbar.grid')"
                             tabindex="0"
-                            :class="(filters.applied.mode === 'grid') ? 'icon-grid-view-fill' : 'icon-grid-view'"
+                            :class="(filters.applied.mode === 'grid') ? 'icon-grid-view-fill bg-[#332a5e] text-white shadow-sm' : 'icon-grid-view text-gray-400 hover:text-[#332a5e]'"
                             @click="changeMode('grid')"
                         >
                         </span>
@@ -106,10 +106,10 @@
 
             <!-- Mobile Toolbar -->
             <div class="md:hidden">
-                <ul>
+                <ul class="list-none m-0 p-0">
                     <li
-                        class="px-4 py-2.5"
-                        :class="{'bg-gray-100': sort.value == filters.applied.sort}"
+                        class="px-4 py-3 text-sm border-b border-gray-100 last:border-0 cursor-pointer transition-colors"
+                        :class="sort.value == filters.applied.sort ? 'bg-[#f5f6fb] text-[#332a5e] font-semibold' : 'text-gray-700'"
                         v-for="(sort, key) in filters.available.sort"
                         @click="apply('sort', sort.value)"
                     >

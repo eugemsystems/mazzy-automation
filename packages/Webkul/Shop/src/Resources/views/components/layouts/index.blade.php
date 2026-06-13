@@ -322,6 +322,45 @@
                 font-family: 'Inter', 'Public Sans', sans-serif;
             }
 
+            /* Kill Konta's bare-table gridlines/borders so app tables (datagrid, order view) render clean.
+               Konta forces `table{border}` and `td,th{border;padding}` on every bare table — the "old grid lines" look. */
+            .store-page table {
+                border: 0 !important;
+                margin: 0;
+            }
+            .store-page th,
+            .store-page td {
+                border: 0 !important;
+            }
+
+            /* Force-hide the real checkbox/radio that sits behind icon-font (.icon-uncheck / .icon-radio-*) controls.
+               Prevents the native box from leaking next to the icon glyph (the "double checkbox" bug). */
+            .store-page input.peer {
+                position: absolute !important;
+                width: 1px !important;
+                height: 1px !important;
+                padding: 0 !important;
+                margin: -1px !important;
+                overflow: hidden !important;
+                clip: rect(0, 0, 0, 0) !important;
+                white-space: nowrap !important;
+                border: 0 !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+
+            /* Keep browser-autofilled inputs white instead of the default blue/yellow tint */
+            .store-page input:-webkit-autofill,
+            .store-page input:-webkit-autofill:hover,
+            .store-page input:-webkit-autofill:focus,
+            .store-page textarea:-webkit-autofill,
+            .store-page select:-webkit-autofill {
+                -webkit-box-shadow: 0 0 0 1000px #fff inset;
+                box-shadow: 0 0 0 1000px #fff inset;
+                -webkit-text-fill-color: #0f172a;
+                caret-color: #0f172a;
+            }
+
             /* Breadcrumb banner used on store inner pages */
             .mz-breadcrumb-banner {
                 background: #332a5e; padding: 22px 0 18px;
