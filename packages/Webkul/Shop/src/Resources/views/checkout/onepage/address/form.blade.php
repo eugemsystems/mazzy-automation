@@ -326,7 +326,7 @@
 
             data() {
                 return {
-                    selectedCountry: this.address.country,
+                    selectedCountry: this.address.country || 'ZA',
 
                     countries: [],
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Webkul\Admin\Http\Controllers\Settings\ChannelController;
+use Webkul\Admin\Http\Controllers\Settings\CollectionPointController;
 use Webkul\Admin\Http\Controllers\Settings\CurrencyController;
 use Webkul\Admin\Http\Controllers\Settings\DataTransfer\ImportController;
 use Webkul\Admin\Http\Controllers\Settings\ExchangeRateController;
@@ -17,6 +18,23 @@ use Webkul\Admin\Http\Controllers\Settings\UserController;
  * Settings routes.
  */
 Route::prefix('settings')->group(function () {
+    /**
+     * Collection Points routes.
+     */
+    Route::controller(CollectionPointController::class)->prefix('collection-points')->group(function () {
+        Route::get('', 'index')->name('admin.settings.collection_points.index');
+
+        Route::get('create', 'create')->name('admin.settings.collection_points.create');
+
+        Route::post('create', 'store')->name('admin.settings.collection_points.store');
+
+        Route::get('edit/{id}', 'edit')->name('admin.settings.collection_points.edit');
+
+        Route::put('edit/{id}', 'update')->name('admin.settings.collection_points.update');
+
+        Route::delete('edit/{id}', 'destroy')->name('admin.settings.collection_points.delete');
+    });
+
     /**
      * Channels routes.
      */

@@ -3493,6 +3493,60 @@ return [
             'update-success' => 'Inventory Sources Updated Successfully',
         ],
 
+        'collection-points' => [
+            'index' => [
+                'create-btn' => 'Create Collection Point',
+                'title' => 'Collection Points',
+
+                'datagrid' => [
+                    'active' => 'Active',
+                    'city' => 'City',
+                    'code' => 'Code',
+                    'delete' => 'Delete',
+                    'edit' => 'Edit',
+                    'handling-fee' => 'Handling Fee',
+                    'id' => 'ID',
+                    'inactive' => 'Inactive',
+                    'name' => 'Name',
+                    'state' => 'Province',
+                    'status' => 'Status',
+                ],
+            ],
+
+            'create' => [
+                'add-title' => 'Add Collection Point',
+                'address' => 'Address',
+                'back-btn' => 'Back',
+                'city' => 'City',
+                'code' => 'Code',
+                'contact-number' => 'Contact Number',
+                'country' => 'Country',
+                'description' => 'Description',
+                'general' => 'General',
+                'handling-fee' => 'Handling Fee',
+                'name' => 'Name',
+                'postcode' => 'Postcode',
+                'save-btn' => 'Save Collection Point',
+                'select-country' => 'Select Country',
+                'select-state' => 'Select Province',
+                'settings' => 'Settings',
+                'state' => 'Province',
+                'status' => 'Status',
+                'street' => 'Street',
+            ],
+
+            'edit' => [
+                'back-btn' => 'Back',
+                'save-btn' => 'Save Collection Point',
+                'title' => 'Edit Collection Point',
+            ],
+
+            'create-success' => 'Collection Point Created Successfully',
+            'delete-failed' => 'Collection Point Delete Failed',
+            'delete-success' => 'Collection Point Deleted Successfully',
+            'update-success' => 'Collection Point Updated Successfully',
+        ],
+
         'taxes' => [
             'categories' => [
                 'index' => [
@@ -4848,6 +4902,34 @@ return [
                             'title' => 'Type',
                         ],
                     ],
+
+                    'province-rate-shipping' => [
+                        'default-rate' => 'Default Rate (fallback)',
+                        'description' => 'Description',
+                        'page-title' => 'Delivery by Province',
+                        'status' => 'Status',
+                        'title' => 'Title',
+                        'title-info' => 'Charge a different shipping rate for each South African province based on the customer\'s delivery address. Provinces without a specific rate fall back to the default rate.',
+                        'provinces' => [
+                            'eastern-cape' => 'Eastern Cape',
+                            'free-state' => 'Free State',
+                            'gauteng' => 'Gauteng',
+                            'kwazulu-natal' => 'KwaZulu-Natal',
+                            'limpopo' => 'Limpopo',
+                            'mpumalanga' => 'Mpumalanga',
+                            'northern-cape' => 'Northern Cape',
+                            'north-west' => 'North West',
+                            'western-cape' => 'Western Cape',
+                        ],
+                    ],
+
+                    'collection-point-shipping' => [
+                        'description' => 'Description',
+                        'page-title' => 'Collection Point',
+                        'status' => 'Status',
+                        'title' => 'Title',
+                        'title-info' => 'Let customers collect their order from one of your configured collection points. Manage the pickup locations under Settings → Collection Points.',
+                    ],
                 ],
 
                 'payment-methods' => [
@@ -5239,6 +5321,7 @@ return [
                 'gdpr-data-requests' => 'GDPR Data Requests',
                 'groups' => 'Groups',
                 'imports' => 'Imports',
+                'collection-points' => 'Collection Points',
                 'inventory-sources' => 'Inventory Sources',
                 'invoices' => 'Invoices',
                 'locales' => 'Locales',
@@ -5486,6 +5569,7 @@ return [
         'groups' => 'Groups',
         'import' => 'Import',
         'imports' => 'Imports',
+        'collection-points' => 'Collection Points',
         'inventory-sources' => 'Inventory Sources',
         'invoices' => 'Invoices',
         'locales' => 'Locales',

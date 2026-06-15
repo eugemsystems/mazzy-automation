@@ -164,6 +164,14 @@
             </div>
         </template>
 
+        <!-- Shipping destination / method line (e.g. "Shipping to Gauteng") -->
+        <p
+            class="text-xs text-slate-400"
+            v-if="cart.selected_shipping_rate && cart.selected_shipping_rate.method_description"
+        >
+            @{{ cart.selected_shipping_rate.method_description }}
+        </p>
+
         {!! view_render_event('bagisto.shop.checkout.onepage.summary.delivery_charges.after') !!}
 
         <!-- Taxes -->

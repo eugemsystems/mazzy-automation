@@ -337,6 +337,12 @@ return [
         'sort' => 4,
         'icon' => '',
     ], [
+        'key' => 'settings.collection_points',
+        'name' => 'admin::app.components.layouts.sidebar.collection-points',
+        'route' => 'admin.settings.collection_points.index',
+        'sort' => 5,
+        'icon' => '',
+    ], [
         'key' => 'settings.channels',
         'name' => 'admin::app.components.layouts.sidebar.channels',
         'route' => 'admin.settings.channels.index',

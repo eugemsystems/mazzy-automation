@@ -1172,6 +1172,10 @@ return [
 
             'shipping' => [
                 'shipping-method' => 'Shipping Method',
+                'province-shipping-to' => 'Shipping to :province',
+                'delivery-title' => 'Delivery to your address',
+                'or-collect-title' => 'Or collect from a collection point',
+                'continue-to-payment' => 'Continue to Payment',
             ],
 
             'summary' => [

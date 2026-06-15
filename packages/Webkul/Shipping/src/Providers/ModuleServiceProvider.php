@@ -3,6 +3,7 @@
 namespace Webkul\Shipping\Providers;
 
 use Webkul\Core\Providers\CoreModuleServiceProvider;
+use Webkul\Shipping\Models\CollectionPoint;
 
 class ModuleServiceProvider extends CoreModuleServiceProvider
 {
@@ -11,5 +12,7 @@ class ModuleServiceProvider extends CoreModuleServiceProvider
      *
      * @var array
      */
-    protected $models = [];
+    protected $models = [
+        CollectionPoint::class,
+    ];
 }

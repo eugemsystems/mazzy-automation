@@ -13,12 +13,11 @@
 
         <!-- Line items -->
         <div class="flex flex-col gap-3 px-5 pt-4">
-            <!-- Estimate shipping -->
-            @if (core()->getConfigData('sales.checkout.shopping_cart.estimate_shipping'))
-                <template v-if="cart.have_stockable_items">
-                    @include('shop::checkout.cart.summary.estimate-shipping')
-                </template>
-            @endif
+            <!--
+                Estimate shipping (country/province selection) is intentionally
+                hidden on the cart page. Address and shipping are handled
+                entirely on the checkout page.
+            -->
 
             <!-- Sub Total -->
             {!! view_render_event('bagisto.shop.checkout.cart.summary.sub_total.before') !!}

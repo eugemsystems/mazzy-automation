@@ -971,6 +971,32 @@ return [
         'route' => 'admin.settings.inventory_sources.delete',
         'sort' => 3,
     ], [
+        'key' => 'settings.collection_points',
+        'name' => 'admin::app.acl.collection-points',
+        'route' => 'admin.settings.collection_points.index',
+        'sort' => 5,
+    ], [
+        'key' => 'settings.collection_points.create',
+        'name' => 'admin::app.acl.create',
+        'route' => [
+            'admin.settings.collection_points.create',
+            'admin.settings.collection_points.store',
+        ],
+        'sort' => 1,
+    ], [
+        'key' => 'settings.collection_points.edit',
+        'name' => 'admin::app.acl.edit',
+        'route' => [
+            'admin.settings.collection_points.edit',
+            'admin.settings.collection_points.update',
+        ],
+        'sort' => 2,
+    ], [
+        'key' => 'settings.collection_points.delete',
+        'name' => 'admin::app.acl.delete',
+        'route' => 'admin.settings.collection_points.delete',
+        'sort' => 3,
+    ], [
         'key' => 'settings.channels',
         'name' => 'admin::app.acl.channels',
         'route' => 'admin.settings.channels.index',

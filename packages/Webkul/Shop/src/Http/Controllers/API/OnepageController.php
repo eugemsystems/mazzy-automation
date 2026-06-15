@@ -74,6 +74,15 @@ class OnepageController extends APIController
                 ]);
             }
 
+            /**
+             * Auto-apply the province based delivery rate as the default so the
+             * customer does not have to manually pick a shipping method. They
+             * can still switch to a collection point on the shipping step.
+             */
+            if (Cart::saveShippingMethod('province_rate_province_rate')) {
+                Cart::collectTotals();
+            }
+
             return new JsonResource([
                 'redirect' => false,
                 'data' => $rates,
