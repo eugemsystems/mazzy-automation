@@ -9,6 +9,15 @@
         </p>
 
         <div class="flex items-center gap-x-2.5">
+            <!-- Meta Catalog Export -->
+            <a
+                href="{{ route('admin.catalog.products.export_meta') }}"
+                class="secondary-button"
+                title="Download Meta (Facebook) product catalog CSV"
+            >
+                Export for Meta
+            </a>
+
             <!-- Export Modal -->
             <x-admin::datagrid.export :src="route('admin.catalog.products.index')" />
 
@@ -205,6 +214,13 @@
                                         @{{ $admin.formatPrice(record.price) }}
                                     </p>
 
+                                    <span
+                                        v-if="record.hide_price"
+                                        class="w-fit rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900 dark:text-amber-300"
+                                    >
+                                        Price hidden from guests
+                                    </span>
+
                                     <div>
                                         <div v-if="['configurable', 'bundle', 'grouped' , 'booking'].includes(record.type)">
                                             <p class="text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
@@ -316,6 +332,13 @@
                                 <p class="text-base font-semibold text-gray-800 dark:text-white">
                                     @{{ $admin.formatPrice(record.price) }}
                                 </p>
+
+                                <span
+                                    v-if="record.hide_price"
+                                    class="w-fit rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900 dark:text-amber-300"
+                                >
+                                    Price hidden from guests
+                                </span>
 
                                 <!-- Parent Product Quantity -->
                                 <div v-if="['configurable', 'bundle', 'grouped' , 'booking'].includes(record.type)">

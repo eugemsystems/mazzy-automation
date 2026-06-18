@@ -1130,6 +1130,9 @@ return [
                     'status' => 'Status',
                     'type' => 'Type',
                     'update-status' => 'Update Status',
+                    'update-hide-price' => 'Update Price Visibility',
+                    'hide-price-on' => 'Hide from Guests',
+                    'hide-price-off' => 'Show to Everyone',
                 ],
             ],
 
@@ -1803,6 +1806,8 @@ return [
                 'add-option' => 'Add Option',
                 'add-options-info' => 'To create various combination of Attribute Option on a go.',
                 'add-row' => 'Add Row',
+                'shipping-price' => 'Shipping Price',
+                'shipping-price-info' => 'Base shipping cost for this product. Shipping zones add a per-unit charge for quantities above the zone\'s included amount.',
                 'admin' => 'Admin',
                 'admin-name' => 'Admin Name',
                 'back-btn' => 'Back',
@@ -3547,6 +3552,98 @@ return [
             'update-success' => 'Collection Point Updated Successfully',
         ],
 
+        'shipping-classes' => [
+            'index' => [
+                'create-btn' => 'Create Shipping Class',
+                'title' => 'Shipping Classes',
+
+                'datagrid' => [
+                    'active' => 'Active',
+                    'code' => 'Code',
+                    'delete' => 'Delete',
+                    'edit' => 'Edit',
+                    'id' => 'ID',
+                    'inactive' => 'Inactive',
+                    'name' => 'Name',
+                    'status' => 'Status',
+                ],
+            ],
+
+            'create' => [
+                'back-btn' => 'Back',
+                'code' => 'Code',
+                'description' => 'Description',
+                'name' => 'Name',
+                'save-btn' => 'Save Shipping Class',
+                'status' => 'Status',
+                'title' => 'Add Shipping Class',
+            ],
+
+            'edit' => [
+                'back-btn' => 'Back',
+                'save-btn' => 'Save Shipping Class',
+                'title' => 'Edit Shipping Class',
+            ],
+
+            'create-success' => 'Shipping Class Created Successfully',
+            'delete-failed' => 'Shipping Class Delete Failed',
+            'delete-success' => 'Shipping Class Deleted Successfully',
+            'update-success' => 'Shipping Class Updated Successfully',
+        ],
+
+        'shipping-zones' => [
+            'index' => [
+                'create-btn' => 'Create Shipping Zone',
+                'title' => 'Shipping Zones',
+
+                'datagrid' => [
+                    'active' => 'Active',
+                    'code' => 'Code',
+                    'delete' => 'Delete',
+                    'edit' => 'Edit',
+                    'id' => 'ID',
+                    'inactive' => 'Inactive',
+                    'name' => 'Name',
+                    'provinces' => 'Provinces',
+                    'status' => 'Status',
+                ],
+            ],
+
+            'create' => [
+                'back-btn' => 'Back',
+                'base-cost' => 'Zone fee (optional)',
+                'base-cost-info' => 'A flat fee added once to every order shipped to this zone. Leave 0 if not needed.',
+                'code' => 'Code',
+                'code-placeholder' => 'Leave blank to auto-generate from the name',
+                'extra-unit-cost' => 'Cost per extra unit',
+                'extra-unit-cost-info' => 'Charged for every unit above the included quantity, e.g. R2.',
+                'fallback' => 'Use as fallback zone',
+                'fallback-info' => 'Covers any South African province not assigned to another zone.',
+                'free-qty' => 'Units included in base price',
+                'free-qty-info' => 'How many units of an item the product\'s shipping price covers before extra charges apply, e.g. 5.',
+                'general' => 'General',
+                'name' => 'Name',
+                'pricing' => 'Quantity-based pricing',
+                'pricing-info' => 'Each item is charged its product shipping price. When the quantity exceeds the included units, every extra unit adds the cost below. Example: product R10, 5 units included at R2 each — ordering 10 = R10 + (5 × R2) = R20.',
+                'provinces' => 'Provinces in this zone',
+                'provinces-info' => 'Tick the provinces this zone applies to.',
+                'save-btn' => 'Save Shipping Zone',
+                'status' => 'Status',
+                'title' => 'Add Shipping Zone',
+            ],
+
+            'edit' => [
+                'back-btn' => 'Back',
+                'save-btn' => 'Save Shipping Zone',
+                'title' => 'Edit Shipping Zone',
+            ],
+
+            'create-success' => 'Shipping Zone Created Successfully',
+            'delete-failed' => 'Shipping Zone Delete Failed',
+            'delete-success' => 'Shipping Zone Deleted Successfully',
+            'update-success' => 'Shipping Zone Updated Successfully',
+        ],
+
         'taxes' => [
             'categories' => [
                 'index' => [
@@ -4930,6 +5027,14 @@ return [
                         'title' => 'Title',
                         'title-info' => 'Let customers collect their order from one of your configured collection points. Manage the pickup locations under Settings → Collection Points.',
                     ],
+
+                    'zone-rate-shipping' => [
+                        'description' => 'Description',
+                        'page-title' => 'Delivery (by Zone & Quantity)',
+                        'status' => 'Status',
+                        'title' => 'Title',
+                        'title-info' => 'Delivery rates based on each product\'s shipping price plus a per-unit charge for higher quantities. Set the product shipping price on the product page, and the included quantity & per-unit cost per province under Settings → Shipping Zones.',
+                    ],
                 ],
 
                 'payment-methods' => [
@@ -5322,6 +5427,8 @@ return [
                 'groups' => 'Groups',
                 'imports' => 'Imports',
                 'collection-points' => 'Collection Points',
+                'shipping-classes' => 'Shipping Classes',
+                'shipping-zones' => 'Shipping Zones',
                 'inventory-sources' => 'Inventory Sources',
                 'invoices' => 'Invoices',
                 'locales' => 'Locales',
@@ -5354,6 +5461,10 @@ return [
                 'transactions' => 'Transactions',
                 'url-rewrites' => 'URL Rewrites',
                 'users' => 'Users',
+                'content' => 'Site Content',
+                'gallery' => 'Gallery & Our Work',
+                'banners' => 'Home Banners',
+                'projects' => 'Projects',
             ],
 
             'powered-by' => [
@@ -5570,6 +5681,8 @@ return [
         'import' => 'Import',
         'imports' => 'Imports',
         'collection-points' => 'Collection Points',
+        'shipping-classes' => 'Shipping Classes',
+        'shipping-zones' => 'Shipping Zones',
         'inventory-sources' => 'Inventory Sources',
         'invoices' => 'Invoices',
         'locales' => 'Locales',
@@ -5599,6 +5712,10 @@ return [
         'url-rewrites' => 'URL Rewrites',
         'users' => 'Users',
         'view' => 'View',
+        'content' => 'Site Content',
+        'gallery' => 'Gallery & Our Work',
+        'banners' => 'Home Banners',
+        'projects' => 'Projects',
 
         'rma' => [
             'title' => 'RMA',

@@ -971,10 +971,62 @@ return [
         'route' => 'admin.settings.inventory_sources.delete',
         'sort' => 3,
     ], [
+        'key' => 'settings.shipping_zones',
+        'name' => 'admin::app.acl.shipping-zones',
+        'route' => 'admin.settings.shipping_zones.index',
+        'sort' => 5,
+    ], [
+        'key' => 'settings.shipping_zones.create',
+        'name' => 'admin::app.acl.create',
+        'route' => [
+            'admin.settings.shipping_zones.create',
+            'admin.settings.shipping_zones.store',
+        ],
+        'sort' => 1,
+    ], [
+        'key' => 'settings.shipping_zones.edit',
+        'name' => 'admin::app.acl.edit',
+        'route' => [
+            'admin.settings.shipping_zones.edit',
+            'admin.settings.shipping_zones.update',
+        ],
+        'sort' => 2,
+    ], [
+        'key' => 'settings.shipping_zones.delete',
+        'name' => 'admin::app.acl.delete',
+        'route' => 'admin.settings.shipping_zones.delete',
+        'sort' => 3,
+    ], [
+        'key' => 'settings.shipping_classes',
+        'name' => 'admin::app.acl.shipping-classes',
+        'route' => 'admin.settings.shipping_classes.index',
+        'sort' => 6,
+    ], [
+        'key' => 'settings.shipping_classes.create',
+        'name' => 'admin::app.acl.create',
+        'route' => [
+            'admin.settings.shipping_classes.create',
+            'admin.settings.shipping_classes.store',
+        ],
+        'sort' => 1,
+    ], [
+        'key' => 'settings.shipping_classes.edit',
+        'name' => 'admin::app.acl.edit',
+        'route' => [
+            'admin.settings.shipping_classes.edit',
+            'admin.settings.shipping_classes.update',
+        ],
+        'sort' => 2,
+    ], [
+        'key' => 'settings.shipping_classes.delete',
+        'name' => 'admin::app.acl.delete',
+        'route' => 'admin.settings.shipping_classes.delete',
+        'sort' => 3,
+    ], [
         'key' => 'settings.collection_points',
         'name' => 'admin::app.acl.collection-points',
         'route' => 'admin.settings.collection_points.index',
-        'sort' => 5,
+        'sort' => 7,
     ], [
         'key' => 'settings.collection_points.create',
         'name' => 'admin::app.acl.create',
@@ -1187,6 +1239,78 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Site Content
+    |--------------------------------------------------------------------------
+    */
+    [
+        'key' => 'content',
+        'name' => 'admin::app.acl.content',
+        'route' => 'admin.content.gallery.index',
+        'sort' => 9,
+    ], [
+        'key' => 'content.gallery',
+        'name' => 'admin::app.acl.gallery',
+        'route' => 'admin.content.gallery.index',
+        'sort' => 1,
+    ], [
+        'key' => 'content.gallery.create',
+        'name' => 'admin::app.acl.create',
+        'route' => 'admin.content.gallery.store',
+        'sort' => 1,
+    ], [
+        'key' => 'content.gallery.edit',
+        'name' => 'admin::app.acl.edit',
+        'route' => 'admin.content.gallery.update',
+        'sort' => 2,
+    ], [
+        'key' => 'content.gallery.delete',
+        'name' => 'admin::app.acl.delete',
+        'route' => 'admin.content.gallery.destroy',
+        'sort' => 3,
+    ], [
+        'key' => 'content.banners',
+        'name' => 'admin::app.acl.banners',
+        'route' => 'admin.content.banners.index',
+        'sort' => 2,
+    ], [
+        'key' => 'content.banners.create',
+        'name' => 'admin::app.acl.create',
+        'route' => 'admin.content.banners.store',
+        'sort' => 1,
+    ], [
+        'key' => 'content.banners.edit',
+        'name' => 'admin::app.acl.edit',
+        'route' => 'admin.content.banners.update',
+        'sort' => 2,
+    ], [
+        'key' => 'content.banners.delete',
+        'name' => 'admin::app.acl.delete',
+        'route' => 'admin.content.banners.destroy',
+        'sort' => 3,
+    ], [
+        'key' => 'content.projects',
+        'name' => 'admin::app.acl.projects',
+        'route' => 'admin.content.projects.index',
+        'sort' => 3,
+    ], [
+        'key' => 'content.projects.create',
+        'name' => 'admin::app.acl.create',
+        'route' => 'admin.content.projects.store',
+        'sort' => 1,
+    ], [
+        'key' => 'content.projects.edit',
+        'name' => 'admin::app.acl.edit',
+        'route' => 'admin.content.projects.update',
+        'sort' => 2,
+    ], [
+        'key' => 'content.projects.delete',
+        'name' => 'admin::app.acl.delete',
+        'route' => 'admin.content.projects.destroy',
+        'sort' => 3,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Configuration
     |--------------------------------------------------------------------------
     |
@@ -1200,6 +1324,6 @@ return [
             'admin.configuration.index',
             'admin.configuration.store',
         ],
-        'sort' => 9,
+        'sort' => 10,
     ],
 ];

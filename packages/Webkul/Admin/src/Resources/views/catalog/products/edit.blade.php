@@ -265,12 +265,31 @@
 
                         <!-- Categories View Blade File -->
                         @include('admin::catalog.products.edit.categories')
+
+                        <!-- Hide Price Toggle -->
+                        <div class="box-shadow relative rounded bg-white p-4 dark:bg-gray-900">
+                            <p class="mb-4 text-base font-semibold text-gray-800 dark:text-white">Price Visibility</p>
+
+                            <div class="flex items-center justify-between gap-2.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800 dark:text-white">Hide Price from Guests</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">When enabled, price is only shown to logged-in customers.</p>
+                                </div>
+
+                                <x-admin::form.control-group.control
+                                    type="switch"
+                                    name="hide_price"
+                                    :value="1"
+                                    :checked="(bool) $product->hide_price"
+                                />
+                            </div>
+                        </div>
                     @endif
                 </div>
 
                 @if ($isSingleColumn && ($column == 1 || $column == 2))
                     <div class="w-[360px] max-w-full max-sm:w-full">
-                        @if ($column == 2) 
+                        @if ($column == 2)
                             <!-- Images View Blade File -->
                             @include('admin::catalog.products.edit.images')
 
@@ -294,6 +313,25 @@
 
                         <!-- Categories View Blade File -->
                         @include('admin::catalog.products.edit.categories')
+
+                        <!-- Hide Price Toggle -->
+                        <div class="box-shadow relative rounded bg-white p-4 dark:bg-gray-900">
+                            <p class="mb-4 text-base font-semibold text-gray-800 dark:text-white">Price Visibility</p>
+
+                            <div class="flex items-center justify-between gap-2.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800 dark:text-white">Hide Price from Guests</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">When enabled, price is only shown to logged-in customers.</p>
+                                </div>
+
+                                <x-admin::form.control-group.control
+                                    type="switch"
+                                    name="hide_price"
+                                    :value="1"
+                                    :checked="(bool) $product->hide_price"
+                                />
+                            </div>
+                        </div>
                     </div>
                 @endif
 

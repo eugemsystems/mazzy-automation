@@ -337,10 +337,16 @@ return [
         'sort' => 4,
         'icon' => '',
     ], [
+        'key' => 'settings.shipping_zones',
+        'name' => 'admin::app.components.layouts.sidebar.shipping-zones',
+        'route' => 'admin.settings.shipping_zones.index',
+        'sort' => 5,
+        'icon' => '',
+    ], [
         'key' => 'settings.collection_points',
         'name' => 'admin::app.components.layouts.sidebar.collection-points',
         'route' => 'admin.settings.collection_points.index',
-        'sort' => 5,
+        'sort' => 6,
         'icon' => '',
     ], [
         'key' => 'settings.channels',
@@ -399,13 +405,42 @@ return [
     ],
 
     /**
+     * Site Content (gallery, banners, projects).
+     */
+    [
+        'key' => 'content',
+        'name' => 'admin::app.components.layouts.sidebar.content',
+        'route' => 'admin.content.gallery.index',
+        'sort' => 9,
+        'icon' => 'icon-cms',
+    ], [
+        'key' => 'content.gallery',
+        'name' => 'admin::app.components.layouts.sidebar.gallery',
+        'route' => 'admin.content.gallery.index',
+        'sort' => 1,
+        'icon' => '',
+    ], [
+        'key' => 'content.banners',
+        'name' => 'admin::app.components.layouts.sidebar.banners',
+        'route' => 'admin.content.banners.index',
+        'sort' => 2,
+        'icon' => '',
+    ], [
+        'key' => 'content.projects',
+        'name' => 'admin::app.components.layouts.sidebar.projects',
+        'route' => 'admin.content.projects.index',
+        'sort' => 3,
+        'icon' => '',
+    ],
+
+    /**
      * Configuration.
      */
     [
         'key' => 'configuration',
         'name' => 'admin::app.components.layouts.sidebar.configure',
         'route' => 'admin.configuration.index',
-        'sort' => 9,
+        'sort' => 10,
         'icon' => 'icon-configuration',
     ],
 ];

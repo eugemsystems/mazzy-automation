@@ -24,9 +24,17 @@ return [
         'code' => 'province_rate',
         'title' => 'Delivery by Province',
         'description' => 'Shipping rate based on your South African province',
-        'active' => true,
+        'active' => false,
         'default_rate' => '0',
         'class' => 'Webkul\Shipping\Carriers\ProvinceRate',
+    ],
+
+    'zone_rate' => [
+        'code' => 'zone_rate',
+        'title' => 'Delivery',
+        'description' => 'Shipping rate based on your province and the items in your cart',
+        'active' => true,
+        'class' => 'Webkul\Shipping\Carriers\ZoneRate',
     ],
 
     'collection_point' => [

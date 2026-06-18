@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Webkul\Admin\Http\Controllers\Settings\ChannelController;
 use Webkul\Admin\Http\Controllers\Settings\CollectionPointController;
 use Webkul\Admin\Http\Controllers\Settings\CurrencyController;
+use Webkul\Admin\Http\Controllers\Settings\ShippingClassController;
+use Webkul\Admin\Http\Controllers\Settings\ShippingZoneController;
 use Webkul\Admin\Http\Controllers\Settings\DataTransfer\ImportController;
 use Webkul\Admin\Http\Controllers\Settings\ExchangeRateController;
 use Webkul\Admin\Http\Controllers\Settings\InventorySourceController;
@@ -18,6 +20,40 @@ use Webkul\Admin\Http\Controllers\Settings\UserController;
  * Settings routes.
  */
 Route::prefix('settings')->group(function () {
+    /**
+     * Shipping Classes routes.
+     */
+    Route::controller(ShippingClassController::class)->prefix('shipping-classes')->group(function () {
+        Route::get('', 'index')->name('admin.settings.shipping_classes.index');
+
+        Route::get('create', 'create')->name('admin.settings.shipping_classes.create');
+
+        Route::post('create', 'store')->name('admin.settings.shipping_classes.store');
+
+        Route::get('edit/{id}', 'edit')->name('admin.settings.shipping_classes.edit');
+
+        Route::put('edit/{id}', 'update')->name('admin.settings.shipping_classes.update');
+
+        Route::delete('edit/{id}', 'destroy')->name('admin.settings.shipping_classes.delete');
+    });
+
+    /**
+     * Shipping Zones routes.
+     */
+    Route::controller(ShippingZoneController::class)->prefix('shipping-zones')->group(function () {
+        Route::get('', 'index')->name('admin.settings.shipping_zones.index');
+
+        Route::get('create', 'create')->name('admin.settings.shipping_zones.create');
+
+        Route::post('create', 'store')->name('admin.settings.shipping_zones.store');
+
+        Route::get('edit/{id}', 'edit')->name('admin.settings.shipping_zones.edit');
+
+        Route::put('edit/{id}', 'update')->name('admin.settings.shipping_zones.update');
+
+        Route::delete('edit/{id}', 'destroy')->name('admin.settings.shipping_zones.delete');
+    });
+
     /**
      * Collection Points routes.
      */

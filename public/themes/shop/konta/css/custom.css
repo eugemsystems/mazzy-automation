@@ -238,6 +238,53 @@
     margin-left: -10px;
 }
 
+/* Reset the col-auto shift inside the main header */
+.header-layout1 .menu-area .col-auto,
+.header-layout1 .main-menu-area .col-auto {
+    margin-left: 0;
+}
+
+/*
+ * HEADER ONE-LINE FIX
+ * Force the logo+contact row to stay on a single line at all desktop widths.
+ * The > selector targets only the immediate row child of th-container2,
+ * NOT the row inside .main-menu-area.
+ */
+.header-layout1 .menu-area > .th-container2 > .row {
+    flex-wrap: nowrap !important;
+    align-items: center;
+}
+
+/* ==========================================
+   Header responsiveness — 992-1399px (all laptops)
+   Reduce contact-info fonts so logo + 3 info blocks fit.
+   ========================================== */
+@media (min-width: 992px) and (max-width: 1399px) {
+    .header-layout1 .header-middle .header-link .header-single-link {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+    .header-layout1 .header-middle .header-link i {
+        --icon-size: 36px;
+        font-size: 14px;
+    }
+    .header-layout1 .header-middle .header-link p {
+        font-size: 11px;
+        margin-bottom: 2px;
+        white-space: nowrap;
+    }
+}
+
+/* Tighten nav item spacing on laptops */
+@media (min-width: 992px) and (max-width: 1299px) {
+    .main-menu > ul > li {
+        margin: 0 5px;
+    }
+    .header-layout1 .main-menu-area {
+        padding-left: 10px;
+    }
+}
+
 
 /** ALIBABA DESCRIPTIONS CSS*/
 .attribute-layout {

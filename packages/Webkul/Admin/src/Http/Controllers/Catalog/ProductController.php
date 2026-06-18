@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Webkul\Admin\DataGrids\Catalog\ProductDataGrid;
+use Webkul\Admin\Exports\MetaProductCatalogExport;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Admin\Http\Requests\InventoryRequest;
 use Webkul\Admin\Http\Requests\MassDestroyRequest;
@@ -154,6 +155,10 @@ class ProductController extends Controller
         Event::dispatch('catalog.product.update.before', $id);
 
         $product = $this->productRepository->update($request->all(), $id);
+
+        // hide_price is not a product attribute — save it directly on the products row
+        $product->hide_price = (bool) $request->input('hide_price', false);
+        $product->saveQuietly();
 
         Event::dispatch('catalog.product.update.after', $product);
 
@@ -308,6 +313,23 @@ class ProductController extends Controller
     }
 
     /**
+     * Mass update hide_price on the selected products.
+     */
+    public function massUpdateHidePrice(MassUpdateRequest $massUpdateRequest): JsonResponse
+    {
+        $productIds = $massUpdateRequest->input('indices');
+        $value = (bool) $massUpdateRequest->input('value');
+
+        foreach ($productIds as $productId) {
+            \Webkul\Product\Models\Product::where('id', $productId)->update(['hide_price' => $value]);
+        }
+
+        return new JsonResponse([
+            'message' => trans('admin::app.catalog.products.index.datagrid.mass-update-success'),
+        ], 200);
+    }
+
+    /**
      * To be manually invoked when data is seeded into products.
      *
      * @return Response
@@ -387,5 +409,13 @@ class ProductController extends Controller
         ]);
 
         return Storage::download($productAttribute['text_value']);
+    }
+
+    /**
+     * Export products as a Meta (Facebook) product catalog CSV.
+     */
+    public function exportMeta(): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        return (new MetaProductCatalogExport)->download();
     }
 }

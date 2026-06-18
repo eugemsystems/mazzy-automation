@@ -100,6 +100,8 @@ Route::prefix('catalog')->group(function () {
     Route::controller(ProductController::class)->prefix('products')->group(function () {
         Route::get('', 'index')->name('admin.catalog.products.index');
 
+        Route::get('export-meta', 'exportMeta')->name('admin.catalog.products.export_meta');
+
         Route::post('create', 'store')->name('admin.catalog.products.store');
 
         Route::post('copy/{id}', 'copy')->name('admin.catalog.products.copy');
@@ -117,6 +119,8 @@ Route::prefix('catalog')->group(function () {
         Route::post('upload-sample/{id}', 'uploadSample')->name('admin.catalog.products.upload_sample');
 
         Route::post('mass-update', 'massUpdate')->name('admin.catalog.products.mass_update');
+
+        Route::post('mass-update-hide-price', 'massUpdateHidePrice')->name('admin.catalog.products.mass_update_hide_price');
 
         Route::post('mass-delete', 'massDestroy')->name('admin.catalog.products.mass_delete');
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Webkul\Shop\Http\Controllers\HomeController;
+use Webkul\Shop\Http\Controllers\PageController;
 
 /**
  * Main site routes — no /store prefix.
@@ -9,8 +10,7 @@ use Webkul\Shop\Http\Controllers\HomeController;
  */
 
 Route::get('/', [HomeController::class, 'index'])
-    ->name('shop.home.index')
-    ->middleware('cache.response');
+    ->name('shop.home.index');
 
 Route::get('contact-us', [HomeController::class, 'contactUs'])
     ->name('shop.home.contact_us')
@@ -27,15 +27,20 @@ Route::get('about-us', [HomeController::class, 'aboutUs'])
     ->middleware('cache.response');
 
 Route::get('gallery', [HomeController::class, 'gallery'])
-    ->name('shop.home.gallery')
-    ->middleware('cache.response');
+    ->name('shop.home.gallery');
 
 Route::get('our-work', [HomeController::class, 'ourWork'])
-    ->name('shop.home.our_work')
-    ->middleware('cache.response');
+    ->name('shop.home.our_work');
 
 Route::get('planning-and-design', [HomeController::class, 'planningAndDesign'])
     ->name('shop.home.planning_and_design')
+    ->middleware('cache.response');
+
+Route::get('projects', [HomeController::class, 'projects'])
+    ->name('shop.home.projects');
+
+Route::get('page/{slug}', [PageController::class, 'view'])
+    ->name('shop.cms.page.root')
     ->middleware('cache.response');
 
 Route::get('{slug}', [HomeController::class, 'solutions'])

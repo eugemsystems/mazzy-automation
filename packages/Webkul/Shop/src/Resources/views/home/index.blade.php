@@ -11,6 +11,40 @@
     <div class="th-hero-wrapper hero-1" id="hero">
         <div class="hero-slider-1 th-carousel" data-fade="true" data-slide-show="1" data-md-slide-show="1" data-dots="true" data-adaptive-height="true">
 
+            @if (isset($banners) && $banners->count())
+                {{-- Dynamic banners from admin --}}
+                @foreach ($banners as $banner)
+                    <div class="th-hero-slide">
+                        <div class="th-hero-bg"
+                             @if ($banner->image_path)
+                                 data-bg-src="{{ asset('storage/' . $banner->image_path) }}"
+                             @else
+                                 data-bg-src="{{ asset('themes/shop/konta/img/hero/hero_bg_1_1.jpg') }}"
+                             @endif
+                        ></div>
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-xxl-8 col-lg-7 col-md-8">
+                                    <div class="hero-style1">
+                                        @if ($banner->subtitle)
+                                            <span class="hero-subtitle" data-ani="slideinleft" data-ani-delay="0.1s">{{ $banner->subtitle }}</span>
+                                        @endif
+                                        <h1 class="hero-title" data-ani="slideinleft" data-ani-delay="0.4s">{!! nl2br(e($banner->title)) !!}</h1>
+                                        @if ($banner->button_text)
+                                            <div class="btn-group" data-ani="slideinleft" data-ani-delay="0.8s">
+                                                <a href="{{ $banner->button_url ?: route('shop.home.about_us') }}" class="th-btn style4 th-icon">{{ $banner->button_text }}</a>
+                                                <a href="{{ route('shop.home.store') }}" class="th-btn ms-3">Visit Shop <i class="fas fa-arrow-right ms-1"></i></a>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                {{-- Static fallback slides (original content) --}}
+
             {{-- Slide 1 --}}
             <div class="th-hero-slide">
                 <div class="th-hero-bg" data-bg-src="{{ asset('themes/shop/konta/img/hero/hero_bg_1_1.jpg') }}">
@@ -142,6 +176,8 @@
                     </div>
                 </div>
             </div>
+
+            @endif
 
         </div>
         <div class="hero-shape"></div>

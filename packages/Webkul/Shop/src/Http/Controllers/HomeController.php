@@ -5,6 +5,9 @@ namespace Webkul\Shop\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
+use Webkul\Admin\Models\GalleryItem;
+use Webkul\Admin\Models\HomeBanner;
+use Webkul\Admin\Models\Project;
 use Webkul\Category\Repositories\CategoryRepository;
 use Webkul\Marketing\Repositories\FormSubmissionRepository;
 use Webkul\Shop\Http\Requests\ContactRequest;
@@ -49,7 +52,9 @@ class HomeController extends Controller
 
         $categories = CategoryTreeResource::collection($categories);
 
-        return view('shop::home.index', compact('customizations', 'categories'));
+        $banners = HomeBanner::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get();
+
+        return view('shop::home.index', compact('customizations', 'categories', 'banners'));
     }
 
     /**
@@ -93,7 +98,13 @@ class HomeController extends Controller
      */
     public function gallery(): View
     {
-        return view('shop::home.gallery');
+        $items = GalleryItem::where('is_active', true)
+            ->whereIn('display_on', ['gallery', 'both'])
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        return view('shop::home.gallery', compact('items'));
     }
 
     /**
@@ -101,7 +112,27 @@ class HomeController extends Controller
      */
     public function ourWork(): View
     {
-        return view('shop::home.our-work');
+        $items = GalleryItem::where('is_active', true)
+            ->whereIn('display_on', ['our_work', 'both'])
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        return view('shop::home.our-work', compact('items'));
+    }
+
+    /**
+     * Projects page.
+     */
+    public function projects(): View
+    {
+        $projects = Project::with('images')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        return view('shop::home.projects', compact('projects'));
     }
 
     /**
@@ -118,6 +149,38 @@ class HomeController extends Controller
     public function planningAndDesign(): View
     {
         return view('shop::home.planning-and-design');
+    }
+
+    /**
+     * Lutron Smart Control page.
+     */
+    public function lutronSmartControl(): View
+    {
+        return view('shop::home.lutron-smart-control');
+    }
+
+    /**
+     * WiiM Home Audio page.
+     */
+    public function wiimHomeAudio(): View
+    {
+        return view('shop::home.wiim-home-audio');
+    }
+
+    /**
+     * Denon Multi-room Audio page.
+     */
+    public function denonMultiRoomAudio(): View
+    {
+        return view('shop::home.denon-multi-room-audio');
+    }
+
+    /**
+     * Polk Audio Sound System page.
+     */
+    public function polkAudioSoundSystem(): View
+    {
+        return view('shop::home.polk-audio-sound-system');
     }
 
     public function sendContactUsMail(ContactRequest $contactRequest): RedirectResponse

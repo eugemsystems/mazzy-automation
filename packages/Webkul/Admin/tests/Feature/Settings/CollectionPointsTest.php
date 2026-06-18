@@ -25,7 +25,6 @@ it('should fail validation when required fields are missing', function () {
     $this->loginAsAdmin();
 
     postJson(route('admin.settings.collection_points.store'))
-        ->assertJsonValidationErrorFor('code')
         ->assertJsonValidationErrorFor('name')
         ->assertJsonValidationErrorFor('country')
         ->assertJsonValidationErrorFor('state')
@@ -34,6 +33,28 @@ it('should fail validation when required fields are missing', function () {
         ->assertJsonValidationErrorFor('postcode')
         ->assertJsonValidationErrorFor('handling_fee')
         ->assertUnprocessable();
+});
+
+it('accepts a free-form code and slugifies it', function () {
+    $this->loginAsAdmin();
+
+    postJson(route('admin.settings.collection_points.store'), [
+        'code'         => 'Cape Town Store',
+        'name'         => fake()->company(),
+        'country'      => 'ZA',
+        'state'        => 'WC',
+        'city'         => fake()->city(),
+        'street'       => fake()->streetName(),
+        'postcode'     => fake()->postcode(),
+        'handling_fee' => '0',
+        'status'       => '1',
+    ])->assertRedirect(route('admin.settings.collection_points.index'));
+
+    $this->assertModelWise([
+        CollectionPoint::class => [
+            ['code' => 'cape_town_store'],
+        ],
+    ]);
 });
 
 it('should store a new collection point', function () {

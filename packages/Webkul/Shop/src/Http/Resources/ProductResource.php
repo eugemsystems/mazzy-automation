@@ -46,8 +46,12 @@ class ProductResource extends JsonResource
             'is_wishlist' => (bool) auth()->guard()->user()?->wishlist_items
                 ->where('channel_id', core()->getCurrentChannel()->id)
                 ->where('product_id', $this->id)->count(),
-            'min_price' => core()->formatPrice($productTypeInstance->getMinimalPrice()),
-            'prices' => $productTypeInstance->getProductPrices(),
+            'min_price' => ($this->hide_price && ! auth('customer')->check())
+                ? null
+                : core()->formatPrice($productTypeInstance->getMinimalPrice()),
+            'prices' => ($this->hide_price && ! auth('customer')->check())
+                ? null
+                : $productTypeInstance->getProductPrices(),
             'price_html' => $productTypeInstance->getPriceHtml(),
             'ratings' => [
                 'average' => $this->reviewHelper->getAverageRating($this),

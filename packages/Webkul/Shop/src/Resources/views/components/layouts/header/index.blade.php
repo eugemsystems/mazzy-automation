@@ -39,7 +39,7 @@
     <div class="sticky-wrapper">
         <div class="menu-area">
             <div class="container th-container2">
-                <div class="row align-items-center justify-content-between">
+                <div class="row align-items-center justify-content-between" style="flex-wrap:nowrap;">
 
                     {{-- Logo --}}
                     <div class="col-auto">
@@ -132,6 +132,9 @@
                                 <li class="{{ request()->routeIs('shop.home.our_work') ? 'active' : '' }}">
                                     <a href="{{ route('shop.home.our_work') }}">Our Work</a>
                                 </li>
+                                <li class="{{ request()->routeIs('shop.home.projects') ? 'active' : '' }}">
+                                    <a href="{{ route('shop.home.projects') }}">Projects</a>
+                                </li>
                                 <li class="menu-item-has-children {{ request()->routeIs('shop.home.gallery') ? 'active' : '' }}">
                                     <a href="#">Media</a>
                                     <ul class="sub-menu">
@@ -171,6 +174,10 @@
                                             <li class="menu-item-has-children">
                                                 <a href="#">Home Automation</a>
                                                 <ul class="sub-menu">
+                                                    <li><a href="{{ route('shop.home.lutron_smart_control') }}">Lutron Smart Control</a></li>
+                                                    <li><a href="{{ route('shop.home.wiim_home_audio') }}">WiiM Home Audio</a></li>
+                                                    <li><a href="{{ route('shop.home.denon_multi_room_audio') }}">Denon Multi-room Audio</a></li>
+                                                    <li><a href="{{ route('shop.home.polk_audio_sound_system') }}">Polk Audio Sound System</a></li>
                                                     <li><a href="{{ route('shop.home.solutions', 'smart-lighting-systems') }}">Smart Lighting Systems</a></li>
                                                     <li><a href="{{ route('shop.home.solutions', 'smart-door-lock-systems') }}">Smart Door Lock Systems</a></li>
                                                     <li><a href="{{ route('shop.home.solutions', 'smart-curtain-systems') }}">Smart Curtain Systems</a></li>
@@ -204,6 +211,9 @@
                                     </li>
                                     <li class="{{ request()->routeIs('shop.home.our_work') ? 'active' : '' }}">
                                         <a href="{{ route('shop.home.our_work') }}">Our Work</a>
+                                    </li>
+                                    <li class="{{ request()->routeIs('shop.home.projects') ? 'active' : '' }}">
+                                        <a href="{{ route('shop.home.projects') }}">Projects</a>
                                     </li>
                                     <li class="menu-item-has-children {{ request()->routeIs('shop.home.gallery') ? 'active' : '' }}">
                                         <a href="#">Media</a>

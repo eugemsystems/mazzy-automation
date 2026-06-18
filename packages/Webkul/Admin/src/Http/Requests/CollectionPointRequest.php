@@ -18,6 +18,17 @@ class CollectionPointRequest extends FormRequest
     }
 
     /**
+     * Normalise the code into a valid slug, generating it from the name when
+     * left blank, so admins are not blocked by the strict code format.
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'code' => generate_shipping_code($this->input('code') ?: $this->input('name')),
+        ]);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array

@@ -188,7 +188,7 @@
                 },
 
                 provinceRate() {
-                    return this.allRates.find(rate => rate.carrier === 'province_rate') || null;
+                    return this.allRates.find(rate => rate.carrier === 'zone_rate') || null;
                 },
 
                 collectionRates() {

@@ -67,6 +67,25 @@ Route::get('booking-slots/{id}', [BookingProductController::class, 'index'])
     ->name('shop.booking-product.slots.index');
 
 /**
+ * Brand info pages — /store/lutron-smart-control etc.
+ */
+Route::get('lutron-smart-control', [HomeController::class, 'lutronSmartControl'])
+    ->name('shop.home.lutron_smart_control')
+    ->middleware('cache.response');
+
+Route::get('wiim-home-audio', [HomeController::class, 'wiimHomeAudio'])
+    ->name('shop.home.wiim_home_audio')
+    ->middleware('cache.response');
+
+Route::get('denon-multi-room-audio', [HomeController::class, 'denonMultiRoomAudio'])
+    ->name('shop.home.denon_multi_room_audio')
+    ->middleware('cache.response');
+
+Route::get('polk-audio-sound-system', [HomeController::class, 'polkAudioSoundSystem'])
+    ->name('shop.home.polk_audio_sound_system')
+    ->middleware('cache.response');
+
+/**
  * Product / category catch-all — MUST be last.
  * Handles /store/{url_key} for product detail and category pages.
  */

@@ -145,10 +145,10 @@
                     Home Automation <i class="fas fa-chevron-down"></i>
                 </a>
                 <div class="mz-dropdown-menu" id="cat-home-menu">
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart lighting']) }}"><i class="fas fa-lightbulb" style="color:#332a5e; width:16px;"></i> Smart Lighting</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart speaker']) }}"><i class="fas fa-volume-up" style="color:#332a5e; width:16px;"></i> Smart Speakers</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart audio']) }}"><i class="fas fa-music" style="color:#332a5e; width:16px;"></i> Home Audio Systems</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart gateway']) }}"><i class="fas fa-wifi" style="color:#332a5e; width:16px;"></i> Smart Gateways</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.home.lutron_smart_control') }}"><i class="fas fa-sliders-h" style="color:#332a5e; width:16px;"></i> Lutron Smart Control</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.home.wiim_home_audio') }}"><i class="fas fa-music" style="color:#332a5e; width:16px;"></i> WiiM Home Audio</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.home.denon_multi_room_audio') }}"><i class="fas fa-volume-up" style="color:#332a5e; width:16px;"></i> Denon Multi-room Audio</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.home.polk_audio_sound_system') }}"><i class="fas fa-headphones" style="color:#332a5e; width:16px;"></i> Polk Audio Sound System</a>
                 </div>
             </div>
 
@@ -211,7 +211,11 @@
                 <div class="mz-mnav-section">Shop</div>
                 <a href="{{ route('shop.home.store') }}" class="mz-mnav-item"><i class="fas fa-th-large"></i> All Products</a>
                 <a href="{{ route('shop.search.index', ['query' => 'smart devices']) }}" class="mz-mnav-item"><i class="fas fa-microchip"></i> Smart Devices</a>
-                <a href="{{ route('shop.search.index', ['query' => 'home automation']) }}" class="mz-mnav-item"><i class="fas fa-home"></i> Home Automation</a>
+                <div class="mz-mnav-section" style="margin-top:4px; font-size:11px;">Home Automation</div>
+                <a href="{{ route('shop.home.lutron_smart_control') }}" class="mz-mnav-item"><i class="fas fa-sliders-h"></i> Lutron Smart Control</a>
+                <a href="{{ route('shop.home.wiim_home_audio') }}" class="mz-mnav-item"><i class="fas fa-music"></i> WiiM Home Audio</a>
+                <a href="{{ route('shop.home.denon_multi_room_audio') }}" class="mz-mnav-item"><i class="fas fa-volume-up"></i> Denon Multi-room Audio</a>
+                <a href="{{ route('shop.home.polk_audio_sound_system') }}" class="mz-mnav-item"><i class="fas fa-headphones"></i> Polk Audio Sound System</a>
                 <a href="{{ route('shop.search.index', ['query' => 'accessories']) }}" class="mz-mnav-item"><i class="fas fa-plug"></i> Accessories</a>
                 <a href="{{ route('shop.compare.index') }}" class="mz-mnav-item"><i class="fas fa-exchange-alt"></i> Compare</a>
 

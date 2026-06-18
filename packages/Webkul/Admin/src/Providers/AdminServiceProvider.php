@@ -24,6 +24,8 @@ class AdminServiceProvider extends ServiceProvider
     {
         Route::middleware(['web', PreventRequestsDuringMaintenance::class])->group(__DIR__.'/../Routes/web.php');
 
+        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
+
         $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'admin');
 
         $this->loadViewsFrom(__DIR__.'/../Resources/views', 'admin');

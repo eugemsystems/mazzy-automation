@@ -50,6 +50,7 @@ class ProductDataGrid extends DataGrid
                 $leftJoin->on('pc.category_id', '=', 'ct.category_id')
                     ->where('ct.locale', app()->getLocale());
             })
+            ->leftJoin('products', 'product_flat.product_id', '=', 'products.id')
             ->select(
                 'product_flat.locale',
                 'product_flat.channel',
@@ -68,6 +69,7 @@ class ProductDataGrid extends DataGrid
             )
             ->addSelect(DB::raw('SUM(DISTINCT '.$tablePrefix.'product_inventories.qty) as quantity'))
             ->addSelect(DB::raw('COUNT(DISTINCT '.$tablePrefix.'product_images.id) as images_count'))
+            ->addSelect(DB::raw('MAX('.$tablePrefix.'products.hide_price) as hide_price'))
             ->where('product_flat.locale', app()->getLocale())
             ->groupBy('product_flat.product_id');
 
@@ -270,6 +272,22 @@ class ProductDataGrid extends DataGrid
                     ],
                     [
                         'label' => trans('admin::app.catalog.products.index.datagrid.disable'),
+                        'value' => 0,
+                    ],
+                ],
+            ]);
+
+            $this->addMassAction([
+                'title' => trans('admin::app.catalog.products.index.datagrid.update-hide-price'),
+                'url' => route('admin.catalog.products.mass_update_hide_price'),
+                'method' => 'POST',
+                'options' => [
+                    [
+                        'label' => trans('admin::app.catalog.products.index.datagrid.hide-price-on'),
+                        'value' => 1,
+                    ],
+                    [
+                        'label' => trans('admin::app.catalog.products.index.datagrid.hide-price-off'),
                         'value' => 0,
                     ],
                 ],

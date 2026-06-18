@@ -1,4 +1,5 @@
-@if ($prices['final']['price'] < $prices['regular']['price'])
+@if ($product->hide_price && ! auth('customer')->check())
+@elseif ($prices['final']['price'] < $prices['regular']['price'])
     <p
         class="final-price font-medium text-slate-500 line-through max-sm:leading-4"
         aria-label="{{ $prices['regular']['formatted_price'] }}"
