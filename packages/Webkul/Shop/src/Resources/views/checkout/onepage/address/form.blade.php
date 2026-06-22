@@ -199,6 +199,7 @@
                                 ::value="address.state"
                                 :label="trans('shop::app.checkout.onepage.address.state')"
                                 :placeholder="trans('shop::app.checkout.onepage.address.state')"
+                                @change="$emit('state-changed')"
                             >
                                 <option value="">
                                     @lang('shop::app.checkout.onepage.address.select-state')
@@ -221,6 +222,7 @@
                                 rules="{{ core()->isStateRequired() ? 'required' : '' }}"
                                 :label="trans('shop::app.checkout.onepage.address.state')"
                                 :placeholder="trans('shop::app.checkout.onepage.address.state')"
+                                @change="$emit('state-changed')"
                             />
                         </template>
                     </template>
@@ -298,6 +300,8 @@
     <script type="module">
         app.component('v-checkout-address-form', {
             template: '#v-checkout-address-form-template',
+
+            emits: ['state-changed'],
 
             props: {
                 controlName: {

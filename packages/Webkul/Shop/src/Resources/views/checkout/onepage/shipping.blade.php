@@ -1,3 +1,20 @@
+<style>
+    /* Scoped overrides for shipping-method option cards only.
+       The global konta style.css applies ::before radio circle to any
+       label sibling of a radio input. These rules re-position and
+       re-size that indicator to fit the taller card layout. */
+    .shipping-method-option input[type="radio"] ~ label {
+        display: block;
+        width: 100%;
+        padding-left: 40px;
+    }
+    .shipping-method-option input[type="radio"] ~ label::before {
+        left: 11px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+</style>
+
 {!! view_render_event('bagisto.shop.checkout.onepage.shipping_methods.before') !!}
 
 <v-shipping-methods
@@ -40,7 +57,7 @@
                         <!-- Province Delivery (auto-applied) -->
                         <div
                             v-if="provinceRate"
-                            class="relative mb-3 select-none"
+                            class="shipping-method-option mb-3 select-none"
                         >
                             <input
                                 type="radio"
@@ -48,35 +65,32 @@
                                 :id="provinceRate.method"
                                 :value="provinceRate.method"
                                 :checked="selectedMethod === provinceRate.method"
-                                class="peer hidden"
-                                @change="select(provinceRate.method)"
+                                style="display:none"
                             >
 
                             <label
-                                class="flex h-full cursor-pointer items-center gap-3.5 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 peer-checked:border-[#332a5e] peer-checked:bg-[#332a5e]/5 peer-checked:ring-1 peer-checked:ring-[#332a5e] ltr:pr-10 rtl:pl-10"
+                                class="cursor-pointer rounded-xl border border-slate-200 bg-white py-4 pr-4 transition hover:border-slate-300"
+                                :class="selectedMethod === provinceRate.method ? 'border-[#332a5e] bg-[#332a5e]/5 ring-1 ring-[#332a5e]' : ''"
                                 :for="provinceRate.method"
+                                @click="select(provinceRate.method)"
                             >
-                                <span class="icon-flate-rate shrink-0 text-3xl text-[#332a5e]"></span>
+                                <div class="flex items-center gap-3">
+                                    <span class="icon-flate-rate shrink-0 text-3xl text-[#332a5e]"></span>
 
-                                <div class="min-w-0 flex-1">
-                                    <p class="text-sm font-semibold text-slate-800">
-                                        @lang('shop::app.checkout.onepage.shipping.delivery-title')
-                                    </p>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-sm font-semibold text-slate-800">
+                                            @lang('shop::app.checkout.onepage.shipping.delivery-title')
+                                        </p>
 
-                                    <p class="mt-0.5 text-xs text-slate-500">
-                                        @{{ provinceRate.method_description }}
-                                    </p>
+                                        <p class="mt-0.5 text-xs text-slate-500">
+                                            @{{ provinceRate.method_description }}
+                                        </p>
 
-                                    <p class="mt-1 text-base font-bold text-[#332a5e]">
-                                        @{{ provinceRate.base_formatted_price }}
-                                    </p>
+                                        <p class="mt-1 text-base font-bold text-[#332a5e]">
+                                            @{{ provinceRate.base_formatted_price }}
+                                        </p>
+                                    </div>
                                 </div>
-                            </label>
-
-                            <label
-                                class="icon-radio-unselect peer-checked:icon-radio-select pointer-events-none absolute top-4 text-xl text-slate-300 peer-checked:text-[#332a5e] ltr:right-4 rtl:left-4"
-                                :for="provinceRate.method"
-                            >
                             </label>
                         </div>
 
@@ -88,7 +102,7 @@
 
                             <div class="grid gap-3 sm:grid-cols-2">
                                 <div
-                                    class="relative select-none"
+                                    class="shipping-method-option select-none"
                                     v-for="rate in collectionRates"
                                 >
                                     <input
@@ -97,35 +111,32 @@
                                         :id="rate.method"
                                         :value="rate.method"
                                         :checked="selectedMethod === rate.method"
-                                        class="peer hidden"
-                                        @change="select(rate.method)"
+                                        style="display:none"
                                     >
 
                                     <label
-                                        class="flex h-full cursor-pointer items-center gap-3.5 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 peer-checked:border-[#332a5e] peer-checked:bg-[#332a5e]/5 peer-checked:ring-1 peer-checked:ring-[#332a5e] ltr:pr-10 rtl:pl-10"
+                                        class="cursor-pointer rounded-xl border border-slate-200 bg-white py-4 pr-4 transition hover:border-slate-300"
+                                        :class="selectedMethod === rate.method ? 'border-[#332a5e] bg-[#332a5e]/5 ring-1 ring-[#332a5e]' : ''"
                                         :for="rate.method"
+                                        @click="select(rate.method)"
                                     >
-                                        <span class="icon-flate-rate shrink-0 text-3xl text-[#332a5e]"></span>
+                                        <div class="flex items-center gap-3">
+                                            <span class="icon-flate-rate shrink-0 text-3xl text-[#332a5e]"></span>
 
-                                        <div class="min-w-0 flex-1">
-                                            <p class="text-sm font-semibold text-slate-800">
-                                                @{{ rate.method_title }}
-                                            </p>
+                                            <div class="min-w-0 flex-1">
+                                                <p class="text-sm font-semibold text-slate-800">
+                                                    @{{ rate.method_title }}
+                                                </p>
 
-                                            <p class="mt-0.5 text-xs text-slate-500">
-                                                @{{ rate.method_description }}
-                                            </p>
+                                                <p class="mt-0.5 text-xs text-slate-500">
+                                                    @{{ rate.method_description }}
+                                                </p>
 
-                                            <p class="mt-1 text-base font-bold text-[#332a5e]">
-                                                @{{ rate.base_formatted_price }}
-                                            </p>
+                                                <p class="mt-1 text-base font-bold text-[#332a5e]">
+                                                    @{{ rate.base_formatted_price }}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </label>
-
-                                    <label
-                                        class="icon-radio-unselect peer-checked:icon-radio-select pointer-events-none absolute top-4 text-xl text-slate-300 peer-checked:text-[#332a5e] ltr:right-4 rtl:left-4"
-                                        :for="rate.method"
-                                    >
                                     </label>
                                 </div>
                             </div>
@@ -201,7 +212,7 @@
                     immediate: true,
 
                     handler(value) {
-                        if (value && ! this.selectedMethod && this.provinceRate) {
+                        if (value && this.provinceRate) {
                             this.selectedMethod = this.provinceRate.method;
                         }
                     },

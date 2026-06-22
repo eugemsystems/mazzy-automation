@@ -29,7 +29,7 @@
                     v-slot="{ meta, errors, handleSubmit }"
                     as="div"
                 >
-                    <form @submit="handleSubmit($event, addAddressToCart)">
+                    <form ref="customerAddressForm" @submit="handleSubmit($event, addAddressToCart)">
                         <!-- Billing Address Header -->
                         <div class="mb-4 flex items-center justify-between max-md:mb-2">
                             <h2 class="text-xl font-medium max-sm:text-base max-sm:font-normal">
@@ -360,6 +360,8 @@
                     isLoading: true,
 
                     isStoring: false,
+
+                    submittedOnce: false,
                 }
             },
 
@@ -371,6 +373,20 @@
 
             mounted() {
                 this.getCustomerSavedAddresses();
+            },
+
+            watch: {
+                'selectedAddresses.billing_address_id'(newVal, oldVal) {
+                    if (this.submittedOnce && oldVal !== null && ! this.isStoring && ! this.activeAddressForm) {
+                        this.$nextTick(() => this.$refs.customerAddressForm?.requestSubmit());
+                    }
+                },
+
+                'selectedAddresses.shipping_address_id'(newVal, oldVal) {
+                    if (this.submittedOnce && oldVal !== null && ! this.isStoring && ! this.activeAddressForm) {
+                        this.$nextTick(() => this.$refs.customerAddressForm?.requestSubmit());
+                    }
+                },
             },
 
             methods: {
@@ -570,6 +586,8 @@
                     this.$axios.post('{{ route('shop.checkout.onepage.addresses.store') }}', payload)
                         .then((response) => {
                             this.isStoring = false;
+
+                            this.submittedOnce = true;
 
                             if (response.data.data.redirect_url) {
                                 window.location.href = response.data.data.redirect_url;
