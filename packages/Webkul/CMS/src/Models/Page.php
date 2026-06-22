@@ -32,7 +32,16 @@ class Page extends TranslatableModel implements PageContract
      *
      * @var array
      */
-    protected $fillable = ['layout'];
+    protected $fillable = ['layout', 'show_in_solutions', 'parent_id', 'menu_label', 'sort_order'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'show_in_solutions' => 'boolean',
+    ];
 
     /**
      * The attributes that are translatable.
@@ -64,6 +73,25 @@ class Page extends TranslatableModel implements PageContract
     public function channels()
     {
         return $this->belongsToMany(ChannelProxy::modelClass(), 'cms_page_channels', 'cms_page_id');
+    }
+
+    /**
+     * Parent page (for submenu nesting).
+     */
+    public function parent()
+    {
+        return $this->belongsTo(static::class, 'parent_id');
+    }
+
+    /**
+     * Child pages (sub-menu items).
+     */
+    public function children()
+    {
+        return $this->hasMany(static::class, 'parent_id')
+            ->where('show_in_solutions', true)
+            ->orderBy('sort_order')
+            ->orderBy('id');
     }
 
     /**

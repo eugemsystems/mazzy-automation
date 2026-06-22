@@ -1133,6 +1133,8 @@ return [
                     'update-hide-price' => 'Update Price Visibility',
                     'hide-price-on' => 'Hide from Guests',
                     'hide-price-off' => 'Show to Everyone',
+                    'update-shipping-price' => 'Update Shipping Price',
+                    'shipping-price-input-label' => 'Shipping Price (R)',
                 ],
             ],
 
@@ -1141,6 +1143,8 @@ return [
                 'remove' => 'Remove',
                 'save-btn' => 'Save Product',
                 'title' => 'Edit Product',
+                'shipping-price' => 'Shipping Price',
+                'shipping-price-info' => 'Base shipping cost for this product. Shipping zones add a per-unit charge for quantities above the zone\'s included amount.',
 
                 'channels' => [
                     'title' => 'Channels',

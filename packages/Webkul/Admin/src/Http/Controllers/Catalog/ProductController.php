@@ -330,6 +330,23 @@ class ProductController extends Controller
     }
 
     /**
+     * Mass update shipping_price on the selected products.
+     */
+    public function massUpdateShippingPrice(MassUpdateRequest $massUpdateRequest): JsonResponse
+    {
+        $productIds = $massUpdateRequest->input('indices');
+        $value = (float) $massUpdateRequest->input('value');
+
+        foreach ($productIds as $productId) {
+            \Webkul\Product\Models\Product::where('id', $productId)->update(['shipping_price' => $value]);
+        }
+
+        return new JsonResponse([
+            'message' => trans('admin::app.catalog.products.index.datagrid.mass-update-success'),
+        ], 200);
+    }
+
+    /**
      * To be manually invoked when data is seeded into products.
      *
      * @return Response

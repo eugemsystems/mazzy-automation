@@ -36,7 +36,7 @@
                         && $product->url_key
                     )
                         <a
-                            href="{{ route('shop.product_or_category.index', $product->url_key) }}"
+                            href="{{ url('/store') . '/' . $product->url_key }}"
                             class="secondary-button"
                             target="_blank"
                         >

@@ -26,7 +26,16 @@
                 <span class="icon-arrow-right rtl:icon-arrow-left text-sm text-slate-300"></span>
                 <span class="text-[#332a5e]">Checkout</span>
             </nav>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-900">Checkout</h1>
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold tracking-tight text-slate-900">Checkout</h1>
+                <a
+                    href="{{ route('shop.checkout.cart.index') }}"
+                    class="inline-flex items-center gap-1.5 rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-[#332a5e] hover:text-[#332a5e]"
+                >
+                    <span class="icon-arrow-left rtl:icon-arrow-right text-base"></span>
+                    Back to Cart
+                </a>
+            </div>
         </div>
     </div>
 

@@ -52,6 +52,25 @@ class PageController extends Controller
      */
     public function store()
     {
+        // Auto-generate url_key from page_title if not provided
+        if (! request()->filled('url_key')) {
+            request()->merge(['url_key' => \Illuminate\Support\Str::slug(request()->input('page_title'))]);
+        }
+
+        // Ensure uniqueness by appending a counter when slug already exists
+        $urlKey = request()->input('url_key');
+        $original = $urlKey;
+        $counter = 1;
+        while (\Webkul\CMS\Models\Page::whereTranslation('url_key', $urlKey)->exists()) {
+            $urlKey = $original . '-' . $counter++;
+        }
+        request()->merge(['url_key' => $urlKey]);
+
+        // Auto-assign default channel if none selected
+        if (! request()->filled('channels')) {
+            request()->merge(['channels' => [core()->getDefaultChannel()->id]]);
+        }
+
         $this->validate(request(), [
             'url_key' => ['required', 'unique:cms_page_translations,url_key', new Slug],
             'page_title' => 'required',
@@ -71,9 +90,12 @@ class PageController extends Controller
             'meta_description',
         ]);
 
-        $data['html_content'] = clean_content($data['html_content']);
-
-        $page = $this->pageRepository->create($data);
+        $page = $this->pageRepository->create(array_merge($data, [
+            'show_in_solutions' => (bool) request()->input('show_in_solutions', false),
+            'parent_id'         => request()->input('parent_id') ?: null,
+            'menu_label'        => request()->input('menu_label'),
+            'sort_order'        => (int) request()->input('sort_order', 0),
+        ]));
 
         Event::dispatch('cms.page.create.after', $page);
 
@@ -118,12 +140,14 @@ class PageController extends Controller
 
         $localeData = request()->input($locale);
 
-        $localeData['html_content'] = clean_content($localeData['html_content']);
-
         $page = $this->pageRepository->update([
-            $locale => $localeData,
-            'channels' => request()->input('channels'),
-            'locale' => $locale,
+            $locale          => $localeData,
+            'channels'       => request()->input('channels'),
+            'locale'         => $locale,
+            'show_in_solutions' => (bool) request()->input('show_in_solutions', false),
+            'parent_id'      => request()->input('parent_id') ?: null,
+            'menu_label'     => request()->input('menu_label'),
+            'sort_order'     => (int) request()->input('sort_order', 0),
         ], $id);
 
         Event::dispatch('cms.page.update.after', $page);

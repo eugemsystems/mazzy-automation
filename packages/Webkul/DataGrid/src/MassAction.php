@@ -16,6 +16,8 @@ class MassAction
         public string $method,
         public mixed $url,
         public array $options = [],
+        public string $type = '',
+        public string $input_label = '',
     ) {}
 
     /**
@@ -24,11 +26,13 @@ class MassAction
     public function toArray()
     {
         return [
-            'icon' => $this->icon,
-            'title' => $this->title,
-            'method' => $this->method,
-            'url' => $this->url,
-            'options' => $this->options,
+            'icon'        => $this->icon,
+            'title'       => $this->title,
+            'method'      => $this->method,
+            'url'         => $this->url,
+            'options'     => $this->options,
+            'type'        => $this->type,
+            'input_label' => $this->input_label,
         ];
     }
 }

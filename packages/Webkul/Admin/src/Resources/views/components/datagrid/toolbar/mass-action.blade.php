@@ -10,6 +10,62 @@
         type="text/x-template"
         id="v-datagrid-mass-action-template"
     >
+        <!-- Input-type mass action modal — teleported to <body> to escape stacking contexts -->
+        <Teleport to="body">
+            <div
+                v-if="inputModal.open"
+                style="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);"
+                @click.self="inputModal.open = false"
+            >
+                <div style="background:#fff;border-radius:12px;padding:28px 32px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.25);position:relative;">
+                    <!-- Close button -->
+                    <button
+                        type="button"
+                        style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;line-height:1;"
+                        @click="inputModal.open = false"
+                    >&times;</button>
+
+                    <h3 style="margin:0 0 6px;font-size:17px;font-weight:700;color:#1f2937;">
+                        @{{ inputModal.action?.title }}
+                    </h3>
+                    <p style="margin:0 0 20px;font-size:13px;color:#6b7280;">Enter the value to apply to all selected products.</p>
+
+                    <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:#374151;">
+                        @{{ inputModal.action?.input_label }}
+                    </label>
+                    <input
+                        type="number"
+                        style="display:block;width:100%;box-sizing:border-box;padding:10px 14px;font-size:15px;border:1.5px solid #d1d5db;border-radius:8px;outline:none;color:#111827;margin-bottom:24px;"
+                        v-model="inputModal.value"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        ref="inputModalField"
+                        @keyup.enter="applyInputAction"
+                        @focus="$event.target.style.borderColor='#6366f1'"
+                        @blur="$event.target.style.borderColor='#d1d5db'"
+                    >
+
+                    <div style="display:flex;justify-content:flex-end;gap:10px;">
+                        <button
+                            type="button"
+                            style="padding:9px 20px;font-size:13px;font-weight:600;border:1.5px solid #d1d5db;border-radius:8px;background:#fff;color:#374151;cursor:pointer;"
+                            @click="inputModal.open = false"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            style="padding:9px 20px;font-size:13px;font-weight:600;border:none;border-radius:8px;background:#4f46e5;color:#fff;cursor:pointer;"
+                            @click="applyInputAction"
+                        >
+                            @lang('admin::app.components.datagrid.toolbar.mass-actions.submit')
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Teleport>
+
         <slot
             name="mass-action"
             :available="available"
@@ -70,6 +126,23 @@
                                 </ul>
                             </li>
 
+                            <li v-else-if="massAction?.type === 'input'">
+                                <a
+                                    class="whitespace-no-wrap flex gap-1.5 rounded-b px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-950"
+                                    href="javascript:void(0);"
+                                    @click="openInputModal(massAction)"
+                                >
+                                    <i
+                                        class="text-2xl"
+                                        :class="massAction.icon"
+                                        v-if="massAction?.icon"
+                                    >
+                                    </i>
+
+                                    @{{ massAction.title }}
+                                </a>
+                            </li>
+
                             <li v-else>
                                 <a
                                     class="whitespace-no-wrap flex gap-1.5 rounded-b px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-950"
@@ -120,6 +193,12 @@
 
                         value: null,
                     },
+
+                    inputModal: {
+                        open: false,
+                        action: null,
+                        value: '',
+                    },
                 };
             },
 
@@ -128,6 +207,65 @@
             },
 
             methods: {
+                /**
+                 * Open the floating input modal for input-type mass actions.
+                 */
+                openInputModal(action) {
+                    if (! this.massActions.indices.length) {
+                        this.$emitter.emit('add-flash', { type: 'warning', message: "@lang('admin::app.components.datagrid.index.no-records-selected')" });
+
+                        return;
+                    }
+
+                    this.inputModal.action = action;
+                    this.inputModal.value = '';
+                    this.inputModal.open = true;
+
+                    this.$nextTick(() => {
+                        if (this.$refs.inputModalField) {
+                            this.$refs.inputModalField.focus();
+                        }
+                    });
+                },
+
+                /**
+                 * Submit the input modal value as a mass action.
+                 */
+                applyInputAction() {
+                    const raw = this.inputModal.value;
+
+                    if (raw === '' || isNaN(parseFloat(raw))) {
+                        this.$emitter.emit('add-flash', { type: 'warning', message: 'Please enter a valid value.' });
+
+                        return;
+                    }
+
+                    const action = this.inputModal.action;
+
+                    this.inputModal.open = false;
+
+                    this.$emitter.emit('open-confirm-modal', {
+                        agree: () => {
+                            this.$axios.post(action.url, {
+                                    indices: this.massActions.indices,
+                                    value: parseFloat(raw),
+                                })
+                                .then((response) => {
+                                    this.$emitter.emit('add-flash', { type: 'success', message: response.data.message });
+
+                                    this.$parent.get();
+                                })
+                                .catch((error) => {
+                                    this.$emitter.emit('add-flash', { type: 'error', message: error.response.data.message });
+
+                                    this.$parent.get();
+                                });
+
+                            this.massActions.indices = [];
+                        },
+                    });
+                },
+
                 /**
                  * Validate mass action.
                  *

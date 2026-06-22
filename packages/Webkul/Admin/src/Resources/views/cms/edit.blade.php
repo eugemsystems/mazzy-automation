@@ -34,7 +34,7 @@
                 <!-- Preview Button -->
                 @if ($page->translate($currentLocale->code))
                     <a
-                        href="{{ route('shop.cms.page', $page->translate($currentLocale->code)['url_key']) }}"
+                        href="{{ route('shop.cms.page.root', $page->translate($currentLocale->code)['url_key']) }}"
                         class="secondary-button"
                         target="_blank"
                     >
@@ -289,6 +289,74 @@
                 </x-admin::accordion>
 
                 {!! view_render_event('bagisto.admin.cms.pages.edit.card.accordion.seo.after', ['page' => $page]) !!}
+
+                <!-- Solutions Menu Settings -->
+                <x-admin::accordion>
+                    <x-slot:header>
+                        <p class="p-2.5 text-base font-semibold text-gray-800 dark:text-white">
+                            Solutions Menu
+                        </p>
+                    </x-slot>
+
+                    <x-slot:content>
+                        <x-admin::form.control-group class="!mb-4">
+                            <div class="flex items-center justify-between gap-2.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800 dark:text-white">Show in Solutions Menu</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">This page will appear in the Solutions dropdown in the site navigation.</p>
+                                </div>
+
+                                <x-admin::form.control-group.control
+                                    type="switch"
+                                    name="show_in_solutions"
+                                    id="show_in_solutions"
+                                    :value="1"
+                                    :checked="(bool) $page->show_in_solutions"
+                                />
+                            </div>
+                        </x-admin::form.control-group>
+
+                        <x-admin::form.control-group class="!mb-4">
+                            <x-admin::form.control-group.label>
+                                Menu Label <span class="text-xs text-gray-400">(optional — uses page title if blank)</span>
+                            </x-admin::form.control-group.label>
+
+                            <x-admin::form.control-group.control
+                                type="text"
+                                name="menu_label"
+                                :value="old('menu_label', $page->menu_label)"
+                                placeholder="Label shown in the nav menu"
+                            />
+                        </x-admin::form.control-group>
+
+                        <x-admin::form.control-group class="!mb-4">
+                            <x-admin::form.control-group.label>
+                                Parent Menu Item <span class="text-xs text-gray-400">(for sub-menus)</span>
+                            </x-admin::form.control-group.label>
+
+                            <select
+                                name="parent_id"
+                                class="w-full rounded border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:border-gray-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                            >
+                                <option value="">— None (top-level item) —</option>
+                                @foreach(\Webkul\CMS\Models\Page::where('show_in_solutions', true)->whereNull('parent_id')->where('id', '!=', $page->id)->orderBy('sort_order')->orderBy('id')->get() as $parentPage)
+                                    <option value="{{ $parentPage->id }}" {{ old('parent_id', $page->parent_id) == $parentPage->id ? 'selected' : '' }}>{{ $parentPage->menu_label ?: $parentPage->page_title }}</option>
+                                @endforeach
+                            </select>
+                        </x-admin::form.control-group>
+
+                        <x-admin::form.control-group class="!mb-0">
+                            <x-admin::form.control-group.label>Sort Order</x-admin::form.control-group.label>
+
+                            <x-admin::form.control-group.control
+                                type="text"
+                                name="sort_order"
+                                :value="old('sort_order', $page->sort_order ?? 0)"
+                                placeholder="0"
+                            />
+                        </x-admin::form.control-group>
+                    </x-slot>
+                </x-admin::accordion>
 
             </div>
           </div>

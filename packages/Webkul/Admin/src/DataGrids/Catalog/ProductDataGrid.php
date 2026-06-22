@@ -292,6 +292,14 @@ class ProductDataGrid extends DataGrid
                     ],
                 ],
             ]);
+
+            $this->addMassAction([
+                'title' => trans('admin::app.catalog.products.index.datagrid.update-shipping-price'),
+                'url' => route('admin.catalog.products.mass_update_shipping_price'),
+                'method' => 'POST',
+                'type' => 'input',
+                'input_label' => trans('admin::app.catalog.products.index.datagrid.shipping-price-input-label'),
+            ]);
         }
     }
 

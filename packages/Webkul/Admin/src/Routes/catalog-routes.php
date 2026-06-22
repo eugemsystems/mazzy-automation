@@ -122,6 +122,8 @@ Route::prefix('catalog')->group(function () {
 
         Route::post('mass-update-hide-price', 'massUpdateHidePrice')->name('admin.catalog.products.mass_update_hide_price');
 
+        Route::post('mass-update-shipping-price', 'massUpdateShippingPrice')->name('admin.catalog.products.mass_update_shipping_price');
+
         Route::post('mass-delete', 'massDestroy')->name('admin.catalog.products.mass_delete');
 
         Route::controller(SimpleController::class)->group(function () {
