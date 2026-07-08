@@ -128,14 +128,14 @@
                     Smart Devices <i class="fas fa-chevron-down"></i>
                 </a>
                 <div class="mz-dropdown-menu" id="cat-smart-menu">
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart alarm']) }}"><i class="fas fa-bell" style="color:#332a5e; width:16px;"></i> Smart Alarm Systems</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart door lock']) }}"><i class="fas fa-lock" style="color:#332a5e; width:16px;"></i> Smart Door Locks</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart curtain']) }}"><i class="fas fa-blinds" style="color:#332a5e; width:16px;"></i> Smart Curtain Systems</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'garage opener']) }}"><i class="fas fa-warehouse" style="color:#332a5e; width:16px;"></i> Garage Openers</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart camera']) }}"><i class="fas fa-video" style="color:#332a5e; width:16px;"></i> Smart Cameras</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart switch']) }}"><i class="fas fa-toggle-on" style="color:#332a5e; width:16px;"></i> Smart Switches</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'zigbee gateway']) }}"><i class="fas fa-network-wired" style="color:#332a5e; width:16px;"></i> Zigbee Gateways</a>
-                    <a class="mz-dropdown-item" href="{{ route('shop.search.index', ['query' => 'smart sensor']) }}"><i class="fas fa-satellite-dish" style="color:#332a5e; width:16px;"></i> Smart Sensors</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.product_or_category.index', ['path' => 'smart-alarm-systems']) }}"><i class="fas fa-bell" style="color:#332a5e; width:16px;"></i> Smart Alarm Systems</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.product_or_category.index', ['path' => 'smart-door-lock']) }}"><i class="fas fa-lock" style="color:#332a5e; width:16px;"></i> Smart Door Locks</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.product_or_category.index', ['path' => 'smart-curtain-system']) }}"><i class="fas fa-blinds" style="color:#332a5e; width:16px;"></i> Smart Curtain Systems</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.product_or_category.index', ['path' => 'garage-opener']) }}"><i class="fas fa-warehouse" style="color:#332a5e; width:16px;"></i> Garage Openers</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.product_or_category.index', ['path' => 'smart-cameras']) }}"><i class="fas fa-video" style="color:#332a5e; width:16px;"></i> Smart Cameras</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.product_or_category.index', ['path' => 'smart-switch']) }}"><i class="fas fa-toggle-on" style="color:#332a5e; width:16px;"></i> Smart Switches</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.product_or_category.index', ['path' => 'zigbee-gateway']) }}"><i class="fas fa-network-wired" style="color:#332a5e; width:16px;"></i> Zigbee Gateways</a>
+                    <a class="mz-dropdown-item" href="{{ route('shop.product_or_category.index', ['path' => 'smart-security']) }}"><i class="fas fa-satellite-dish" style="color:#332a5e; width:16px;"></i> Smart Security</a>
                 </div>
             </div>
 
@@ -152,7 +152,7 @@
                 </div>
             </div>
 
-            <a href="{{ route('shop.search.index', ['query' => 'accessories']) }}" class="mz-catlink">Accessories</a>
+            <a href="{{ route('shop.product_or_category.index', ['path' => 'automation-accessories']) }}" class="mz-catlink">Accessories</a>
             <a href="{{ route('shop.compare.index') }}" class="mz-catlink">Compare</a>
 
             {{-- Account (right side of catnav) --}}
@@ -210,13 +210,13 @@
             <div class="mz-mnav-body">
                 <div class="mz-mnav-section">Shop</div>
                 <a href="{{ route('shop.home.store') }}" class="mz-mnav-item"><i class="fas fa-th-large"></i> All Products</a>
-                <a href="{{ route('shop.search.index', ['query' => 'smart devices']) }}" class="mz-mnav-item"><i class="fas fa-microchip"></i> Smart Devices</a>
+                <a href="{{ route('shop.product_or_category.index', ['path' => 'smart-automation']) }}" class="mz-mnav-item"><i class="fas fa-microchip"></i> Smart Devices</a>
                 <div class="mz-mnav-section" style="margin-top:4px; font-size:11px;">Home Automation</div>
                 <a href="{{ route('shop.home.lutron_smart_control') }}" class="mz-mnav-item"><i class="fas fa-sliders-h"></i> Lutron Smart Control</a>
                 <a href="{{ route('shop.home.wiim_home_audio') }}" class="mz-mnav-item"><i class="fas fa-music"></i> WiiM Home Audio</a>
                 <a href="{{ route('shop.home.denon_multi_room_audio') }}" class="mz-mnav-item"><i class="fas fa-volume-up"></i> Denon Multi-room Audio</a>
                 <a href="{{ route('shop.home.polk_audio_sound_system') }}" class="mz-mnav-item"><i class="fas fa-headphones"></i> Polk Audio Sound System</a>
-                <a href="{{ route('shop.search.index', ['query' => 'accessories']) }}" class="mz-mnav-item"><i class="fas fa-plug"></i> Accessories</a>
+                <a href="{{ route('shop.product_or_category.index', ['path' => 'automation-accessories']) }}" class="mz-mnav-item"><i class="fas fa-plug"></i> Accessories</a>
                 <a href="{{ route('shop.compare.index') }}" class="mz-mnav-item"><i class="fas fa-exchange-alt"></i> Compare</a>
 
                 @auth('customer')

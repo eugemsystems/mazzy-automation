@@ -13,7 +13,11 @@ class WooCommerceImporter
 
     protected string $channel = 'default';
 
-    protected array $attributes = [];
+    /** @var array All rows from mazzattributes, keyed by code */
+    protected array $attributesByCode = [];
+
+    /** @var array attribute_id => [ option_value_lower => option_id ] */
+    protected array $optionCache = [];
 
     protected int $rootRgt = 2;
 
@@ -36,14 +40,11 @@ class WooCommerceImporter
     ];
 
     /**
-     * Run the full import: wipe products + non-root categories, then seed fresh data.
-     *
-     * @param  array  $data  Parsed JSON (categories + products keys)
-     * @param  callable|null  $progress  fn(int $done, int $total)
+     * Run the full import.
      */
     public function import(array $data, ?callable $progress = null): array
     {
-        $this->attributes = DB::table('attributes')->get()->all();
+        $this->loadAttributes();
         $this->loadImageCache();
 
         $this->deleteExistingProducts();
@@ -78,6 +79,19 @@ class WooCommerceImporter
     }
 
     // -------------------------------------------------------------------------
+    // Boot
+    // -------------------------------------------------------------------------
+
+    protected function loadAttributes(): void
+    {
+        $rows = DB::table('attributes')->get()->all();
+
+        foreach ($rows as $row) {
+            $this->attributesByCode[$row->code] = $row;
+        }
+    }
+
+    // -------------------------------------------------------------------------
     // Cleanup
     // -------------------------------------------------------------------------
 
@@ -99,7 +113,6 @@ class WooCommerceImporter
 
     protected function importCategories(array $categories): array
     {
-        // Sort so parents always appear before their children.
         usort($categories, fn ($a, $b) => (int) ($a['parent_slug'] !== null) - (int) ($b['parent_slug'] !== null));
 
         $slugToId = ['root' => 1];
@@ -124,7 +137,6 @@ class WooCommerceImporter
             ];
         }
 
-        // Compute Kalnoy nested-set _lft/_rgt values.
         $this->computeNestedSet($rows);
 
         $now = now();
@@ -161,7 +173,6 @@ class WooCommerceImporter
             ]);
         }
 
-        // Update root's right boundary to encompass all new categories.
         DB::table('categories')->where('id', 1)->update(['_rgt' => $this->rootRgt]);
 
         return $slugToId;
@@ -169,24 +180,21 @@ class WooCommerceImporter
 
     protected function computeNestedSet(array &$rows): void
     {
-        // Index rows by id and build parent->children lists.
-        $byId    = [];
         $children = [1 => []];
 
         foreach ($rows as &$row) {
-            $byId[$row['id']]              = &$row;
             $children[$row['parent_id']][] = &$row;
             $children[$row['id']]          = [];
         }
         unset($row);
 
-        $counter = 2; // root _lft=1; first child starts at 2
+        $counter = 2;
 
         foreach ($children[1] as &$node) {
             $this->walkNode($node, $children, $counter);
         }
 
-        $this->rootRgt = $counter; // root _rgt gets this value after all children
+        $this->rootRgt = $counter;
     }
 
     protected function walkNode(array &$node, array &$children, int &$counter): void
@@ -207,7 +215,6 @@ class WooCommerceImporter
             return $row['slug'];
         }
 
-        // Find parent row.
         foreach ($rows as $r) {
             if ($r['id'] === $row['parent_id']) {
                 return $r['slug'].'/'.$row['slug'];
@@ -218,7 +225,7 @@ class WooCommerceImporter
     }
 
     // -------------------------------------------------------------------------
-    // Products
+    // Products — dispatch by type
     // -------------------------------------------------------------------------
 
     protected function importSingleProduct(array $productData, array $categoryMap): void
@@ -226,7 +233,14 @@ class WooCommerceImporter
         DB::beginTransaction();
 
         try {
-            $this->doImportSingleProduct($productData, $categoryMap);
+            $type = $productData['type'] ?? 'simple';
+
+            if ($type === 'configurable' && ! empty($productData['variations'])) {
+                $this->importConfigurableProduct($productData, $categoryMap);
+            } else {
+                $this->importSimpleProduct($productData, $categoryMap, null);
+            }
+
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -234,28 +248,415 @@ class WooCommerceImporter
         }
     }
 
-    protected function doImportSingleProduct(array $productData, array $categoryMap): void
+    // -------------------------------------------------------------------------
+    // Simple product
+    // -------------------------------------------------------------------------
+
+    protected function importSimpleProduct(array $productData, array $categoryMap, ?int $parentId): int
     {
         $now = now();
 
         $productId = DB::table('products')->insertGetId([
-            'sku'                => $productData['sku'],
-            'type'               => 'simple',
-            'attribute_family_id'=> 1,
-            'parent_id'          => null,
-            'created_at'         => $now,
-            'updated_at'         => $now,
+            'sku'                 => $productData['sku'],
+            'type'                => 'simple',
+            'attribute_family_id' => 1,
+            'parent_id'           => $parentId,
+            'created_at'          => $now,
+            'updated_at'          => $now,
         ]);
 
-        $this->insertAttributeValues($productId, $productData);
+        $this->insertAttributeValues($productId, $productData, []);
 
+        // Only top-level simple products get channel + category + inventory assignments.
+        if ($parentId === null) {
+            $this->attachToChannel($productId);
+            $this->attachToCategories($productId, $productData['category_slugs'] ?? [], $categoryMap);
+            $this->attachInventory($productId, (int) ($productData['qty'] ?? 100));
+            $this->downloadAndAttachImages($productId, $productData['images'] ?? []);
+        }
+
+        return $productId;
+    }
+
+    // -------------------------------------------------------------------------
+    // Configurable product
+    // -------------------------------------------------------------------------
+
+    protected function importConfigurableProduct(array $productData, array $categoryMap): void
+    {
+        $variations = $productData['variations'];
+        $now        = now();
+
+        // ── Determine which attribute codes vary across the variations ────────
+        $variantAttributeCodes = $this->collectVariantAttributeCodes($variations);
+
+        // ── Ensure each variant attribute exists in Bagisto ───────────────────
+        $variantAttributeIds = [];
+        foreach ($variantAttributeCodes as $code) {
+            $variantAttributeIds[$code] = $this->getOrCreateSelectAttribute($code);
+        }
+
+        // ── Compute min price across all variations for the parent ────────────
+        $allPrices = array_column($variations, 'price');
+        $minPrice  = $allPrices ? min(array_filter($allPrices, fn ($p) => $p > 0)) : ($productData['price'] ?? 0);
+
+        // ── Insert parent configurable product ────────────────────────────────
+        $parentId = DB::table('products')->insertGetId([
+            'sku'                 => $productData['sku'],
+            'type'                => 'configurable',
+            'attribute_family_id' => 1,
+            'parent_id'           => null,
+            'created_at'          => $now,
+            'updated_at'          => $now,
+        ]);
+
+        // Override price with the minimum variant price on the parent.
+        $parentData          = $productData;
+        $parentData['price'] = round((float) $minPrice, 2);
+
+        $this->insertAttributeValues($parentId, $parentData, []);
+
+        $this->attachToChannel($parentId);
+        $this->attachToCategories($parentId, $productData['category_slugs'] ?? [], $categoryMap);
+        $this->attachInventory($parentId, 0); // Bagisto derives stock from children.
+        $this->downloadAndAttachImages($parentId, $productData['images'] ?? []);
+
+        // ── Link super attributes (the axes of variation) ─────────────────────
+        foreach ($variantAttributeIds as $code => $attrId) {
+            DB::table('product_super_attributes')->insertOrIgnore([
+                'product_id'   => $parentId,
+                'attribute_id' => $attrId,
+            ]);
+        }
+
+        // ── Insert child simple products ──────────────────────────────────────
+        foreach ($variations as $index => $variation) {
+            $this->importVariationChild($variation, $productData, $parentId, $variantAttributeIds, $index);
+        }
+    }
+
+    /**
+     * Collect the set of attribute codes that actually vary across all variations
+     * (i.e. codes whose value differs between at least some variations).
+     */
+    protected function collectVariantAttributeCodes(array $variations): array
+    {
+        $allCodes = [];
+        foreach ($variations as $v) {
+            foreach (array_keys($v['attributes'] ?? []) as $code) {
+                $allCodes[$code] = true;
+            }
+        }
+        return array_keys($allCodes);
+    }
+
+    /**
+     * Get or create a select+configurable attribute for a variant axis (e.g. "gang", "color").
+     * Returns the attribute id.
+     */
+    protected function getOrCreateSelectAttribute(string $code): int
+    {
+        // Check in-memory cache first.
+        if (isset($this->attributesByCode[$code])) {
+            return (int) $this->attributesByCode[$code]->id;
+        }
+
+        $now = now();
+
+        $attrId = DB::table('attributes')->insertGetId([
+            'code'                 => $code,
+            'admin_name'           => Str::title(str_replace('_', ' ', $code)),
+            'type'                 => 'select',
+            'swatch_type'          => null,
+            'validation'           => null,
+            'regex'                => null,
+            'position'             => 100,
+            'is_required'          => 0,
+            'is_unique'            => 0,
+            'is_filterable'        => 1,
+            'is_comparable'        => 0,
+            'is_configurable'      => 1,
+            'is_user_defined'      => 1,
+            'is_visible_on_front'  => 1,
+            'value_per_locale'     => 0,
+            'value_per_channel'    => 0,
+            'default_value'        => null,
+            'enable_wysiwyg'       => 0,
+            'created_at'           => $now,
+            'updated_at'           => $now,
+        ]);
+
+        // Add to the default attribute group so it appears in admin.
+        DB::table('attribute_group_mappings')->insertOrIgnore([
+            'attribute_id'       => $attrId,
+            'attribute_group_id' => 1,
+            'position'           => 100,
+        ]);
+
+        // Cache it.
+        $this->attributesByCode[$code] = (object) [
+            'id'                => $attrId,
+            'code'              => $code,
+            'type'              => 'select',
+            'value_per_channel' => 0,
+            'value_per_locale'  => 0,
+        ];
+
+        return $attrId;
+    }
+
+    /**
+     * Get or create an attribute option (e.g. "White" for "color").
+     * Returns the option id.
+     */
+    protected function getOrCreateAttributeOption(int $attributeId, string $value): int
+    {
+        $key = strtolower(trim($value));
+
+        if (isset($this->optionCache[$attributeId][$key])) {
+            return $this->optionCache[$attributeId][$key];
+        }
+
+        // Load all existing options for this attribute on first access.
+        if (! isset($this->optionCache[$attributeId])) {
+            $this->optionCache[$attributeId] = [];
+            $rows = DB::table('attribute_options')
+                ->where('attribute_id', $attributeId)
+                ->get(['id', 'admin_name']);
+
+            foreach ($rows as $row) {
+                $this->optionCache[$attributeId][strtolower(trim($row->admin_name))] = (int) $row->id;
+            }
+        }
+
+        if (isset($this->optionCache[$attributeId][$key])) {
+            return $this->optionCache[$attributeId][$key];
+        }
+
+        // Create the option.
+        $optionId = DB::table('attribute_options')->insertGetId([
+            'attribute_id' => $attributeId,
+            'admin_name'   => $value,
+            'sort_order'   => count($this->optionCache[$attributeId]),
+            'swatch_value' => null,
+        ]);
+
+        // Also insert an attribute_option_translation for the locale.
+        DB::table('attribute_option_translations')->insertOrIgnore([
+            'attribute_option_id' => $optionId,
+            'locale'              => $this->locale,
+            'label'               => $value,
+        ]);
+
+        $this->optionCache[$attributeId][$key] = $optionId;
+
+        return $optionId;
+    }
+
+    /**
+     * Import one variation as a child simple product of the configurable parent.
+     */
+    protected function importVariationChild(
+        array $variation,
+        array $parentData,
+        int $parentId,
+        array $variantAttributeIds,   // ['color' => attrId, 'gang' => attrId, …]
+        int $index
+    ): void {
+        $now = now();
+
+        // Build child SKU: fall back to parent-sku + index if blank.
+        $childSku = trim($variation['sku'] ?? '');
+        if ($childSku === '') {
+            $childSku = $parentData['sku'].'-var-'.($index + 1);
+        }
+
+        // Child url_key: parent slug + variant suffix.
+        $attrSuffix = implode('-', array_map(
+            fn ($v) => Str::slug($v),
+            array_values($variation['attributes'])
+        ));
+        $childUrlKey = $parentData['url_key'].'-'.($attrSuffix ?: ($index + 1));
+
+        $childProductId = DB::table('products')->insertGetId([
+            'sku'                 => $childSku,
+            'type'                => 'simple',
+            'attribute_family_id' => 1,
+            'parent_id'           => $parentId,
+            'created_at'          => $now,
+            'updated_at'          => $now,
+        ]);
+
+        // Build attribute values for the child: inherit parent descriptive fields,
+        // override price + sku-level fields, add variant attribute option ids.
+        $childData = [
+            'name'              => $parentData['name'],
+            'url_key'           => $childUrlKey,
+            'short_description' => $parentData['short_description'] ?? '',
+            'description'       => $parentData['description'] ?? '',
+            'meta_title'        => $parentData['meta_title'] ?? $parentData['name'],
+            'meta_keywords'     => $parentData['meta_keywords'] ?? '',
+            'meta_description'  => $parentData['meta_description'] ?? '',
+            'price'             => round((float) $variation['price'], 2),
+            'special_price'     => $variation['sale_price'] !== null ? round((float) $variation['sale_price'], 2) : null,
+            'weight'            => $parentData['weight'] ?? 1,
+            'status'            => 1,
+            'visible_individually' => 0,
+        ];
+
+        // Resolve each variant attribute value to an option id.
+        $variantOptionIds = [];
+        foreach ($variation['attributes'] as $code => $value) {
+            if (! isset($variantAttributeIds[$code])) {
+                continue;
+            }
+            $attrId   = $variantAttributeIds[$code];
+            $optionId = $this->getOrCreateAttributeOption($attrId, $value);
+            $variantOptionIds[$code] = ['attr_id' => $attrId, 'option_id' => $optionId];
+        }
+
+        $this->insertAttributeValues($childProductId, $childData, $variantOptionIds);
+
+        // Inventory per child.
+        DB::table('product_inventories')->insert([
+            'product_id'          => $childProductId,
+            'inventory_source_id' => 1,
+            'qty'                 => (int) ($variation['in_stock'] ? 100 : 0),
+        ]);
+
+        // Per-variation image (if different from parent gallery).
+        if (! empty($variation['image'])) {
+            $path = $this->downloadImage($variation['image'], $childProductId);
+            if ($path) {
+                DB::table('product_images')->insert([
+                    'type'       => null,
+                    'path'       => $path,
+                    'product_id' => $childProductId,
+                    'position'   => 1,
+                ]);
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Attribute values
+    // -------------------------------------------------------------------------
+
+    /**
+     * @param  array  $variantOptionIds  ['color' => ['attr_id' => x, 'option_id' => y], …]
+     */
+    protected function insertAttributeValues(int $productId, array $productData, array $variantOptionIds): void
+    {
+        $baseUrlKey = $productData['url_key'] ?? Str::slug($productData['name'] ?? '');
+        $urlKey     = $baseUrlKey;
+        $suffix     = 2;
+
+        while (DB::table('product_flat')->where('url_key', $urlKey)->exists()) {
+            $urlKey = $baseUrlKey.'-'.$suffix++;
+        }
+
+        $isVisibleIndividually = isset($productData['visible_individually'])
+            ? (int) $productData['visible_individually']
+            : 1;
+
+        $attrValues = [
+            'name'                 => $productData['name'] ?? '',
+            'url_key'              => $urlKey,
+            'short_description'    => $this->sanitizeHtml($productData['short_description'] ?? ''),
+            'description'          => $this->sanitizeHtml($productData['description'] ?? ''),
+            'meta_title'           => $productData['meta_title'] ?? ($productData['name'] ?? ''),
+            'meta_keywords'        => $productData['meta_keywords'] ?? '',
+            'meta_description'     => $productData['meta_description'] ?? '',
+            'price'                => (float) ($productData['price'] ?? 0),
+            'special_price'        => isset($productData['special_price']) ? (float) $productData['special_price'] : null,
+            'weight'               => (string) ($productData['weight'] ?? '1'),
+            'status'               => 1,
+            'manage_stock'         => 0,
+            'new'                  => (int) (bool) ($productData['new'] ?? false),
+            'featured'             => (int) (bool) ($productData['featured'] ?? false),
+            'visible_individually' => $isVisibleIndividually,
+        ];
+
+        $nullColumns = array_fill_keys(['text_value', 'float_value', 'boolean_value', 'integer_value', 'datetime_value', 'date_value'], null);
+        $seen        = [];
+        $rows        = [];
+
+        foreach ($attrValues as $code => $value) {
+            if ($value === null) {
+                continue;
+            }
+
+            $attr = $this->attributesByCode[$code] ?? null;
+
+            if (! $attr) {
+                continue;
+            }
+
+            $channelVal = $attr->value_per_channel ? $this->channel : null;
+            $localeVal  = $attr->value_per_locale  ? $this->locale  : null;
+            $uniqueId   = collect([$channelVal, $localeVal, $productId, $attr->id])->filter()->implode('|');
+
+            if (isset($seen[$uniqueId])) {
+                continue;
+            }
+
+            $seen[$uniqueId] = true;
+            $valueCol        = self::ATTRIBUTE_TYPE_FIELDS[$attr->type] ?? 'text_value';
+
+            $rows[] = array_merge($nullColumns, [
+                'attribute_id' => $attr->id,
+                'product_id'   => $productId,
+                'channel'      => $channelVal,
+                'locale'       => $localeVal,
+                'unique_id'    => $uniqueId,
+                'json_value'   => null,
+                $valueCol      => $value,
+            ]);
+        }
+
+        // Insert variant attribute values (select option ids).
+        foreach ($variantOptionIds as $code => ['attr_id' => $attrId, 'option_id' => $optionId]) {
+            $uniqueId = collect([null, null, $productId, $attrId])->filter()->implode('|');
+
+            if (isset($seen[$uniqueId])) {
+                continue;
+            }
+
+            $seen[$uniqueId] = true;
+
+            $rows[] = array_merge($nullColumns, [
+                'attribute_id'  => $attrId,
+                'product_id'    => $productId,
+                'channel'       => null,
+                'locale'        => null,
+                'unique_id'     => $uniqueId,
+                'json_value'    => null,
+                'integer_value' => $optionId,
+            ]);
+        }
+
+        if ($rows) {
+            collect($rows)->chunk(200)->each(fn ($chunk) => DB::table('product_attribute_values')->insert($chunk->all()));
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Helpers: channel / categories / inventory / images
+    // -------------------------------------------------------------------------
+
+    protected function attachToChannel(int $productId): void
+    {
         DB::table('product_channels')->insert([
             'product_id' => $productId,
             'channel_id' => 1,
         ]);
+    }
 
-        foreach ($productData['category_slugs'] ?? [] as $slug) {
+    protected function attachToCategories(int $productId, array $catSlugs, array $categoryMap): void
+    {
+        foreach ($catSlugs as $slug) {
             $catId = $categoryMap[$slug] ?? null;
+
             if ($catId) {
                 DB::table('product_categories')->insertOrIgnore([
                     'product_id'  => $productId,
@@ -263,16 +664,22 @@ class WooCommerceImporter
                 ]);
             }
         }
+    }
 
+    protected function attachInventory(int $productId, int $qty): void
+    {
         DB::table('product_inventories')->insert([
             'product_id'          => $productId,
             'inventory_source_id' => 1,
-            'qty'                 => (int) ($productData['qty'] ?? 100),
+            'qty'                 => $qty,
         ]);
+    }
 
+    protected function downloadAndAttachImages(int $productId, array $imageUrls): void
+    {
         $position = 1;
 
-        foreach ($productData['images'] ?? [] as $imageUrl) {
+        foreach ($imageUrls as $imageUrl) {
             $path = $this->downloadImage((string) $imageUrl, $productId);
 
             if ($path) {
@@ -286,77 +693,6 @@ class WooCommerceImporter
         }
     }
 
-    protected function insertAttributeValues(int $productId, array $productData): void
-    {
-        $baseUrlKey = $productData['url_key'] ?? Str::slug($productData['name'] ?? '');
-        $urlKey     = $baseUrlKey;
-        $suffix     = 2;
-
-        while (DB::table('product_flat')->where('url_key', $urlKey)->exists()) {
-            $urlKey = $baseUrlKey.'-'.$suffix++;
-        }
-
-        $attrValues = [
-            'name'                => $productData['name'] ?? '',
-            'url_key'             => $urlKey,
-            'short_description'   => $this->sanitizeHtml($productData['short_description'] ?? ''),
-            'description'         => $this->sanitizeHtml($productData['description'] ?? ''),
-            'meta_title'          => $productData['meta_title'] ?? ($productData['name'] ?? ''),
-            'meta_keywords'       => $productData['meta_keywords'] ?? '',
-            'meta_description'    => $productData['meta_description'] ?? '',
-            'price'               => (float) ($productData['price'] ?? 0),
-            'special_price'       => $productData['special_price'] ? (float) $productData['special_price'] : null,
-            'weight'              => (string) ($productData['weight'] ?? '1'),
-            'status'              => 1,
-            'manage_stock'        => 0,
-            'new'                 => (int) (bool) ($productData['new'] ?? false),
-            'featured'            => (int) (bool) ($productData['featured'] ?? false),
-            'visible_individually'=> 1,
-        ];
-
-        $nullColumns = array_fill_keys(['text_value', 'float_value', 'boolean_value', 'integer_value', 'datetime_value', 'date_value'], null);
-        $attributes  = collect($this->attributes);
-        $seen        = [];
-        $rows        = [];
-
-        foreach ($attrValues as $code => $value) {
-            if ($value === null) {
-                continue;
-            }
-
-            $attr = $attributes->firstWhere('code', $code);
-
-            if (! $attr) {
-                continue;
-            }
-
-            $channel    = $attr->value_per_channel ? $this->channel : null;
-            $locale     = $attr->value_per_locale  ? $this->locale  : null;
-            $uniqueId   = collect([$channel, $locale, $productId, $attr->id])->filter()->implode('|');
-
-            if (isset($seen[$uniqueId])) {
-                continue;
-            }
-
-            $seen[$uniqueId] = true;
-            $valueCol        = self::ATTRIBUTE_TYPE_FIELDS[$attr->type] ?? 'text_value';
-
-            $rows[] = array_merge($nullColumns, [
-                'attribute_id' => $attr->id,
-                'product_id'   => $productId,
-                'channel'      => $channel,
-                'locale'       => $locale,
-                'unique_id'    => $uniqueId,
-                'json_value'   => null,
-                $valueCol      => $value,
-            ]);
-        }
-
-        if ($rows) {
-            collect($rows)->chunk(200)->each(fn ($chunk) => DB::table('product_attribute_values')->insert($chunk->all()));
-        }
-    }
-
     // -------------------------------------------------------------------------
     // HTML sanitisation
     // -------------------------------------------------------------------------
@@ -367,7 +703,24 @@ class WooCommerceImporter
             return '';
         }
 
-        // Strip elements that should never appear in a product description.
+        // Strip Bestsellers section and everything after it.
+        $html = preg_replace('/<header[^>]*class=["\'][^"\']*shortcode-heading-wrapper[^"\']*["\'][^>]*>\s*<h2[^>]*class=["\'][^"\']*shortcode-title[^"\']*["\'][^>]*>\s*Bestsellers.*$/si', '', $html) ?? $html;
+
+        // Normalize &nbsp; and its raw UTF-8 bytes (\xC2\xA0) to plain spaces.
+        $html = str_replace('&nbsp;', ' ', $html);
+        $html = str_replace("\xC2\xC2\xA0", ' ', $html);
+        $html = str_replace("\xC2\xA0", ' ', $html);
+
+        // Fix Windows-1252 mojibake (curly quotes, em dash etc. stored as garbled bytes).
+        $mojibake = [
+            "â\u{20AC}\u{201D}" => '—', "â\u{20AC}\u{2122}" => "\u{2019}",
+            "â\u{20AC}\u{02DC}" => "\u{2018}", "â\u{20AC}\u{0153}" => "\u{201C}",
+            "â\u{20AC}\u{009D}" => "\u{201D}", "â\u{20AC}\u{00A2}" => '•',
+            "â\u{20AC}\u{00A6}" => '…', "â\u{201E}\u{00A2}" => '™',
+            "\u{00C2}\u{00AE}"  => '®', "\u{00C2}\u{00A9}" => '©', "\u{00C2}\u{00B0}" => '°',
+        ];
+        $html = str_replace(array_keys($mojibake), array_values($mojibake), $html);
+
         $html = preg_replace(
             '/<(script|style|form|input|button|select|textarea|label|noscript|iframe|object|embed)[^>]*>.*?<\/\1>/si',
             '',
@@ -380,11 +733,10 @@ class WooCommerceImporter
             $html
         ) ?? $html;
 
-        // Feed through DOMDocument so it fixes orphaned closing tags (e.g. a stray </div>
-        // with no opener) that would break Vue's template compiler.
         $doc = new \DOMDocument('1.0', 'UTF-8');
         libxml_use_internal_errors(true);
-        $doc->loadHTML('<html><head><meta charset="UTF-8"></head><body>'.$html.'</body></html>', LIBXML_NOERROR);
+        // Prepend XML encoding declaration so DOMDocument parses as UTF-8, not ISO-8859-1.
+        $doc->loadHTML('<?xml encoding="UTF-8"><html><head><meta charset="UTF-8"></head><body>'.$html.'</body></html>', LIBXML_NOERROR);
         libxml_clear_errors();
 
         $body   = $doc->getElementsByTagName('body')->item(0);
@@ -396,7 +748,6 @@ class WooCommerceImporter
             }
         }
 
-        // Keep only safe formatting tags — strip everything else.
         $safe   = '<p><br><strong><b><em><i><u><ul><ol><li><h2><h3><h4><h5><h6><span><div><table><thead><tbody><tr><th><td><img><a>';
         $result = strip_tags($result, $safe);
 
@@ -421,20 +772,17 @@ class WooCommerceImporter
 
     protected function downloadImage(string $url, int $productId): ?string
     {
-        // Normalise common WooCommerce sitemap bug: /store/store/ → /store/
         $url = preg_replace('|(https?://[^/]+(?:/[^/]+)*)/([^/]+)/\2/|', '$1/$2/', $url) ?? $url;
 
         $cacheKey = md5($url);
 
-        // Return cached path if the file still exists on disk.
         if (isset($this->imageCache[$cacheKey])) {
             $cachedPath = $this->imageCache[$cacheKey];
 
-            if (Storage::exists($cachedPath)) {
+            if (Storage::disk('public')->exists($cachedPath)) {
                 return $cachedPath;
             }
 
-            // File was deleted — remove stale cache entry and re-download.
             unset($this->imageCache[$cacheKey]);
         }
 
@@ -463,19 +811,19 @@ class WooCommerceImporter
         $tempFile = tempnam(sys_get_temp_dir(), 'mazzy_img_');
 
         try {
-            // Stream directly to a temp file — avoids loading the whole image body into PHP memory.
+            // Use the image's own origin as Referer to pass hotlink protection.
+            $origin   = preg_replace('|(https?://[^/]+).*|', '$1', $url);
             $response = Http::timeout(20)->withHeaders([
-                'User-Agent'      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'User-Agent'      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept'          => 'image/webp,image/apng,image/*,*/*;q=0.8',
                 'Accept-Encoding' => 'gzip, deflate, br',
-                'Referer'         => config('app.url'),
+                'Referer'         => $origin . '/',
             ])->sink($tempFile)->get($url);
 
             if (! $response->ok()) {
                 return null;
             }
 
-            // Detect extension from Content-Type header if URL path has none.
             $ext = pathinfo((string) parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
 
             if (! $ext || ! in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
@@ -491,7 +839,7 @@ class WooCommerceImporter
             $filename = Str::uuid().'.'.strtolower($ext);
             $path     = "product/{$productId}/{$filename}";
 
-            Storage::put($path, fopen($tempFile, 'r'));
+            Storage::disk('public')->put($path, fopen($tempFile, 'r'));
 
             return $path;
         } catch (\Throwable) {
