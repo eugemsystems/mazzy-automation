@@ -136,7 +136,7 @@ class ProcessSitemap implements ShouldQueue
 
         $sitemapFilePath = clean_path($this->sitemap->path.'/'.File::name($this->sitemap->file_name).'-'.$this->sitemap->id.'-'.$this->batchProcessed.'.'.File::extension($this->sitemap->file_name));
 
-        $sitemap->writeToDisk('public', $sitemapFilePath);
+        $sitemap->writeToDisk('public', $sitemapFilePath, true);
 
         $this->generatedSitemaps[] = $sitemapFilePath;
 
@@ -154,6 +154,6 @@ class ProcessSitemap implements ShouldQueue
             $sitemap->add(Storage::disk('public')->url($generatedSitemap));
         }
 
-        $sitemap->writeToDisk('public', $this->sitemap->index_file_name);
+        $sitemap->writeToDisk('public', $this->sitemap->index_file_name, true);
     }
 }
