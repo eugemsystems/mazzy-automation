@@ -133,7 +133,7 @@
                 {{-- Map --}}
                 <div class="col-lg-5">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3582.9!2d28.0567!3d-26.1066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c687e5b3abb%3A0x1e950c687e5b3abb!2s165+West+St%2C+Sandown%2C+Sandton%2C+2031!5e0!3m2!1sen!2sza!4v1"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7165.761380994825!2d28.048718476287178!3d-26.102813059854004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e957331af137053%3A0x863bf8154f435015!2s2%20Sandown%20Valley%20Cres%2C%20Sandown%2C%20Sandton%2C%202031!5e0!3m2!1sen!2sza!4v1784564820137!5m2!1sen!2sza"
                         width="100%"
                         height="100%"
                         style="min-height:450px; border:0; border-radius:8px;"
@@ -141,6 +141,7 @@
                         loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"
                     ></iframe>
+                    
                 </div>
             </div>
         </div>
