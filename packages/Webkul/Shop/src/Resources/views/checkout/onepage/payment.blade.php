@@ -81,8 +81,10 @@
 
                                         {!! view_render_event('bagisto.shop.checkout.onepage.payment-method.description.before') !!}
 
-                                        <p class="mt-0.5 text-xs text-slate-500">
-                                            @{{ payment.description }}
+                                        <p
+                                            class="mt-0.5 text-xs text-slate-500 [&_a]:underline [&_p]:mb-0"
+                                            v-html="payment.description"
+                                        >
                                         </p>
 
                                         {!! view_render_event('bagisto.shop.checkout.onepage.payment-method.description.after') !!}

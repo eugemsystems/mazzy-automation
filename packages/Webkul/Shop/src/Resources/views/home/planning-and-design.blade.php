@@ -223,16 +223,16 @@
                     </div>
                     <div class="d-flex flex-wrap gap-3">
                         <a href="{{ route('shop.home.contact_us') }}" class="th-btn">Get Free Advice <i class="fas fa-arrow-right ms-2"></i></a>
-                        <a href="tel:+27787972186" class="th-btn style2">Call +27 787 972 186 <i class="fas fa-phone ms-2"></i></a>
+                        <a href="tel:{{ config('company.phone.mobile') }}" class="th-btn style2">Call {{ config('company.phone.mobile') }} <i class="fas fa-phone ms-2"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="bg-theme p-4 rounded text-white text-center">
                         <i class="fas fa-clock fa-3x mb-3"></i>
                         <h5 class="text-white">Office Hours</h5>
-                        <p class="text-white opacity-75 mb-0">Mon – Sat: 8:00am – 5:00pm<br>Sunday: Closed</p>
+                        <p class="text-white opacity-75 mb-0">Mon – Fri: {{ config('company.hours.weekdays') }}<br>Sat: {{ config('company.hours.saturday') }}<br>Sun: {{ config('company.hours.sunday') }}</p>
                         <hr class="border-white opacity-25 my-3">
-                        <a href="mailto:info@mazzyautomations.co.za" class="text-white">info@mazzyautomations.co.za</a>
+                        <a href="mailto:{{ config('company.email') }}" class="text-white">{{ config('company.email') }}</a>
                     </div>
                 </div>
             </div>

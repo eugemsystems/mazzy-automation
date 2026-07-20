@@ -769,6 +769,7 @@ return [
                 ],
 
                 'configurable' => [
+                    'available-options' => '利用可能なオプション',
                     'select-options' => 'オプションを選択してください',
                     'select-above-options' => '上記のオプションを選択してください',
                 ],

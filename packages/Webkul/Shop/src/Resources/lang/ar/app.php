@@ -769,6 +769,7 @@ return [
                 ],
 
                 'configurable' => [
+                    'available-options' => 'الخيارات المتاحة',
                     'select-options' => 'يرجى اختيار خيار',
                     'select-above-options' => 'يرجى اختيار الخيارات أعلاه',
                 ],

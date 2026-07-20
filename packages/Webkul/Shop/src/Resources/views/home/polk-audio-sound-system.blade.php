@@ -111,13 +111,13 @@
                             <div class="info-box-wrap mb-3">
                                 <div class="info-box_icon"><i class="fas fa-phone"></i></div>
                                 <div>
-                                    <a href="tel:+27787972186" class="info-box_link">+27 787 972 186</a><br>
-                                    <a href="tel:0107463674" class="info-box_link">010 746 3674</a>
+                                    <a href="tel:{{ config('company.phone.mobile') }}" class="info-box_link">{{ config('company.phone.mobile') }}</a><br>
+                                    <a href="tel:{{ config('company.phone.telephone') }}" class="info-box_link">{{ config('company.phone.telephone') }}</a>
                                 </div>
                             </div>
                             <div class="info-box-wrap mb-4">
                                 <div class="info-box_icon"><i class="fas fa-envelope"></i></div>
-                                <a href="mailto:info@mazzyautomations.co.za" class="info-box_link">info@mazzyautomations.co.za</a>
+                                <a href="mailto:{{ config('company.email') }}" class="info-box_link">{{ config('company.email') }}</a>
                             </div>
                             <a href="{{ route('shop.home.contact_us') }}" class="th-btn w-100 text-center">Make an Enquiry</a>
                         </div>

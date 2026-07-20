@@ -87,6 +87,39 @@
                     </div>
                 </div>
 
+                {{-- Contact Widget --}}
+                <div class="col-md-6 col-xxl-3 col-xl-3">
+                    <div class="widget footer-widget">
+                        <h3 class="widget_title">Get In Touch</h3>
+                        <div class="th-widget-contact">
+                            <div class="info-box-wrap">
+                                <div class="info-box_icon"><i class="fas fa-location-dot"></i></div>
+                                <p class="info-box_text">{{ config('company.address') }}</p>
+                            </div>
+                            <div class="info-box-wrap">
+                                <div class="info-box_icon"><i class="fas fa-phone"></i></div>
+                                <a href="tel:{{ config('company.phone.mobile') }}" class="info-box_link">Mobile: {{ config('company.phone.mobile') }}</a>
+                            </div>
+                            <div class="info-box-wrap">
+                                <div class="info-box_icon"><i class="fas fa-phone"></i></div>
+                                <a href="tel:{{ config('company.phone.telephone') }}" class="info-box_link">Tel: {{ config('company.phone.telephone') }}</a>
+                            </div>
+                            <div class="info-box-wrap">
+                                <div class="info-box_icon"><i class="fas fa-envelope"></i></div>
+                                <a href="mailto:{{ config('company.email') }}" class="info-box_link">{{ config('company.email') }}</a>
+                            </div>
+                            <div class="info-box-wrap">
+                                <div class="info-box_icon"><i class="fas fa-clock"></i></div>
+                                <p class="info-box_text">
+                                    Mon - Fri: {{ config('company.hours.weekdays') }}<br>
+                                    Sat: {{ config('company.hours.saturday') }}<br>
+                                    Sun: {{ config('company.hours.sunday') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

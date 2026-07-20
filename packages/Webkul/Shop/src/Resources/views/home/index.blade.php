@@ -748,7 +748,7 @@
                                         </div>
                                         <div >
                                             <p>Call Us Anytime:</p>
-                                            <a class="cta-single-link" href="tel:+27787972186" >+27787972186</a>
+                                            <a class="cta-single-link" href="tel:{{ config('company.phone.mobile') }}" >{{ config('company.phone.mobile') }}</a>
                                         </div>
                                     </div>
                                     <div class="cta-link" >
@@ -757,7 +757,7 @@
                                         </div>
                                         <div >
                                             <p>Email Us:</p>
-                                            <a class="cta-single-link" href="mailto:support@mazzyautomations.co.za" >support@mazzyautomations.co.za</a>
+                                            <a class="cta-single-link" href="mailto:{{ config('company.email') }}" >{{ config('company.email') }}</a>
                                         </div>
                                     </div></div><a href="https://mazzyautomations.co.za/about-us/" class="th-btn style6" >More About us<i class="fas fa-arrow-right ms-1"></i></a></div></div><div class="col-xl-7" ><div class="contact-form-wrap" >
                         <h2 class="title h4 text-center">Request A Quote</h2>

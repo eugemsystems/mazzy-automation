@@ -769,6 +769,7 @@ return [
                 ],
 
                 'configurable' => [
+                    'available-options' => 'উপলব্ধ বিকল্পসমূহ',
                     'select-options' => 'দয়া করে একটি বিকল্প নির্বাচন করুন',
                     'select-above-options' => 'দয়া করে উপরের বিকল্পগুলি নির্বাচন করুন',
                 ],

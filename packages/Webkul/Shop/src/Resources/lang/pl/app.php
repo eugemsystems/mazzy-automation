@@ -769,6 +769,7 @@ return [
                 ],
 
                 'configurable' => [
+                    'available-options' => 'Dostępne opcje',
                     'select-options' => 'Wybierz opcję',
                     'select-above-options' => 'Wybierz powyższe opcje',
                 ],

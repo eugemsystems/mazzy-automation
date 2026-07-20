@@ -769,6 +769,7 @@ return [
                 ],
 
                 'configurable' => [
+                    'available-options' => '可用选项',
                     'select-options' => '请选择一个选项',
                     'select-above-options' => '请选择以上选项',
                 ],

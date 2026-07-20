@@ -769,6 +769,7 @@ return [
                 ],
 
                 'configurable' => [
+                    'available-options' => 'Доступні варіанти',
                     'select-options' => 'Будь ласка, виберіть опцію',
                     'select-above-options' => 'Будь ласка, виберіть опції вище',
                 ],

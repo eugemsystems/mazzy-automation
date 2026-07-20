@@ -769,6 +769,7 @@ return [
                 ],
 
                 'configurable' => [
+                    'available-options' => 'Opsi yang Tersedia',
                     'select-options' => 'Silakan pilih opsi',
                     'select-above-options' => 'Silakan pilih opsi di atas',
                 ],

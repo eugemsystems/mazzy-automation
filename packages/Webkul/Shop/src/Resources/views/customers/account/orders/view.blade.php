@@ -2241,6 +2241,12 @@
                                 </div>
                             @endif
 
+                            @if ($order->payment->method === 'moneytransfer')
+                                <div>
+                                    {!! core()->getConfigData('sales.payment_methods.moneytransfer.description') !!}
+                                </div>
+                            @endif
+
                             {!! view_render_event('bagisto.shop.customers.account.orders.view.payment_method_details.after', ['order' => $order]) !!}
 
                         </div>
@@ -2323,6 +2329,12 @@
                     @if (! empty($additionalDetails))
                         <div class="instructions">
                             <label>{{ $additionalDetails['title'] }}</label>
+                        </div>
+                    @endif
+
+                    @if ($order->payment->method === 'moneytransfer')
+                        <div class="text-sm">
+                            {!! core()->getConfigData('sales.payment_methods.moneytransfer.description') !!}
                         </div>
                     @endif
 

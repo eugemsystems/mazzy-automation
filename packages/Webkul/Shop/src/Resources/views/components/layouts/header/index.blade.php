@@ -22,10 +22,10 @@
                 <div class="col-auto d-none d-lg-block">
                     <div class="header-links">
                         <ul>
-                            <li><i class="far fa-phone"></i><a href="tel:+27787972186">+27 787 972 186</a></li>
-                            <li class="d-none d-xl-inline-block"><i class="far fa-phone"></i><a href="tel:0107463674">010 746 3674</a></li>
-                            <li class="d-none d-xl-inline-block"><i class="far fa-envelope"></i><a href="mailto:info@mazzyautomations.co.za">info@mazzyautomations.co.za</a></li>
-                            <li><i class="far fa-location-dot"></i>Erf 598 Sandown, 165 West Street, Sandton</li>
+                            <li><i class="far fa-phone"></i><a href="tel:{{ config('company.phone.mobile') }}">{{ config('company.phone.mobile') }}</a></li>
+                            <li class="d-none d-xl-inline-block"><i class="far fa-phone"></i><a href="tel:{{ config('company.phone.telephone') }}">{{ config('company.phone.telephone') }}</a></li>
+                            <li class="d-none d-xl-inline-block"><i class="far fa-envelope"></i><a href="mailto:{{ config('company.email') }}">{{ config('company.email') }}</a></li>
+                            <li><i class="far fa-location-dot"></i>{{ config('company.address') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -74,21 +74,21 @@
                                 <i class="fas fa-phone"></i>
                                 <div>
                                     <p>Call Us Any Time:</p>
-                                    <a class="header-single-link" href="tel:+27787972186">+27 787 972 186</a>
+                                    <a class="header-single-link" href="tel:{{ config('company.phone.mobile') }}">{{ config('company.phone.mobile') }}</a>
                                 </div>
                             </div>
                             <div class="header-link">
                                 <i class="fas fa-envelope"></i>
                                 <div>
                                     <p>Email Us:</p>
-                                    <a class="header-single-link" href="mailto:info@mazzyautomations.co.za">info@mazzyautomations.co.za</a>
+                                    <a class="header-single-link" href="mailto:{{ config('company.email') }}">{{ config('company.email') }}</a>
                                 </div>
                             </div>
                             <div class="header-link d-xl-inline-flex d-none">
                                 <i class="fas fa-clock"></i>
                                 <div>
                                     <p>Working Time:</p>
-                                    <span class="header-single-link">Mon - Sat: 8:00 - 17:00</span>
+                                    <span class="header-single-link">Mon - Fri: {{ config('company.hours.weekdays') }}</span>
                                 </div>
                             </div>
                         </div>

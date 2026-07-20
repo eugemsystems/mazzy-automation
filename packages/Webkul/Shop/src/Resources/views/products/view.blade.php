@@ -359,17 +359,19 @@
 
                                 {!! view_render_event('bagisto.shop.products.short_description.after', ['product' => $product]) !!}
 
-                                @include('shop::products.view.types.simple')
+                                <div class="mt-4">
+                                    @include('shop::products.view.types.simple')
 
-                                @include('shop::products.view.types.configurable')
+                                    @include('shop::products.view.types.configurable')
 
-                                @include('shop::products.view.types.grouped')
+                                    @include('shop::products.view.types.grouped')
 
-                                @include('shop::products.view.types.bundle')
+                                    @include('shop::products.view.types.bundle')
 
-                                @include('shop::products.view.types.downloadable')
+                                    @include('shop::products.view.types.downloadable')
 
-                                @include('shop::products.view.types.booking')
+                                    @include('shop::products.view.types.booking')
+                                </div>
 
                                 <!-- Product Actions and Quantity Box -->
                                 <hr class="my-4 border-slate-100">

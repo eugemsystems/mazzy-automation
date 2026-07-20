@@ -32,6 +32,7 @@ return [
         Webkul\GDPR\Providers\ModuleServiceProvider::class,
         Webkul\Inventory\Providers\ModuleServiceProvider::class,
         Webkul\Marketing\Providers\ModuleServiceProvider::class,
+        Webkul\Netcash\Providers\ModuleServiceProvider::class,
         Webkul\Notification\Providers\ModuleServiceProvider::class,
         Webkul\PayU\Providers\ModuleServiceProvider::class,
         Webkul\Payment\Providers\ModuleServiceProvider::class,

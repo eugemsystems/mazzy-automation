@@ -93,6 +93,12 @@
                         <div>{{ $additionalDetails['value'] }}</div>
                     </div>
                 @endif
+
+                @if ($order->payment->method === 'moneytransfer')
+                    <div style="font-size: 14px; color: #384860; margin-top: 10px;">
+                        {!! core()->getConfigData('sales.payment_methods.moneytransfer.description') !!}
+                    </div>
+                @endif
             </div>
         @endif
     </div>

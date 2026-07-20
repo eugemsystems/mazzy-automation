@@ -436,6 +436,12 @@
                                         <span>{{ $additionalDetails['value'] }}</span>
                                     </div>
                                 @endif
+
+                                @if ($invoice->order->payment->method === 'moneytransfer')
+                                    <div class="small-text">
+                                        {!! core()->getConfigData('sales.payment_methods.moneytransfer.description') !!}
+                                    </div>
+                                @endif
                             </td>
 
                             @if ($invoice->order->shipping_address)

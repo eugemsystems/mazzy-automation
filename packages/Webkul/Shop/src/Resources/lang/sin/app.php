@@ -769,6 +769,7 @@ return [
                 ],
 
                 'configurable' => [
+                    'available-options' => 'තිබෙන විකල්ප',
                     'select-options' => 'කරුණු තෝරන්න',
                     'select-above-options' => 'ඉහළට සහිත කරුණු තෝරන්න',
                 ],

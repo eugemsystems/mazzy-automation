@@ -769,6 +769,7 @@ return [
                 ],
 
                 'configurable' => [
+                    'available-options' => 'گزینه‌های موجود',
                     'select-options' => 'لطفاً یک گزینه انتخاب کنید',
                     'select-above-options' => 'لطفاً گزینه‌های بالا را انتخاب کنید',
                 ],

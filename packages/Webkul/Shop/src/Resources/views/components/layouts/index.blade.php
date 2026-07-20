@@ -460,15 +460,15 @@
                     <div class="th-widget-contact">
                         <div class="info-box-wrap">
                             <div class="info-box_icon"><i class="fas fa-location-dot"></i></div>
-                            <p class="info-box_text">Erf 598 Sandown, 165 West Street, Cnr Sandown Valley Crescent, Sandton</p>
+                            <p class="info-box_text">{{ config('company.address') }}</p>
                         </div>
                         <div class="info-box-wrap">
                             <div class="info-box_icon"><i class="fas fa-envelope"></i></div>
-                            <a href="mailto:info@mazzyautomations.co.za" class="info-box_link">info@mazzyautomations.co.za</a>
+                            <a href="mailto:{{ config('company.email') }}" class="info-box_link">{{ config('company.email') }}</a>
                         </div>
                         <div class="info-box-wrap">
                             <div class="info-box_icon"><i class="fas fa-phone"></i></div>
-                            <a href="tel:+27787972186" class="info-box_link">+27 787 972 186</a>
+                            <a href="tel:{{ config('company.phone.mobile') }}" class="info-box_link">{{ config('company.phone.mobile') }}</a>
                         </div>
                     </div>
                 </div>
@@ -648,15 +648,15 @@
                                         <div class="th-widget-contact">
                                             <div class="info-box-wrap">
                                                 <div class="info-box_icon"><i class="fas fa-phone"></i></div>
-                                                <a href="tel:+27787972186" class="info-box_link">+27 787 972 186</a>
+                                                <a href="tel:{{ config('company.phone.mobile') }}" class="info-box_link">{{ config('company.phone.mobile') }}</a>
                                             </div>
                                             <div class="info-box-wrap">
                                                 <div class="info-box_icon"><i class="fas fa-envelope"></i></div>
-                                                <a href="mailto:info@mazzyautomations.co.za" class="info-box_link">info@mazzyautomations.co.za</a>
+                                                <a href="mailto:{{ config('company.email') }}" class="info-box_link">{{ config('company.email') }}</a>
                                             </div>
                                             <div class="info-box-wrap">
                                                 <div class="info-box_icon"><i class="fas fa-location-dot"></i></div>
-                                                <p class="info-box_text">Erf 598 Sandown, 165 West Street, Sandton</p>
+                                                <p class="info-box_text">{{ config('company.address') }}</p>
                                             </div>
                                             <div class="info-box-wrap mt-2">
                                                 <div class="info-box_icon"><i class="fas fa-globe"></i></div>
