@@ -119,6 +119,14 @@
             {{ __('netcash::app.redirect.redirect-message') }}
         </p>
 
+        <button
+            type="button"
+            onclick="submitNetcashForm()"
+            style="margin-top: 10px; padding: 10px 20px; border: none; border-radius: 8px; background: #2c5364; color: white; font-size: 14px; cursor: pointer;"
+        >
+            {{ __('netcash::app.redirect.click-if-not-redirected') }}
+        </button>
+
         {!! view_render_event('bagisto.shop.netcash.redirect.after') !!}
     </div>
 
@@ -129,9 +137,16 @@
     </form>
 
     <script>
-        setTimeout(function() {
-            document.getElementById('netcash_payment_form').submit();
-        }, 100);
+        function submitNetcashForm() {
+            var form = document.getElementById('netcash_payment_form');
+
+            // A hidden field named "submit" shadows the form's native submit
+            // method (named form controls become properties on the form
+            // element), so form.submit() must be called via the prototype.
+            HTMLFormElement.prototype.submit.call(form);
+        }
+
+        setTimeout(submitNetcashForm, 100);
     </script>
 </body>
 
