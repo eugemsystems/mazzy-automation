@@ -123,6 +123,7 @@ class Netcash extends Payment
             'Budget' => 'Y',
             'm4' => $cart->id,
             'm9' => $cart->customer_email ?? '',
+            'submit' => 'PAY',
         ];
     }
 
