@@ -22,7 +22,7 @@
                 {{ $product->name }}
             </p>
 
-            <div class="mb-4">
+            <div class="mb-3">
                 <x-shop::form.control-group.control
                     type="text"
                     name="name"
@@ -34,7 +34,7 @@
                 <x-shop::form.control-group.error control-name="name" />
             </div>
 
-            <div class="mb-4">
+            <div class="mb-3">
                 <x-shop::form.control-group.control
                     type="email"
                     name="email"
@@ -46,7 +46,7 @@
                 <x-shop::form.control-group.error control-name="email" />
             </div>
 
-            <div class="mb-4">
+            <div class="mb-3">
                 <x-shop::form.control-group.control
                     type="text"
                     name="phone"
@@ -58,7 +58,7 @@
                 <x-shop::form.control-group.error control-name="phone" />
             </div>
 
-            <div class="mb-4">
+            <div class="mb-3">
                 <x-shop::form.control-group.control
                     type="textarea"
                     name="message"
