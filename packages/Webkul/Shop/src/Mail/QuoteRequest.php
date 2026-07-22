@@ -2,7 +2,6 @@
 
 namespace Webkul\Shop\Mail;
 
-use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
