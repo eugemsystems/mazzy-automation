@@ -101,13 +101,36 @@
                 <!-- Actions row — always visible -->
                 <div class="mt-auto pt-3 flex items-center gap-2">
                     @if (core()->getConfigData('sales.checkout.shopping_cart.cart_page'))
-                        {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.before') !!}
-                        <button
-                            class="flex-1 bg-[#332a5e] text-white text-xs font-semibold py-2.5 px-3 rounded-lg hover:bg-[#FF9923] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                            :disabled="! product.is_saleable || isAddingToCart"
-                            @click="addToCart()"
-                        >@lang('shop::app.components.products.card.add-to-cart')</button>
-                        {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.after') !!}
+                        <template v-if="! (product.hide_price && ! isCustomer)">
+                            {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.before') !!}
+                            <button
+                                class="flex-1 bg-[#332a5e] text-white text-xs font-semibold py-2.5 px-3 rounded-lg hover:bg-[#FF9923] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                :disabled="! product.is_saleable || isAddingToCart"
+                                @click="addToCart()"
+                            >@lang('shop::app.components.products.card.add-to-cart')</button>
+                            {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.after') !!}
+                        </template>
+
+                        <template v-else>
+                            <x-shop::modal ref="enquireModal">
+                                <x-slot:toggle>
+                                    <button
+                                        type="button"
+                                        class="flex-1 bg-[#FF9923] text-white text-xs font-semibold py-2.5 px-3 rounded-lg hover:bg-[#332a5e] transition-colors"
+                                    >
+                                        @lang('shop::app.products.view.enquire-now')
+                                    </button>
+                                </x-slot>
+
+                                <x-slot:header>
+                                    @lang('shop::app.products.view.enquire-now')
+                                </x-slot>
+
+                                <x-slot:content>
+                                    <x-shop::products.enquire-form />
+                                </x-slot>
+                            </x-shop::modal>
+                        </template>
                     @endif
 
                     @if (core()->getConfigData('catalog.products.settings.compare_option'))
@@ -177,13 +200,36 @@
 
                 <div class="mt-auto pt-1 flex items-center gap-3">
                     @if (core()->getConfigData('sales.checkout.shopping_cart.cart_page'))
-                        {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.before') !!}
-                        <button
-                            class="bg-[#332a5e] text-white text-sm font-semibold py-2.5 px-6 rounded-lg hover:bg-[#FF9923] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                            :disabled="! product.is_saleable || isAddingToCart"
-                            @click="addToCart()"
-                        >@lang('shop::app.components.products.card.add-to-cart')</button>
-                        {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.after') !!}
+                        <template v-if="! (product.hide_price && ! isCustomer)">
+                            {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.before') !!}
+                            <button
+                                class="bg-[#332a5e] text-white text-sm font-semibold py-2.5 px-6 rounded-lg hover:bg-[#FF9923] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                :disabled="! product.is_saleable || isAddingToCart"
+                                @click="addToCart()"
+                            >@lang('shop::app.components.products.card.add-to-cart')</button>
+                            {!! view_render_event('bagisto.shop.components.products.card.add_to_cart.after') !!}
+                        </template>
+
+                        <template v-else>
+                            <x-shop::modal ref="enquireModal">
+                                <x-slot:toggle>
+                                    <button
+                                        type="button"
+                                        class="bg-[#FF9923] text-white text-sm font-semibold py-2.5 px-6 rounded-lg hover:bg-[#332a5e] transition-colors"
+                                    >
+                                        @lang('shop::app.products.view.enquire-now')
+                                    </button>
+                                </x-slot>
+
+                                <x-slot:header>
+                                    @lang('shop::app.products.view.enquire-now')
+                                </x-slot>
+
+                                <x-slot:content>
+                                    <x-shop::products.enquire-form />
+                                </x-slot>
+                            </x-shop::modal>
+                        </template>
                     @endif
 
                     @if (core()->getConfigData('customer.settings.wishlist.wishlist_option'))
@@ -226,6 +272,15 @@
                     isCustomer: '{{ auth()->guard('customer')->check() }}',
 
                     isAddingToCart: false,
+
+                    isSendingEnquiry: false,
+
+                    enquiryForm: {
+                        name: '',
+                        email: '',
+                        phone: '',
+                        message: '',
+                    },
                 }
             },
 
@@ -329,6 +384,32 @@
                             }
 
                             this.isAddingToCart = false;
+                        });
+                },
+
+                sendEnquiry() {
+                    this.isSendingEnquiry = true;
+
+                    this.$axios.post('{{ route("shop.api.products.enquire.store") }}', {
+                            product_id: this.product.id,
+                            name: this.enquiryForm.name,
+                            email: this.enquiryForm.email,
+                            phone: this.enquiryForm.phone,
+                            message: this.enquiryForm.message,
+                        })
+                        .then(response => {
+                            this.$emitter.emit('add-flash', { type: 'success', message: response.data.data.message });
+
+                            this.enquiryForm = { name: '', email: '', phone: '', message: '' };
+
+                            this.isSendingEnquiry = false;
+
+                            this.$refs.enquireModal.close();
+                        })
+                        .catch(error => {
+                            this.$emitter.emit('add-flash', { type: 'error', message: error.response?.data?.message || 'Something went wrong.' });
+
+                            this.isSendingEnquiry = false;
                         });
                 },
             },

@@ -4,7 +4,7 @@
     <x-slot:toggle>
         <button
             type="button"
-            class="secondary-button w-full max-w-full !py-2.5 !px-5 !rounded-lg text-sm"
+            class="w-full max-w-full rounded-lg bg-[#FF9923] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#332a5e]"
         >
             @lang('shop::app.products.view.enquire-now')
         </button>

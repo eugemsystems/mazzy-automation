@@ -4,17 +4,11 @@
 
 @if ($isEnquireOnly)
     {{--
-        Plain anchor, not the interactive modal — this partial's rendered
-        HTML is also injected via Vue's v-html on product cards, which does
-        not mount nested Vue components. The full "Enquire Now" modal lives
-        on the product detail page instead, next to the Add to Cart button.
+        Intentionally blank — the actual "Enquire Now" call-to-action is
+        the button that replaces Add to Cart / Buy Now (see card.blade.php
+        for listings, view.blade.php for the product detail page), so this
+        price slot doesn't need to duplicate it.
     --}}
-    <a
-        href="{{ $product->url_key ? url($product->url_key) : 'javascript:void(0)' }}"
-        class="final-price font-semibold text-[#332a5e] underline max-sm:leading-4"
-    >
-        @lang('shop::app.products.view.enquire-now')
-    </a>
 @elseif ($prices['final']['price'] < $prices['regular']['price'])
     <p
         class="final-price font-medium text-slate-500 line-through max-sm:leading-4"
