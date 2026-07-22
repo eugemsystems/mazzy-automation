@@ -2,7 +2,9 @@
 
 namespace Webkul\Netcash\Http\Controllers;
 
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -126,8 +128,9 @@ class NetcashController extends Controller
     /**
      * Verify and process a Netcash Pay Now callback, creating the order/invoice
      * on first successful confirmation. Safe to call more than once for the
-     * same transaction (accept + notify both hit this) — a repeat call is a
-     * no-op once the cart has already been converted to an order.
+     * same transaction (accept + notify both hit this, often almost
+     * simultaneously) — concurrent calls are serialized via a per-transaction
+     * lock so only the first one creates the order; the rest reuse it.
      *
      * @param  array  $response
      * @return \Webkul\Sales\Contracts\Order|null
@@ -136,61 +139,75 @@ class NetcashController extends Controller
     {
         $cartId = $response['Extra1'] ?? null;
 
-        if (! $cartId) {
+        $requestTrace = $response['RequestTrace'] ?? null;
+
+        if (! $cartId || ! $requestTrace) {
             return null;
         }
 
-        $cart = $this->cartRepository->find($cartId);
-
-        if (! $cart || ! $cart->is_active) {
-            return null;
-        }
-
-        if (! $this->verifyTransaction($response)) {
-            Log::warning('Netcash Pay Now: transaction could not be verified.', $response);
-
-            return null;
-        }
+        $lock = Cache::lock("netcash-transaction-{$requestTrace}", 30);
 
         try {
-            Cart::setCart($cart);
+            return $lock->block(10, function () use ($cartId, $response) {
+                if ($existingOrder = $this->findExistingOrder($response)) {
+                    return $existingOrder;
+                }
 
-            Cart::collectTotals();
+                $cart = $this->cartRepository->find($cartId);
 
-            $data = (new OrderResource($cart))->jsonSerialize();
+                if (! $cart || ! $cart->is_active) {
+                    return null;
+                }
 
-            $data['payment']['additional'] = [
-                'netcash_reference' => $response['Reference'] ?? '',
-                'netcash_request_trace' => $response['RequestTrace'] ?? '',
-                'netcash_method' => $response['Method'] ?? '',
-            ];
+                if (! $this->verifyTransaction($response)) {
+                    Log::warning('Netcash Pay Now: transaction could not be verified.', $response);
 
-            $order = $this->orderRepository->create($data);
+                    return null;
+                }
 
-            $this->orderRepository->update(['status' => 'processing'], $order->id);
+                try {
+                    Cart::setCart($cart);
 
-            if ($order->canInvoice()) {
-                $invoice = $this->invoiceRepository->create($this->prepareInvoiceData($order));
+                    Cart::collectTotals();
 
-                $this->orderTransactionRepository->create([
-                    'transaction_id' => $response['RequestTrace'] ?? '',
-                    'status' => self::PAYMENT_SUCCESS,
-                    'type' => $order->payment->method,
-                    'payment_method' => $order->payment->method,
-                    'order_id' => $order->id,
-                    'invoice_id' => $invoice->id,
-                    'amount' => $response['Amount'] ?? $order->base_grand_total,
-                    'data' => json_encode($response),
-                ]);
-            }
+                    $data = (new OrderResource($cart))->jsonSerialize();
 
-            Cart::deActivateCart();
+                    $data['payment']['additional'] = [
+                        'netcash_reference' => $response['Reference'] ?? '',
+                        'netcash_request_trace' => $response['RequestTrace'] ?? '',
+                        'netcash_method' => $response['Method'] ?? '',
+                    ];
 
-            return $order;
-        } catch (\Exception $e) {
-            report($e);
+                    $order = $this->orderRepository->create($data);
 
-            return null;
+                    $this->orderRepository->update(['status' => 'processing'], $order->id);
+
+                    if ($order->canInvoice()) {
+                        $invoice = $this->invoiceRepository->create($this->prepareInvoiceData($order));
+
+                        $this->orderTransactionRepository->create([
+                            'transaction_id' => $response['RequestTrace'] ?? '',
+                            'status' => self::PAYMENT_SUCCESS,
+                            'type' => $order->payment->method,
+                            'payment_method' => $order->payment->method,
+                            'order_id' => $order->id,
+                            'invoice_id' => $invoice->id,
+                            'amount' => $response['Amount'] ?? $order->base_grand_total,
+                            'data' => json_encode($response),
+                        ]);
+                    }
+
+                    Cart::deActivateCart();
+
+                    return $order;
+                } catch (\Exception $e) {
+                    report($e);
+
+                    return null;
+                }
+            });
+        } catch (LockTimeoutException $e) {
+            return $this->findExistingOrder($response);
         }
     }
 
