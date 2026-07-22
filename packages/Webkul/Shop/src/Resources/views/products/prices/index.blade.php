@@ -1,7 +1,5 @@
 @php
-    $isEnquireOnly = $product->hide_price
-        && (float) ($prices['final']['price'] ?? 0) <= 0
-        && (float) ($prices['regular']['price'] ?? 0) <= 0;
+    $isEnquireOnly = $product->hide_price && ! auth('customer')->check();
 @endphp
 
 @if ($isEnquireOnly)
@@ -17,7 +15,6 @@
     >
         @lang('shop::app.products.view.enquire-now')
     </a>
-@elseif ($product->hide_price && ! auth('customer')->check())
 @elseif ($prices['final']['price'] < $prices['regular']['price'])
     <p
         class="final-price font-medium text-slate-500 line-through max-sm:leading-4"

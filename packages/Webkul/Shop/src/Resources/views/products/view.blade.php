@@ -10,11 +10,7 @@
 
     $attributeData = collect($customAttributeValues)->filter(fn ($item) => ! empty($item['value']));
 
-    $productPrices = $product->getTypeInstance()->getProductPrices();
-
-    $isEnquireOnly = $product->hide_price
-        && (float) ($productPrices['final']['price'] ?? 0) <= 0
-        && (float) ($productPrices['regular']['price'] ?? 0) <= 0;
+    $isEnquireOnly = $product->hide_price && ! auth('customer')->check();
 @endphp
 
 <!-- SEO Meta Content -->
