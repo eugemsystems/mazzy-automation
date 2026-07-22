@@ -67,7 +67,6 @@
                 <div
                     class="fixed inset-0 z-10 bg-slate-900/50 backdrop-blur-sm transition-opacity"
                     v-show="isOpen"
-                    @click="close"
                 ></div>
             </transition>
 
@@ -83,9 +82,13 @@
             >
                 <div
                     class="fixed inset-0 z-10 transform overflow-y-auto transition" v-show="isOpen"
+                    @click="close"
                 >
                     <div class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
-                        <div class="absolute left-1/2 top-1/2 z-[999] w-full max-w-[595px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-slate-100 max-md:w-[90%]">
+                        <div
+                            class="absolute left-1/2 top-1/2 z-[999] w-full max-w-[595px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-slate-100 max-md:w-[90%]"
+                            @click.stop
+                        >
                             <!-- Header Slot-->
                             <slot
                                 name="header"
