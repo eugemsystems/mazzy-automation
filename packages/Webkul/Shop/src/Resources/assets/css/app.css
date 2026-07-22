@@ -544,4 +544,15 @@ img.lazy {
     .skip-to-main-content-link:focus {
         @apply ltr:left-1/2 rtl:right-1/2 ltr:translate-x-1/2 rtl:translate-x-[-50%] opacity-100;
     }
+
+    select,
+    .form-control,
+    .form-select,
+    input {
+        height: 35px;
+    }
+
+    textarea {
+        min-height: 35px;
+    }
 }
