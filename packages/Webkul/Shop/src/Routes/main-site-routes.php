@@ -1,14 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Webkul\Shop\Http\Controllers\GoogleMerchantFeedController;
 use Webkul\Shop\Http\Controllers\HomeController;
 use Webkul\Shop\Http\Controllers\PageController;
+use Webkul\Shop\Http\Controllers\ProductController;
 
 /**
  * Main site routes — no /store prefix.
  * These are the marketing/content pages.
  */
-
 Route::get('/', [HomeController::class, 'index'])
     ->name('shop.home.index');
 
@@ -21,6 +22,16 @@ Route::post('contact-us/send-mail', [HomeController::class, 'sendContactUsMail']
 
 Route::post('quote/send', [HomeController::class, 'sendQuoteMail'])
     ->name('shop.home.quote.send');
+
+Route::post('products/enquire', [ProductController::class, 'sendEnquiryMail'])
+    ->name('shop.products.enquire.send_mail');
+
+/**
+ * Public Google Merchant Center product feed — protected by a secret token
+ * in the URL instead of a login, so Merchant Center can pull it directly.
+ */
+Route::get('feed/google-merchant/{token}', [GoogleMerchantFeedController::class, 'index'])
+    ->name('shop.feed.google_merchant');
 
 Route::get('about-us', [HomeController::class, 'aboutUs'])
     ->name('shop.home.about_us')

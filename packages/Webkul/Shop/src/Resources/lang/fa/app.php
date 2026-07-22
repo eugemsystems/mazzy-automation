@@ -915,6 +915,7 @@ return [
             'additional-information' => 'اطلاعات اضافی',
             'already-in-compare' => 'محصول از قبل در لیست مقایسه وجود دارد.',
             'buy-now' => 'خرید فوری',
+            'enquire-now' => 'Enquire Now',            'enquiry-email' => 'Your Email',            'enquiry-message' => 'Message',            'enquiry-message-placeholder' => 'Tell us what you would like to know...',            'enquiry-name' => 'Your Name',            'enquiry-phone' => 'Your Phone Number',            'enquiry-sent' => 'Thank you! Your enquiry has been sent, we will be in touch shortly.',            'enquiry-submit' => 'Send Enquiry',
             'compare' => 'مقایسه',
             'description' => 'توضیحات',
             'related-product-title' => 'محصولات مرتبط',

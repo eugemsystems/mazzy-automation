@@ -915,6 +915,7 @@ return [
             'additional-information' => 'Aanvullende informatie',
             'already-in-compare' => 'Product staat al in de vergelijking.',
             'buy-now' => 'Nu kopen',
+            'enquire-now' => 'Enquire Now',            'enquiry-email' => 'Your Email',            'enquiry-message' => 'Message',            'enquiry-message-placeholder' => 'Tell us what you would like to know...',            'enquiry-name' => 'Your Name',            'enquiry-phone' => 'Your Phone Number',            'enquiry-sent' => 'Thank you! Your enquiry has been sent, we will be in touch shortly.',            'enquiry-submit' => 'Send Enquiry',
             'compare' => 'Vergelijken',
             'description' => 'Beschrijving',
             'related-product-title' => 'Gerelateerde producten',

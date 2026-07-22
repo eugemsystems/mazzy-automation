@@ -2,12 +2,17 @@
 
 namespace Webkul\Shop\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Webkul\Marketing\Repositories\FormSubmissionRepository;
 use Webkul\Product\Repositories\ProductAttributeValueRepository;
 use Webkul\Product\Repositories\ProductDownloadableLinkRepository;
 use Webkul\Product\Repositories\ProductDownloadableSampleRepository;
 use Webkul\Product\Repositories\ProductRepository;
+use Webkul\Shop\Http\Requests\ProductEnquiryRequest;
+use Webkul\Shop\Mail\ProductEnquiry;
 use Webkul\Shop\Traits\ValidatesExternalUrl;
 
 class ProductController extends Controller
@@ -23,7 +28,8 @@ class ProductController extends Controller
         protected ProductRepository $productRepository,
         protected ProductAttributeValueRepository $productAttributeValueRepository,
         protected ProductDownloadableSampleRepository $productDownloadableSampleRepository,
-        protected ProductDownloadableLinkRepository $productDownloadableLinkRepository
+        protected ProductDownloadableLinkRepository $productDownloadableLinkRepository,
+        protected FormSubmissionRepository $formSubmissionRepository
     ) {}
 
     /**
@@ -103,5 +109,46 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             abort(404);
         }
+    }
+
+    /**
+     * Send an "Enquire Now" email for a hidden-price product.
+     */
+    public function sendEnquiryMail(ProductEnquiryRequest $productEnquiryRequest): RedirectResponse
+    {
+        try {
+            $data = $productEnquiryRequest->only(['product_id', 'name', 'email', 'phone', 'message']);
+
+            $product = $this->productRepository->findOrFail($data['product_id']);
+
+            $enquiryData = [
+                'product_name' => $product->name,
+                'product_sku' => $product->sku,
+                'product_url' => $product->url_key ? rtrim(config('app.url'), '/').'/'.$product->url_key : config('app.url'),
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'] ?? null,
+                'message' => $data['message'],
+            ];
+
+            $this->formSubmissionRepository->create([
+                'type' => 'product_enquiry',
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'] ?? null,
+                'subject' => 'Product Enquiry: '.$product->name,
+                'message' => $data['message'],
+            ]);
+
+            Mail::queue(new ProductEnquiry($enquiryData));
+
+            session()->flash('success', trans('shop::app.products.view.enquiry-sent'));
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+
+            report($e);
+        }
+
+        return back();
     }
 }

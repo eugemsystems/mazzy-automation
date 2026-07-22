@@ -915,6 +915,7 @@ return [
             'additional-information' => 'অতিরিক্ত তথ্য',
             'already-in-compare' => 'পণ্যটি ইতিমধ্যে তুলনা তালিকায় যোগ করা হয়েছে।',
             'buy-now' => 'এখন ক্রয় করুন',
+            'enquire-now' => 'Enquire Now',            'enquiry-email' => 'Your Email',            'enquiry-message' => 'Message',            'enquiry-message-placeholder' => 'Tell us what you would like to know...',            'enquiry-name' => 'Your Name',            'enquiry-phone' => 'Your Phone Number',            'enquiry-sent' => 'Thank you! Your enquiry has been sent, we will be in touch shortly.',            'enquiry-submit' => 'Send Enquiry',
             'compare' => 'তুলনা',
             'description' => 'বিবরণ',
             'related-product-title' => 'সাথে সম্পর্কিত পণ্যগুলি',

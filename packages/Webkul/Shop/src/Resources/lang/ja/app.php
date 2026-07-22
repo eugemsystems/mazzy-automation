@@ -915,6 +915,7 @@ return [
             'additional-information' => '追加情報',
             'already-in-compare' => '製品はすでに比較に追加されています。',
             'buy-now' => '今すぐ購入',
+            'enquire-now' => 'Enquire Now',            'enquiry-email' => 'Your Email',            'enquiry-message' => 'Message',            'enquiry-message-placeholder' => 'Tell us what you would like to know...',            'enquiry-name' => 'Your Name',            'enquiry-phone' => 'Your Phone Number',            'enquiry-sent' => 'Thank you! Your enquiry has been sent, we will be in touch shortly.',            'enquiry-submit' => 'Send Enquiry',
             'compare' => '比較',
             'description' => '説明',
             'related-product-title' => '関連製品',

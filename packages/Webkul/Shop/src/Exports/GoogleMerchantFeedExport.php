@@ -1,16 +1,16 @@
 <?php
 
-namespace Webkul\Admin\Exports;
+namespace Webkul\Shop\Exports;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class MetaProductCatalogExport
+class GoogleMerchantFeedExport
 {
     /**
-     * Generate the Meta product catalog CSV and return it as a streamed download.
+     * Generate the Google Merchant Center product feed CSV and return it as a streamed response.
      */
     public function download(): StreamedResponse
     {
@@ -18,27 +18,27 @@ class MetaProductCatalogExport
 
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="meta-product-catalog.csv"',
+            'Content-Disposition' => 'inline; filename="google-merchant-feed.csv"',
             'Cache-Control' => 'no-store, no-cache',
         ];
 
         return response()->stream(function () use ($products) {
             $handle = fopen('php://output', 'w');
 
-            // BOM for Excel UTF-8 compatibility
             fwrite($handle, "\xEF\xBB\xBF");
 
             fputcsv($handle, [
                 'id',
                 'title',
                 'description',
-                'availability',
-                'condition',
-                'price',
                 'link',
                 'image_link',
-                'brand',
+                'availability',
+                'price',
                 'sale_price',
+                'brand',
+                'condition',
+                'identifier_exists',
             ], ',', '"', '\\');
 
             foreach ($products as $product) {
@@ -53,7 +53,6 @@ class MetaProductCatalogExport
     {
         $locale = app()->getLocale();
         $channel = core()->getRequestedChannelCode();
-        $baseUrl = rtrim(config('app.url'), '/');
 
         // Laravel prefixes both the table name AND the alias (e.g. "pf" → "mazzpf"),
         // so raw SQL fragments must use the prefixed alias names too.
@@ -67,6 +66,17 @@ class MetaProductCatalogExport
                         "`{$pfx}pi`.id = (SELECT MIN(id) FROM `{$pfx}product_images` pi2 WHERE pi2.product_id = `{$pfx}pf`.product_id)"
                     );
             })
+            ->leftJoin('product_attribute_values as pav', function ($join) use ($pfx) {
+                $join->on('pf.product_id', '=', 'pav.product_id')
+                    ->whereRaw(
+                        "`{$pfx}pav`.attribute_id = (SELECT id FROM `{$pfx}attributes` WHERE code = 'brand' LIMIT 1)"
+                    );
+            })
+            ->leftJoin('attribute_options as ao', 'ao.id', '=', 'pav.integer_value')
+            ->leftJoin('attribute_option_translations as aot', function ($join) use ($locale) {
+                $join->on('aot.attribute_option_id', '=', 'ao.id')
+                    ->where('aot.locale', $locale);
+            })
             ->select(
                 'p.id',
                 'pf.sku',
@@ -78,12 +88,15 @@ class MetaProductCatalogExport
                 'pf.url_key',
                 'pf.type',
                 'pi.path as image_path',
+                'aot.label as brand',
                 DB::raw("(SELECT COALESCE(SUM(qty),0) FROM `{$pfx}product_inventories` WHERE product_id = `{$pfx}pf`.product_id) as qty"),
             )
             ->where('pf.locale', $locale)
             ->where('pf.channel', $channel)
             ->where('pf.status', 1)
             ->where('pf.visible_individually', 1)
+            ->where('p.hide_price', 0)
+            ->where('pf.price', '>', 0)
             ->whereNotNull('pf.url_key')
             ->whereNotIn('pf.type', ['configurable', 'grouped', 'bundle'])
             ->get();
@@ -107,7 +120,7 @@ class MetaProductCatalogExport
         $imageLink = '';
         if (! empty($product->image_path)) {
             $imageLink = Storage::url($product->image_path);
-            // Ensure absolute URL
+
             if (! str_starts_with($imageLink, 'http')) {
                 $imageLink = rtrim(config('app.url'), '/').$imageLink;
             }
@@ -116,17 +129,20 @@ class MetaProductCatalogExport
         $description = strip_tags($product->short_description ?: $product->description ?: '');
         $description = preg_replace('/\s+/', ' ', trim($description));
 
+        $brand = $product->brand ?? '';
+
         return [
             $product->sku ?: $product->id,
             $product->name ?? '',
             $description,
-            $availability,
-            'new',
-            $price,
             $link,
             $imageLink,
-            '',       // brand — left blank; add your own logic if you have a brand attribute
+            $availability,
+            $price,
             $salePrice,
+            $brand,
+            'new',
+            $brand ? '' : 'no',
         ];
     }
 }

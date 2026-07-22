@@ -9,6 +9,12 @@
     $customAttributeValues = $productViewHelper->getAdditionalData($product);
 
     $attributeData = collect($customAttributeValues)->filter(fn ($item) => ! empty($item['value']));
+
+    $productPrices = $product->getTypeInstance()->getProductPrices();
+
+    $isEnquireOnly = $product->hide_price
+        && (float) ($productPrices['final']['price'] ?? 0) <= 0
+        && (float) ($productPrices['regular']['price'] ?? 0) <= 0;
 @endphp
 
 <!-- SEO Meta Content -->
@@ -375,6 +381,12 @@
 
                                 <!-- Product Actions and Quantity Box -->
                                 <hr class="my-4 border-slate-100">
+
+                                @if ($isEnquireOnly)
+                                    <div class="max-w-[470px]">
+                                        <x-shop::products.enquire-now :product="$product" />
+                                    </div>
+                                @else
                                 <div class="flex max-w-[470px] items-center gap-3 max-sm:gap-2.5">
 
                                     {!! view_render_event('bagisto.shop.products.view.quantity.before', ['product' => $product]) !!}
@@ -434,6 +446,7 @@
                                     @endif
 
                                     {!! view_render_event('bagisto.shop.products.view.buy_now.after', ['product' => $product]) !!}
+                                @endif
                                 @endif
 
                                 {!! view_render_event('bagisto.shop.products.view.additional_actions.before', ['product' => $product]) !!}

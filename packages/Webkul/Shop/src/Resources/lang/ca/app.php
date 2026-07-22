@@ -915,6 +915,7 @@ return [
             'additional-information' => 'Informació addicional',
             'already-in-compare' => 'El producte ja està a la llista de comparació.',
             'buy-now' => 'Comprar ara',
+            'enquire-now' => 'Enquire Now',            'enquiry-email' => 'Your Email',            'enquiry-message' => 'Message',            'enquiry-message-placeholder' => 'Tell us what you would like to know...',            'enquiry-name' => 'Your Name',            'enquiry-phone' => 'Your Phone Number',            'enquiry-sent' => 'Thank you! Your enquiry has been sent, we will be in touch shortly.',            'enquiry-submit' => 'Send Enquiry',
             'compare' => 'Comparar',
             'description' => 'Descripció',
             'related-product-title' => 'Productes relacionats',

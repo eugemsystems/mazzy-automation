@@ -915,6 +915,7 @@ return [
             'additional-information' => 'Ek Bilgiler',
             'already-in-compare' => 'Ürün zaten karşılaştırma listesinde.',
             'buy-now' => 'Hemen Al',
+            'enquire-now' => 'Enquire Now',            'enquiry-email' => 'Your Email',            'enquiry-message' => 'Message',            'enquiry-message-placeholder' => 'Tell us what you would like to know...',            'enquiry-name' => 'Your Name',            'enquiry-phone' => 'Your Phone Number',            'enquiry-sent' => 'Thank you! Your enquiry has been sent, we will be in touch shortly.',            'enquiry-submit' => 'Send Enquiry',
             'compare' => 'Karşılaştır',
             'description' => 'Açıklama',
             'related-product-title' => 'İlgili Ürünler',

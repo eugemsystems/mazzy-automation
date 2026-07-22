@@ -915,6 +915,7 @@ return [
             'additional-information' => 'අමතර තොරතුරු',
             'already-in-compare' => 'සාකච්ඡාකරන ලද්ද',
             'buy-now' => 'දැක්කාකරන්න',
+            'enquire-now' => 'Enquire Now',            'enquiry-email' => 'Your Email',            'enquiry-message' => 'Message',            'enquiry-message-placeholder' => 'Tell us what you would like to know...',            'enquiry-name' => 'Your Name',            'enquiry-phone' => 'Your Phone Number',            'enquiry-sent' => 'Thank you! Your enquiry has been sent, we will be in touch shortly.',            'enquiry-submit' => 'Send Enquiry',
             'compare' => 'සාකච්ඡා',
             'description' => 'විස්තරය',
             'related-product-title' => 'සමහර අයිතමය',

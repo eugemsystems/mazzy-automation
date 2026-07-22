@@ -915,6 +915,7 @@ return [
             'additional-information' => 'अतिरिक्त जानकारी',
             'already-in-compare' => 'प्रोडक्ट पहले से ही तुलना सूची में शामिल है।',
             'buy-now' => 'अब खरीदें',
+            'enquire-now' => 'Enquire Now',            'enquiry-email' => 'Your Email',            'enquiry-message' => 'Message',            'enquiry-message-placeholder' => 'Tell us what you would like to know...',            'enquiry-name' => 'Your Name',            'enquiry-phone' => 'Your Phone Number',            'enquiry-sent' => 'Thank you! Your enquiry has been sent, we will be in touch shortly.',            'enquiry-submit' => 'Send Enquiry',
             'compare' => 'तुलना करें',
             'description' => 'विवरण',
             'related-product-title' => 'संबंधित प्रोडक्ट्स',

@@ -18,6 +18,25 @@
                 Export for Meta
             </a>
 
+            @if ($googleMerchantFeedToken = config('google_merchant.feed_token'))
+                <!-- Google Merchant Center Feed -->
+                <a
+                    href="{{ route('shop.feed.google_merchant', ['token' => $googleMerchantFeedToken]) }}"
+                    class="secondary-button"
+                    title="Public Google Shopping feed URL — paste this into Merchant Center. It updates automatically, no re-upload needed."
+                    target="_blank"
+                >
+                    Google Merchant Feed
+                </a>
+            @else
+                <span
+                    class="secondary-button cursor-not-allowed opacity-50"
+                    title="Set GOOGLE_MERCHANT_FEED_TOKEN in .env to enable the public Google Merchant feed URL."
+                >
+                    Google Merchant Feed (not configured)
+                </span>
+            @endif
+
             <!-- Export Modal -->
             <x-admin::datagrid.export :src="route('admin.catalog.products.index')" />
 
