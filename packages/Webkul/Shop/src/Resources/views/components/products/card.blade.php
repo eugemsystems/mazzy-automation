@@ -116,7 +116,7 @@
                                 <x-slot:toggle>
                                     <button
                                         type="button"
-                                        class="flex-1 bg-[#FF9923] text-white text-xs font-semibold py-2.5 px-3 rounded-lg hover:bg-[#332a5e] transition-colors"
+                                        class="flex-1 bg-red-700 text-white text-xs font-semibold py-2.5 px-3 rounded-lg hover:bg-red-800 transition-colors"
                                     >
                                         @lang('shop::app.products.view.enquire-now')
                                     </button>
@@ -215,7 +215,7 @@
                                 <x-slot:toggle>
                                     <button
                                         type="button"
-                                        class="bg-[#FF9923] text-white text-sm font-semibold py-2.5 px-6 rounded-lg hover:bg-[#332a5e] transition-colors"
+                                        class="bg-red-700 text-white text-sm font-semibold py-2.5 px-6 rounded-lg hover:bg-red-800 transition-colors"
                                     >
                                         @lang('shop::app.products.view.enquire-now')
                                     </button>
