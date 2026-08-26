@@ -55,7 +55,7 @@ class ProductMediaRepository extends Repository
             foreach ($data[$uploadFileType]['files'] as $indexOrModelId => $file) {
                 if ($file instanceof UploadedFile) {
                     if (Str::contains($file->getMimeType(), 'image')) {
-                        $encoded = image_manager()->read($file)->encodeByExtension('webp');
+                        $encoded = image_manager()->read($file)->scaleDown(2000, 2000)->encodeByExtension('webp');
 
                         $path = $this->getProductDirectory($product).'/'.Str::random(40).'.webp';
 

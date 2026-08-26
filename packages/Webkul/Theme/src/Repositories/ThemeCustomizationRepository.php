@@ -100,7 +100,7 @@ class ThemeCustomizationRepository extends Repository
                 try {
                     $path = 'theme/'.$theme->id.'/'.Str::random(40).'.webp';
 
-                    $encoded = image_manager()->read($image['image'])->encodeByExtension('webp');
+                    $encoded = image_manager()->read($image['image'])->scaleDown(2000, 2000)->encodeByExtension('webp');
 
                     Storage::put($path, (string) $encoded);
                 } catch (\Exception $e) {

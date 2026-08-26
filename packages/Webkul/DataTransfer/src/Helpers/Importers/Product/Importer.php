@@ -1454,7 +1454,7 @@ class Importer extends AbstractImporter
             foreach ($images as $key => $image) {
                 $file = new UploadedFile($image['path'], $image['name']);
 
-                $encoded = image_manager()->read($file)->encodeByExtension('webp');
+                $encoded = image_manager()->read($file)->scaleDown(2000, 2000)->encodeByExtension('webp');
 
                 $imageDirectory = $this->productImageRepository->getProductDirectory((object) $product);
 
